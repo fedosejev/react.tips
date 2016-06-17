@@ -1,5 +1,3 @@
 #!/bin/bash
 
-rm -r build
-node generate.js
-gulp
+./generate-for-development.sh

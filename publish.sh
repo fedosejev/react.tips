@@ -1,8 +1,6 @@
 #!/bin/bash
 
-./generate.sh
-
-gulp build-for-production
+./generate-for-production.sh
 
 # Copy files needed to deploy on GitHub Pages
 cp ./deploy/CNAME ./build/CNAME
