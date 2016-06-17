@@ -1,0 +1,25 @@
+<body class="post-page">
+  <div class="container">
+
+    <%- include('../../partials/header') %>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <%- postHtml %>
+      </div>
+    </div>
+
+    <%- include('../../partials/add-this-sharing-buttons') %>
+    <%- include('../../partials/disqus') %>
+    <%- include('../../partials/footer') %>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/components/prism-jsx.min.js"></script>
+  <script src="/js/app.js"></script>
+
+  <%- include('../../partials/google-analytics') %>
+  <%- include('../../partials/add-this') %>
+</body>

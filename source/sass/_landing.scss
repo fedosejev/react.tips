@@ -1,0 +1,18 @@
+.landing-page {
+  .posts {
+    list-style-type: none;
+    margin: 0;
+
+    li {
+      font-size: 20px;
+      text-align: left;
+      margin: 0 20px;
+      line-height: 42px;
+
+      .fa {
+        color: #cecece;
+        margin-right: 10px;
+      }
+    }
+  }
+}

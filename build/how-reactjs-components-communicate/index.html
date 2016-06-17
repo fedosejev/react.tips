@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>React Tips - How React.js Components Communicate</title><meta name="description" content="Example of how React.js components communicate with each other."><link rel="canonical" href="http://react.tips/how-reactjs-components-communicate/"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"><link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/themes/prism.min.css" rel="stylesheet" type="text/css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li><a href="/">React Tips</a></li><li><a href="http://reactessentials.com" target="_blank">React Essentials Book</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>How React.js Components Communicate</h1><p>Can you wrap your head around how components in React.js communicate with each other?</p><p>Let me help you out.</p><p>In this tutorial, we're going to build this application:</p><figure class="figure"><a href="http://fedosejev.github.io/how-react-components-communicate/" target="_blank"><img src="./images/app.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/how-react-components-communicate">this GitHub repository</a>.</p><p>Our application is going to render a message with a <code>Love</code> button. When you clicks <code>Love</code> button our heart icon "turns on" and our button's text is changed to <code>Unlove</code>.</p><p>As you can see our application will need to render 2 different states: 1) when message is loved and 2) when message is unloved.</p><p>Our application will be made of 3 React.js components:</p><ol><li><code>MessageContainer</code></li><li><code>Message</code></li><li><code>Button</code></li></ol><p>Both <code>Message</code> and <code>Button</code> components are siblings and both are nested inside of <code>MessageContainer</code> component.</p><p>Can you tell which component will own the state for the whole application?</p><p>Let's think about it. When user interacts with the <code>Button</code> component, our <code>Message</code> component needs to react and render differently. How can we achieve this when <code>Button</code> and <code>Message</code> components are siblings?</p><p>The answer is: our <code>MessageContainer</code> will be in charge of maintaining our application's state. And since <code>MessageContainer</code> is a parent component for both <code>Message</code> and <code>Button</code> components - it can pass that state to them too.</p><p>When user interacts with the <code>Button</code> component, it will update <code>MessageContainer</code>'s state and re-render both <code>Message</code> and <code>Button</code> components.</p><p>Let's create <code>Message</code> component first:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+
+var Message = function statelessFunctionComponentClass(props) { /* ... */ };
+
+module.exports = Message;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1. Message.jsx</figcaption></figure><p>Wait, what is this <code>statelessFunctionComponentClass</code> function is doing here - where is <code>React.createClass</code>? That's how you create component class in React - by calling <code>React.createClass</code> function?</p><p>That's right, but in <a href="https://facebook.github.io/react/blog/2015/10/07/react-v0.14.html#stateless-functional-components">version 0.14</a> React introduced a new way of <a href="https://facebook.github.io/react/blog/page2/#components-can-be-classes-or-functions">creating components using functions</a>. These components will be stateless components without any lifecycle methods and other boilerplate. Which means they can be optimised for speed.</p><p>Our <code>Message</code> component will be stateless and we don't need to access any component lifecycle methods, so the functional way of creating <code>Message</code> component is a perfect choice in this case.</p><p>Notice that we've named our function <code>statelessFunctionComponentClass</code> - this is just for signaling the fact that we're using a functional way of creating our component class.</p><p><code>statelessFunctionComponentClass</code> function declares <code>props</code> parameter - this is a way for <code>Message</code> component to access properties passed to it by a parent component.</p><p>What is the purpose of our <code>Message</code> component? To render message text and an icon that represents whether the message is loved or not loved.</p><p>Let's implement that:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+
+var Message = function statelessFunctionComponentClass(props) {
+  var iconImagePath = './images/';
+  iconImagePath = iconImagePath + (props.isLoved ? 'loved.png' : 'not-loved.png');
+
+  return (
+    &lt;span&gt;
+      &lt;img src={iconImagePath} alt="Love status" /&gt;
+      &lt;span className="message-text"&gt;{props.text}&lt;/span&gt;
+    &lt;/span&gt;
+  );
+};
+
+module.exports = Message;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. <a href="https://github.com/fedosejev/how-react-components-communicate/blob/master/source/js/components/Message.jsx" target="_blank">Message.jsx</a></figcaption></figure><p>The first thing is to get a path string to an image file that visualizes whether the message is loved or not:</p><figure class="figure"><pre>
+<code class="language-js">
+var iconImagePath = './images/';
+iconImagePath = iconImagePath + (props.isLoved ? 'loved.png' : 'not-loved.png');
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3. Message.jsx</figcaption></figure><p>We're declating new variable <code>iconImagePath</code> and assigning string <code>./images/</code> to it - that's the first part of our file path.</p><p>The second part depends on whether the message is loved or not. We're using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator">conditional operator</a> in our expression:</p><figure class="figure"><pre>
+<code class="language-js">
+iconImagePath = iconImagePath + (props.isLoved ? 'loved.png' : 'not-loved.png');
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4. Message.jsx</figcaption></figure><p>Which is a short-hand for <code>if</code> statement:</p><figure class="figure"><pre>
+<code class="language-js">
+if (props.isLoved) {
+  iconImagePath = iconImagePath + 'loved.png';
+} else {
+  iconImagePath = iconImagePath + 'not-loved.png';
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. Message.jsx</figcaption></figure><p>Our image file path string depends on the value of <code>props.isLoved</code> which is passed to <code>Message</code> component from a parent <code>MessageContainer</code> component.</p><p>Finally our <code>statelessFunctionComponentClass</code> function returns JSX code that will be rendered when we render our <code>Message</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+return (
+  &lt;span&gt;
+    &lt;img src={iconImagePath} alt="Love status" /&gt;
+    &lt;span className="message-text"&gt;{props.text}&lt;/span&gt;
+  &lt;/span&gt;
+);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6. Message.jsx</figcaption></figure><p>It renders <code>img</code> and <code>span</code> elements nested inside of <code>span</code> element. The text for our message comes as a propety for <code>Message</code> component: <code>props.text</code>.</p><p>As you can see our <code>Message</code> component doesn't know in advance about what text and which image it's going to render. Those decisions will be made by <code>MessageContainer</code> component and passed as properties to <code>Message</code> component.</p><p><strong>And that's how a parent component can communicate with a child component in React.</strong></p><p>Let's create <code>MessageContainer</code> component next:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+var Message = require('./Message.jsx');
+
+var MessageContainer = React.createClass({  
+  getInitialState: function () {
+    return {
+      isLoved: false
+    };
+  },
+
+  render: function () {
+    var messageText = 'Now you know how React.js components communicate with each other.';
+
+    return (
+      &lt;div className="message"&gt;
+        &lt;Message text={messageText} isLoved={this.state.isLoved} /&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+module.exports = MessageContainer;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7. MessageContainer.jsx</figcaption></figure><p>As we discussed previously, our <code>MessageContainer</code> component is going to stateful, because we want it to maintain our application's state.</p><p>We create <code>getInitialState</code> function that returns the initial state object with a single property <code>isLoved</code> set to <code>false</code>:</p><figure class="figure"><pre>
+<code class="language-js">
+getInitialState: function () {
+  return {
+    isLoved: false
+  };
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8. MessageContainer.jsx</figcaption></figure><p><code>isLoved</code> property tracks whether user loved message or not. Initially - it's not loved.</p><p>Let's take a look at what <code>MessageContainer</code> component renders:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render: function () {
+  var messageText = 'Now you know how React.js components communicate with each other.';
+
+  return (
+    &lt;div className="message"&gt;
+      &lt;Message text={messageText} isLoved={this.state.isLoved} /&gt;
+    &lt;/div&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9. MessageContainer.jsx</figcaption></figure><p>We're assigning <code>'Now you know how React.js components communicate with each other.'</code> string to <code>messageText</code> variable and then we're rendering a new instance of <code>Message</code> component.</p><p>Our <code>Message</code> component instance receives 2 properties: 1) <code>text</code> property that tells which message text we want to render and 2) <code>isLoved</code> property which tells whether this message is loved or not. The value for <code>isLoved</code> property is coming from <code>MessageContainer</code> component's state: <code>this.state.isLoved</code>.</p><p>At this point, we've created <code>MessageContainer</code> component that knows whether message is loved or not and renders <code>Message</code> component by passing a couple of properties to it.</p><p>Next we need to render our <code>Love</code>/<code>Unlove</code> button.</p><p>Let's create our <code>Button</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+
+var Button = function statelessFunctionComponentClass(props) {
+  return (
+    &lt;button onClick={props.onClick} 
+                          className="btn btn-xs btn-default"&gt;{props.text}&lt;/button&gt;
+  );
+};
+
+module.exports = Button;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10. <a href="https://github.com/fedosejev/how-react-components-communicate/blob/master/source/js/components/Button.jsx" target="_blank">Button.jsx</a></figcaption></figure><p>Just like with <code>Message</code> component we're using function to create React component class.</p><p>Our <code>Button</code> component will render <code>&lt;button&gt;</code> element with a text that comes from a parent component via <code>props</code> object: <code>props.text</code>.</p><p>We also want our button to react on user click. To achieve that we create <code>onClick</code> property and assign <code>props.onClick</code> to it. <code>props.onClick</code> references a function that our parent <code>MessageContainer</code> component passes as a property when it creates a new instance of our <code>Button</code> component.</p><p>And that's all we need to do to create <code>Button</code> component class.</p><p>Now let's render a new instance of <code>Button</code> component inside of <code>MessageContainer</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+var Message = require('./Message.jsx');
+var Button = require('./Button.jsx');
+
+var MessageContainer = React.createClass({  
+  getInitialState: function () { /* ... */ },
+  render: function () {
+    var messageText = 'Now you know how React.js components communicate with each other.';
+    var buttonText = this.state.isLoved ? 'Unlove' : 'Love';
+
+    return (
+      &lt;div className="message"&gt;
+        &lt;Message text={messageText} isLoved={this.state.isLoved} /&gt;
+        &lt;Button text={buttonText} /&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+module.exports = MessageContainer;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 11. MessageContainer.jsx</figcaption></figure><p>We import our <code>Button</code> component class first. Then we render a new instance of it right after our <code>Message</code> component instance.</p><p>We create <code>text</code> property on our <code>Button</code> component instance. The value for this property will be either <code>'Unlove'</code> or <code>'Love'</code> - it depends on what is the value of <code>this.state.isLoved</code>:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var buttonText = this.state.isLoved ? 'Unlove' : 'Love';
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12. MessageContainer.jsx</figcaption></figure><p>As you can see we're using conditional <code>?</code> operator here too.</p><p>Initially, <code>isLoved</code> is set to <code>false</code>, so our <code>Button</code> component is going to render <code>Love</code> text and our <code>Message</code> component is going to render <img src="./images/not-loved.png" alt="Not loved icon" width="24"> icon.</p><p><strong>And now the key question</strong>: when user clicks our button how can <code>Button</code> component change state of <code>MessageContainer</code> component? In other words: in React how a child component can communicate with a parent component?</p><p>We've already seen in this tutorial how a parent component can communicate with a child component via properties and <code>props</code> object. But what about the other way around?</p><p>The answer is: <strong>a callback function</strong>. A parent component can pass a reference to a callback function (as a property) that a child component can call (and pass arguments if needed).</p><p>Let's create a new property <code>toggleLove</code> on our <code>MessageContainer</code> component's specification object that references a function:</p><figure class="figure"><pre>
+<code class="language-js">
+toggleLove: function () {
+  this.setState({
+    isLoved: ! this.state.isLoved
+  });
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 13. MessageContainer.jsx</figcaption></figure><p>This function will change component's state by calling <code>this.setState</code> function and setting the value of <code>isLoved</code> property to the opposite of the current value: <code>! this.state.isLoved</code>.</p><p>Where and when do we want to call our new <code>toggleLove</code> function? In our <code>Button</code> component when user clicks on our button!</p><p>Let's pass a reference to <code>toggleLove</code> function as a value to <code>onClick</code> property on our <code>Button</code> component instance:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;Button text={buttonText} onClick={this.toggleLove} /&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 14. MessageContainer.jsx</figcaption></figure><p>Now when user clicks on our <code>&lt;button&gt;</code> element React will call <code>props.onClick</code> which references <code>this.toggleLove</code> function. Which in turn will change <code>MessageContainer</code> component's state and re-render <code>Message</code> and <code>Button</code> components, passing new properties to them.</p><p>Effectively toggling from <img src="./images/not-loved.png" alt="Not loved icon" width="24"> to <img src="./images/loved.png" alt="Loved icon" width="24"> and switching from <code>'Love'</code> text to <code>'Unlove'</code> button text.</p><p><strong>And that's how a child component can communicate with a parent component in React.</strong></p><p>Here is our complete <code>MessageContainer</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+var Message = require('./Message.jsx');
+var Button = require('./Button.jsx');
+
+var MessageContainer = React.createClass({  
+  getInitialState: function () {
+    return {
+      isLoved: false
+    };
+  },
+
+  toggleLove: function () {
+    this.setState({
+      isLoved: ! this.state.isLoved
+    });
+  },
+
+  render: function () {
+    var messageText = 'Now you know how React.js components communicate with each other.';
+    var buttonText = this.state.isLoved ? 'Unlove' : 'Love';
+
+    return (
+      &lt;div className="message"&gt;
+        &lt;Message text={messageText} isLoved={this.state.isLoved} /&gt;
+        &lt;Button text={buttonText} onClick={this.toggleLove} /&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+module.exports = MessageContainer;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 15. MessageContainer.jsx</figcaption></figure><p>Thank you for your attention!</p><p>Please take a look at <a href="https://github.com/fedosejev/how-react-components-communicate/">the complete source code on GitHub</a> and <a href="http://fedosejev.github.io/how-react-components-communicate/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p><p>P.S. I've also written <a href="http://reactessentials.com">React.js Essentials book</a> and <a href="http://progressdots.com">I teach people React.js and JavaScript</a>!</p></div></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/how-reactjs-components-communicate/';
+    this.page.identifier = 'how-reactjs-components-communicate';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="http://reactessentials.com" target="_blank">React.js Essentials</a> book:</p><aside><a href="http://reactessentials.com" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="http://reactessentials.com" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.0/components/prism-jsx.min.js"></script><script src="/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>
