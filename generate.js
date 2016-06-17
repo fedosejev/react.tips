@@ -110,6 +110,8 @@ function createPost(postDirectoryName) {
   var postMarkdown = readMarkdownFromFile(contentFilePath);
   var postHtml = convertMarkdownToHtml(postMarkdown);
 
+  console.log('Creating post: ' + postConfig.title);
+
   createPostHtmlFile(postHtml, postConfig);
   copyPostImagesToBuild(postConfig);
 }
