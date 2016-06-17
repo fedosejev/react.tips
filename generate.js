@@ -151,4 +151,4 @@ function createLandingPage() {
 createPosts();
 createLandingPage();
 
-console.log('🏁');
+console.log('🏁 Finished.');
