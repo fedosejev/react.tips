@@ -392,7 +392,7 @@ Please take a look at [the complete source code on GitHub](https://github.com/fe
 
 I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via [Twitter](http://twitter.com/artemy) and [email](mailto:artemij@fedosejev.com).
 
-<img src="../images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape" />
+<img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape" />
 
 [Artemij Fedosejev](http://artemij.com)
 
