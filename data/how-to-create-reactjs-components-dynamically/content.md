@@ -24,7 +24,7 @@ Our application will be made of 2 React.js components:
 
 `Application` component is a contrainer component - it encapsulates our entire React.js application. `Image` component on the hand - renders a single image.
 
-Let's create the `Image` component:
+Let's create the `Image` component first:
 
 <figure class="figure">
 <pre>
