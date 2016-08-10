@@ -19,11 +19,23 @@ function getListOfPostsInDataDirectory() {
   var dataDirectoryPath = __dirname + '/data/';
   var fileNames = fs.readdirSync(dataDirectoryPath, 'utf8');
   var posts = fileNames
-              .filter(function (fileName) {
+              .filter(function checkIfDirectory(fileName) {
                 return fs.statSync(dataDirectoryPath + fileName).isDirectory();
               })
-              .map(function (directoryName) {
-                return readPostConfigFromFile(directoryName);
+              .map(readPostConfigFromFile)
+              .sort(function compare(a, b) {
+                var dateA = new Date(a.date);
+                var dateB = new Date(b.date);
+
+                if (dateA < dateB) {
+                  return 1;
+                }
+
+                if (dateA > dateB) {
+                  return -1;
+                }
+
+                return 0;
               });
 
   return posts;
