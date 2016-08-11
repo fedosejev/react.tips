@@ -98,6 +98,9 @@ a:hover {
         .header .navigation li a:hover {
           text-decoration: none;
           color: #000; }
+        .header .navigation li a .fa {
+          color: inherit;
+          margin-right: 5px; }
 
 .footer {
   margin: 20px 0;
