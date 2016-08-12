@@ -26,8 +26,8 @@ a:hover {
   .landing-page .posts li {
     font-size: 20px;
     text-align: left;
-    margin: 0 20px;
-    line-height: 42px; }
+    margin: 20px;
+    line-height: 30px; }
     .landing-page .posts li .fa {
       color: #cecece;
       margin-right: 10px; }
@@ -85,7 +85,7 @@ a:hover {
   border-bottom: 1px dotted #ccc; }
   .header .navigation {
     text-align: left;
-    margin: 40px 0; }
+    margin: 30px 0; }
     .header .navigation li {
       list-style-type: none;
       display: inline-block;
