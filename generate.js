@@ -75,6 +75,7 @@ function createPostHtmlFile(postHtmlContent, postConfig) {
   var htmlContent = compiled({
     websiteName: websiteConfig.name,
     websiteDescription: websiteConfig.description,
+    showHomeLink: true,
     postHtml: postHtmlContent,
     postTitle: postConfig.title,
     postDescription: postConfig.description,
@@ -132,11 +133,11 @@ function createPosts() {
   getListOfDirectoriesInDataDirectory().forEach(createPost);
 }
 
-function createLandingPage() {
+function createHomePage() {
   var htmlFilePath = __dirname + '/build/index.html';
 
   // https://github.com/mde/ejs/issues/124
-  var templateFilePath = __dirname + '/source/templates/landing/index.ejs';
+  var templateFilePath = __dirname + '/source/templates/home/index.ejs';
 
   var compiled = ejs.compile(fs.readFileSync(templateFilePath, 'utf8'), {
     filename: templateFilePath
@@ -150,6 +151,7 @@ function createLandingPage() {
     websiteName: websiteConfig.name,
     websiteDescription: websiteConfig.description,
     posts: posts,
+    showHomeLink: false,
     googleAnalyticsTrackingId: websiteConfig.googleAnalyticsTrackingId
   });
 
@@ -161,6 +163,6 @@ function createLandingPage() {
 }
 
 createPosts();
-createLandingPage();
+createHomePage();
 
 console.log('🏁  Finished.');

@@ -3,9 +3,13 @@
 
     <div class="header">
       <ul class="navigation">
+
+        <% if (showHomeLink) { %>
         <li>
           <a href="/"><%= websiteName %></a>
         </li>
+        <% } %>
+        
         <li>
           <a href="http://reactessentials.com" target="_blank">React Essentials Book</a>
         </li>
@@ -14,8 +18,7 @@
         </li>
         <li>
           <a href="http://bit.ly/PublishMyTutorial" target="_blank">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-            Submit your React.js tutorial
+            Add your React.js tutorial
           </a>
         </li>
       </ul>
