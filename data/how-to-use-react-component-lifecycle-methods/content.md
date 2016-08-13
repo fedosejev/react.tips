@@ -1,4 +1,4 @@
-# How To Use React Component Lifecycle Methods
+# How To Use React.js Component Lifecycle Methods
 
 Everything in this universe has a lifecycle. It means everything is constantly changing over time. From the moment you born - you start changing - you're getting older. We divide our life into parts that we call - [The Stages of Life](http://www.ralphrowbottom.info/the-stages-of-life-a-new-look/).
 
