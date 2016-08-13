@@ -485,10 +485,14 @@ Well, we've just updated the state of our `Application` component by clicking `I
 So effectively - we've updated our `Counter` component instance. We've changed it's life. It now entered it's __`Updating Phase`__, in which React calls the following lifecycle methods:
 
 + __`componentWillReceiveProps`__ - this methods is called when our component instance receives new properties. [Learn more about this methods](https://facebook.github.io/react/docs/component-specs.html#updating-componentwillreceiveprops).
-+ __`shouldComponentUpdate`__ - this method decides whether or not our `Counter` component instance needs to be rerendered. This is an opportunity for us to save time and skip rerendering if we know that it's not nessesary. By default - React will rerender our component. We return `true` to signal that React should rerender it. Returning `false` will prevent React from rerendering it.
-+ __`componentWillUpdate`__ - is called _right before_ React will rerender `Counter` component class instance into the DOM.
+
++ __`shouldComponentUpdate`__ - this method decides whether or not our `Counter` component instance needs to be rerendered. This is an opportunity for us to save time and skip rerendering if we know that it's not nessesary. By default - React will rerender our component. We return `true` to signal that React should rerender it. Returning `false` will prevent React from rerendering it. [Learn more about this methods](https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate).
+
++ __`componentWillUpdate`__ - is called _right before_ React will rerender `Counter` component class instance into the DOM. [Learn more about this methods](https://facebook.github.io/react/docs/component-specs.html#updating-componentwillupdate).
+
 + __`render`__ - rerenders `Counter` component class instance into the DOM - __that's when we see our counter displaying 1 instead of 0__.
-+ __`componentDidUpdate`__ - is called _right after_ React has rerendered `Counter` component class instance into the DOM.
+
++ __`componentDidUpdate`__ - is called _right after_ React has rerendered `Counter` component class instance into the DOM. [Learn more about this methods](https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate).
 
 We can keep clicking `Increment` button - every click will trigger `Counter` component to go through another `Updating Phase`. Every click will trigger the same lifecycle methods.
 
