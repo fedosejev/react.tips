@@ -80,6 +80,21 @@ a:hover {
   .post-page #disqus_thread {
     margin-top: 20px; }
 
+.mailchimp {
+  border-top: 1px dotted #ccc;
+  border-bottom: 1px dotted #ccc;
+  margin: 30px 0;
+  padding: 30px 0 20px 0; }
+  .mailchimp h3 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+    line-height: 32px; }
+  .mailchimp #mc_embed_signup form {
+    text-align: left; }
+    .mailchimp #mc_embed_signup form input {
+      margin-right: 10px; }
+
 .header {
   margin: 20px 0;
   border-bottom: 1px dotted #ccc; }
