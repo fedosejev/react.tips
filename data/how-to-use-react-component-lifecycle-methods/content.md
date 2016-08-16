@@ -534,7 +534,7 @@ __During `Updating Phase` React calls__:
 4. `render`.
 5. `componentDidUpdate`.
 
-In that specific order. Every time. But not necessarily all 5 methods are being called every time. If `shouldComponentUpdate` returns `false` then React wont' call `componentWillUpdate`, `render` and `componentDidUpdate` methods.
+In that specific order. Every time. But not necessarily all 5 methods are being called every time. If `shouldComponentUpdate` returns `false` then React won't call `componentWillUpdate`, `render` and `componentDidUpdate` methods.
 
 __During `Unmounting Phase` React calls__:
 
