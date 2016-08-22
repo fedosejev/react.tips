@@ -1,10 +1,10 @@
 # Checkboxes in React.js
 
-How to you use checkboxes in React.js? We've learnt about radio buttons in [this tutorial](http://react.tips/radio-buttons-in-reactjs/), but what about checkboxes - do you use them differently in React?
+How do you use checkboxes in React.js? We've learnt about radio buttons in [this tutorial](http://react.tips/radio-buttons-in-reactjs/), but what about checkboxes - do you use them differently in React?
 
 The short answer is: yes.
 
-Let me demonstrate how to use checkboxes with a help of a simple React application:
+Let me demonstrate how to use checkboxes with the help of a simple React application:
 
 <figure class="figure">
   <a href="https://fedosejev.github.io/checkboxes-in-react/" target="_blank">
@@ -29,7 +29,7 @@ Our application will be made of [two React components](https://github.com/fedose
 1. `Application`
 2. `Checkbox`
 
-`Application` component is a contrainer component - it encapsulates our entire React.js application and renders three instances of `Checkbox` component and a `Save` button. `Application` component also logs into the Developer Tools Console which checkboxes were checked when user click `Save` button.
+`Application` component is a container component - it encapsulates our entire React.js application, and renders three instances of `Checkbox` component and a `Save` button. `Application` component also logs into the Developer Tools Console which checkboxes were checked when users click the `Save` button.
 
 `Checkbox` component renders a checkbox with a label.
 
@@ -105,7 +105,7 @@ export default Application;
 <figcaption class="figure-caption">Code snippet 1. Application.jsx</figcaption>
 </figure>
 
-First let's focus on it's `render` function:
+First, let's focus on its `render` function:
 
 <figure class="figure">
 <pre>
@@ -132,9 +132,9 @@ render: function () {
 <figcaption class="figure-caption">Code snippet 2. Application.jsx</figcaption>
 </figure>
 
-We see three `div` elements with class names that you might recognise if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us to create layout for out page. 
+We see three `div` elements with class names that you might recognise if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us create layout for our page. 
 
-Now let's focus on a `form` element:
+Now let's focus on the `form` element:
 
 <figure class="figure">
 <pre>
@@ -151,7 +151,7 @@ Now let's focus on a `form` element:
 
 Inside of our `form` element we call `this.createCheckboxes` function that creates three instances of a `Checkbox` component. We'll see how exactly it does that in a moment. It's important to recognise that here we're creating our instances of a `Checkbox` component __dynamically__. If you're not familiar with this approach, then please read [this tutorial](http://react.tips/how-to-create-reactjs-components-dynamically/) first.
 
-We then create a button element of type `submit` which will submit our form when user clicks on it. We're telling React to call `this.handleFormSubmit` function when this happens: `<form onSubmit={this.handleFormSubmit}>`.
+We then create a button element of type `submit` which will submit our form when user clicks on it, we're telling React to call `this.handleFormSubmit` function when this happens: `<form onSubmit={this.handleFormSubmit}>`.
 
 Let's take a look at how exactly we're creating our instances of `Checkbox` component dynamically. Here is our `createCheckboxes` function:
 
@@ -166,9 +166,9 @@ createCheckboxes: function () {
 <figcaption class="figure-caption">Code snippet 4. Application.jsx</figcaption>
 </figure>
 
-It iterates over `items` array and calls `this.createCheckbox` function for each item in that array. Where `items` array is coming from and what is it for?
+It iterates over `items` array and calls `this.createCheckbox` function for each item in that array. Where is `items` array coming from and what is it for?
 
-In our `Application.jsx` file before declaring our `Application` component we create `items` constant that references an array of three items:
+In our `Application.jsx` file before declaring our `Application` component, we create `items` constant that references an array of three items:
 
 <figure class="figure">
 <pre>
@@ -204,7 +204,7 @@ createCheckbox: function (label) {
 Each `Checkbox` component instance gets three properties:
 1. `label` - the text that you see rendered next to a checkbox. This value is coming from our `items` array.
 2. `handleCheckboxChange` - a reference to `this.toggleCheckbox` function. Every time user checks/unchecks a checkbox React calls `this.toggleCheckbox` function. We'll see what it does in a moment.
-3. `key` - as you already know each dynamically created React component instance needs a `key` property that React uses to uniquely identify that instance.
+3. `key` - as you already know, each dynamically created React component instance needs a `key` property that React uses to uniquely identify that instance.
 
 Now we understand how we create and render three checkboxes in our application. What happens when user checks/unchecks our checkbox? As you will see later - every time user change checkbox's state - our `this.toggleCheckbox` is called.
 
@@ -235,19 +235,19 @@ It's a good time to zoom out for a second and talk about how our application wor
 
 We want to keep our application as simple as possible, so a simple answer for our first question is: let each `Checkbox` component instance maintain it's own state. Meaning: each `Checkbox` component instance is responsible for managing it's own state and knowing when it's checked or unchecked.
 
-That's the key point: our `Application` component is not responsible for managing `Checkbox` component instance state and _hence_ it doesn't know anything about it. The advantage of this approach is that now our `Application` component can create as many instances of a `Checkbox` component as we need and it doesn't need to deal with managing state of each `Checkbox` instance. In addition this solution makes our `Checkbox` component more reusable as it doesn't depend on a parent component.
+That's the key point: our `Application` component is not responsible for managing `Checkbox` component instance state and _hence_ it doesn't know anything about it. The advantage of this approach is that now our `Application` component can create as many instances of a `Checkbox` component as we need and it doesn't need to deal with managing the state of each `Checkbox` instance. In addition this solution makes our `Checkbox` component more reusable as it doesn't depend on a parent component.
 
-This sounds fantastic, but coming back to our second question: how do we know which checkboxes are checked in our `Application` component? This question highlights the disadvantage of our approach, because as I've mentioned earlier: our `Application` component knows nothing about state of each instance of a `Checkbox` component.
+This sounds fantastic, but coming back to our second question: how do we know which checkboxes are checked in our `Application` component? This question highlights the disadvantage of our approach, because as I've mentioned earlier, our `Application` component knows nothing about state of each instance of a `Checkbox` component.
 
-Luckily, there is no need for our `Application` component to know the state of each instance of a `Checkbox` component in any given time. All it needs to know is: which checkboxes _are selected_ at any given time.
+Luckily, there is no need for our `Application` component to know the state of each instance of a `Checkbox` component at any given time. All it needs to know is: which checkboxes _are selected_ at any given time.
 
 Should we store that information in `Application` component's state? Should we make our `Application` component stateful?
 
-No. Remember in React you want to keep as little information in component's state as possible. And this should come naturally to you when you start thinking about it this way: does this information affects what my component is rendering? Meaning: if that information changes - do I want React to rerender my component? If the answer is no - don't store it in component's state. If yes - that information represents your component's state and it should be stored in your component's state.
+No. Remember in React you want to keep as little information in component's state as possible. And this should come naturally to you when you start thinking about it this way: does this information affects what my component is rendering? In other words, if that information changes - do I want React to rerender my component? If the answer is "no" - don't store it in component's state. If the answer is "yes", then that information represents your component's state and it should be stored in your component's state.
 
-In the case of our `Application` component - when user checks or unchecks any checkbox that we render - do we need to rerender our `Application` component? The answer is: clearly no. Therefore, we don't want to store a list of checked checkboxes in `Application` component's state.
+In the case of our `Application` component - when user checks or unchecks any checkbox that we render - do we need to rerender our `Application` component? The answer is clearly no. Therefore, we don't want to store a list of checked checkboxes in `Application` component's state.
 
-Ok, if not in component's state then where?
+Ok, if not in the component's state, then where?
 
 You can see that our `Application` component is "defined" by a component specification object (CSO) that we pass as an argument to `React.createClass` function call:
 
@@ -260,23 +260,23 @@ let Application = React.createClass({ /* This is a component specification objec
 <figcaption class="figure-caption">Code snippet 8. Application.jsx</figcaption>
 </figure>
 
-Since CSO is just a JavaScript object we can add own properties to it, just like you would do with any other JavaScript object.
+Since CSO is just a JavaScript object we can add our own properties to it, just like you would do with any other JavaScript object.
 
 Let's create a property on CSO that will store information about which checkboxes are checked. The next question that we should ask ourselves is: which data structure should I choose for storing that information?
 
 What are the requirements for our perfect data structure?
 
-1. We should easily add and delete our elements.
+1. We should be able to easily add and delete our elements.
 2. All elements must be unique.
-3. We should easily find out if the element is already stored.
+3. We should be able to easily find out if the element is already stored.
 
 That sounds like a description of a data structure that you might know about: Set.
 
-Sets are not supported in ES5 version of JavaScript, but luckily, we're using ES2015 version of JavaScript and Sets are supported there.
+Sets are not supported in ES5 version of JavaScript, but luckily, we're using ES2015 version of JavaScript where Sets are supported.
 
 Now we know that we want to create a new Set and assign it to `Application`'s component specification object.
 
-The next question to ask ourselves is: when should we do that? The better version of that question is: where do we need it, meaning: do we need our set to be ready before or after our `Application` component did mount?
+The next question we need to answer is: when should we create our empty Set? That will depend on whether we want our Set to be created before or after the `Application` component is rendered.
 
 The answer is: we want our Set to be created right before we mount our `Application` component:
 
@@ -295,7 +295,7 @@ If you're not familiar with `componentDidMount` method or any other React compon
 
 `this.selectedCheckboxes = new Set();` creates a new `selectedCheckboxes` property on component specification object and assigns a new set to it.
 
-Now we have an empty set created right before our `Application` component is rendered. Then when user checks/unchecks our checkboxes React will call `toggleCheckbox` function:
+Now we have an empty set created right before our `Application` component is rendered. Then, when user checks/unchecks our checkboxes React will call `toggleCheckbox` function:
 
 <figure class="figure">
 <pre>
@@ -323,7 +323,7 @@ if (this.selectedCheckboxes.has(label)) {}
 <figcaption class="figure-caption">Code snippet 11. Application.jsx</figcaption>
 </figure>
 
-If the label already in our set then we delete from the set:
+If the label is already in our set then we delete from the set:
 
 <figure class="figure">
 <pre>
@@ -345,9 +345,9 @@ this.selectedCheckboxes.add(label);
 <figcaption class="figure-caption">Code snippet 13. Application.jsx</figcaption>
 </figure>
 
-And that's how our `Application` component is going to know which checkboxes are checked at any given moment in time. If the label in the set - it's checked, otherwise - it's unchecked.
+And that's how our `Application` component is going to know which checkboxes are checked at any given moment in time. If the label in the set - it's checked; if not - it's unchecked.
 
-What happens when user clicks `Save` button? Our form is submmited and our `handleFormSubmit` function is called by React:
+What happens when the user clicks `Save` button? Our form is submitted and our `handleFormSubmit` function is called by React:
 
 <figure class="figure">
 <pre>
@@ -375,7 +375,7 @@ handleFormSubmit: function (formSubmitEvent) {
 <figcaption class="figure-caption">Code snippet 15. Application.jsx</figcaption>
 </figure>
 
-First it prevent the default behavious of a form submit event
+First it prevents the default behavious of a form's submit event
 
 <figure class="figure">
 <pre>
@@ -399,7 +399,7 @@ for (let checkbox of this.selectedCheckboxes) {
 <figcaption class="figure-caption">Code snippet 17. Application.jsx</figcaption>
 </figure>
 
-And then it uses `for... of` statement to iterate through our `this.selectedCheckboxes` set and log every item from that set. Which effectively prints the name of each label of checked checkbox.
+And then it uses `for... of` statement to iterate through our `this.selectedCheckboxes` set and log every item from that set. Which effectively prints the label of every checked checkbox.
 
 [`for... of` statement](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/for...of) is available to us in JavaScript version ES2015.
 
@@ -466,7 +466,7 @@ getInitialState: function () {
 <figcaption class="figure-caption">Code snippet 19. Checkbox.jsx</figcaption>
 </figure>
 
-That state is represented by `isChecked` property. By the default its value is set to `false` because initially we want every checkbox to render as uncheked.
+That state is represented by `isChecked` property. By the default its value is set to `false` because initially we want every checkbox to render as unchecked.
 
 Let's see what our `Checkbox` component renders:
 
@@ -497,14 +497,14 @@ It renders `div` element with a Bootstrap class name that we use for styling. In
 The `input` element renders the checkbox. It has 4 properties:
 1. `type` - the type of input: `checkbox` in our case.
 2. `value` - the value of input: which is a label name passed as property from a parent `Application` component.
-3. `checked` - whether it's checked or not: the value comes from component's state property `isChecked`.
-4. `onChange` - `change` event handler: `this.toggleCheckbox` function will be called when user checks or unchecks our checkbox.
+3. `checked` - whether it's checked or not. The value comes from component's state property `isChecked`.
+4. `onChange` - `change` event handler: `this.toggleCheckbox` function will be called when user checks or unchecks a checkbox.
 
 The label text is coming from a property `label` that is passed from a parent `Application` component. It will be either `One`, `Two` or `Three`.
 
-Now if you read [this tutorial](http://react.tips/radio-buttons-in-reactjs/), you will recognise that our `input` element is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components) because we "control" the `value` property by providing our own value that comes from `this.props.label`. If you're not sure about what's the difference between controlled components and uncontrolled components then I recommend you read [this tutorial](http://react.tips/radio-buttons-in-reactjs/).
+Now if you read [this tutorial](http://react.tips/radio-buttons-in-reactjs/), you will recognise that our `input` element is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components) because we "control" the `value` property by providing our own value that comes from `this.props.label`. If you're not sure about the difference between controlled components and uncontrolled components, then I recommend you read [this tutorial](http://react.tips/radio-buttons-in-reactjs/).
 
-What happens when user toggles our checkbox? `this.toggleCheckbox` function is called:
+What happens when the user toggles our checkbox? `this.toggleCheckbox` function is called:
 
 <figure class="figure">
 <pre>
@@ -538,7 +538,7 @@ That's how our `Application` component will always know which checkboxes are sel
 
 And now you know how to use checkboxes in React.js!
 
-Notice that this solution works great for _our_ needs. If you have different requirements you might need to think of a different way of creating checkboxes. For example, how do you implement a button that checks all checkboxes? I'll leave it for you to figure it out as a challenge! And if you do figure it out - please [propose to write your tutorial](http://bit.ly/PublishMyTutorial) for this website!
+Notice that this solution works great for _our specific_ needs. If you have different requirements you might need to think of a different way of creating checkboxes. For example, how do you implement a button that checks all checkboxes? I'll leave it for you to figure it out as a challenge! And if you do figure it out - please [propose your tutorial](http://bit.ly/PublishMyTutorial) for this website!
 
 Thank you for reading this React tutorial!
 
