@@ -42,7 +42,7 @@ Where do we store it then? That's why you might need to introduce Flux architect
 
 This example is a perfect introduction to the Flux architecture, because you're building exactly the same app, but now you're clearly separating your UI logic from your application state logic.
 
-## Built with React.js and Redux and JavaScript ES2016
+## Built with React.js and Redux and JavaScript ES2015
 
 Flux is a great start for understanding how data flows in your React application. Redux takes it to the next level by building on top of ideas from Flux and introducing new important concepts that allow you to build really scalable and robust React apps.
 
