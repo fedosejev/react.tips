@@ -13,7 +13,7 @@ They all implement exactly the same Shopping List app, but most importantly - th
   <figcaption class="figure-caption">Figure 1. Our Shopping List application.</figcaption>
 </figure>
 
-## Built React.js with JavaScript ES5
+## Built with React.js and JavaScript ES5
 
 In this example, I am using only React.js without Flux or Redux to build the entire app. And I am using the good old JavaScript that all know and love (or hate?): version ECMAScript 5.
 
@@ -22,7 +22,7 @@ In this example, I am using only React.js without Flux or Redux to build the ent
 
 This example is the best place for you to start if you're not familiar with Flux or Redux at all. It helps you to understand _why_ we need Flux or Redux. You will feel strange when storing application state (the shopping list itself) in React components, knowing that React _should_ only be responsible for knowing how to render the user interface.
 
-## Built React.js with JavaScript ES2015
+## Built with React.js and JavaScript ES2015
 
 The industry uses a newer version of JavaScript today: ECMAScript 2015. It brings new syntax and React takes advantage of that syntax.
 
@@ -31,7 +31,7 @@ The industry uses a newer version of JavaScript today: ECMAScript 2015. It bring
 
 If you want to see how to transition from tradition ES5 syntax to newer ES2015 syntax in the context of React app, then this example is perfect for you. Feel free to compare it with the the previous one (ES5 version).
 
-## Built React.js with Flux and JavaScript ES5
+## Built with React.js and Flux and JavaScript ES5
 
 If React feels familiar to you and you can build simple apps with it then you most likely faced a problem of accessing application state from different React components. It's not a straight forward task! And it feels awkward, because we know that React is a UI library, and if we follow the separation of concerns principle, then it's clear to us that we shouldn't store application state in React components!
 
@@ -42,7 +42,7 @@ Where do we store it then? That's why you might need to introduce Flux architect
 
 This example is a perfect introduction to the Flux architecture, because you're building exactly the same app, but now you're clearly separating your UI logic from your application state logic.
 
-## Built React.js with Redux and JavaScript ES2016
+## Built with React.js and Redux and JavaScript ES2016
 
 Flux is a great start for understanding how data flows in your React application. Redux takes it to the next level by building on top of ideas from Flux and introducing new important concepts that allow you to build really scalable and robust React apps.
 
