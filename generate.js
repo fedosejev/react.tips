@@ -1,31 +1,47 @@
-var fs = require('fs');
-var ejs = require('ejs');
-var mkdirp = require('mkdirp');
-var minify = require('html-minifier').minify;
-var showdown = require('showdown');
-var fsExtra = require('fs-extra');
+const fs = require('fs');
+const path = require('path');
+const ejs = require('ejs');
+const mkdirp = require('mkdirp');
+const minify = require('html-minifier').minify;
+const showdown = require('showdown');
+const fsExtra = require('fs-extra');
 
-function getListOfDirectoriesInDataDirectory() {
-  var dataDirectoryPath = __dirname + '/data/';
-  var fileNames = fs.readdirSync(dataDirectoryPath, 'utf8');
-  var directoryNames = fileNames.filter(function (fileName) {
-    return fs.statSync(dataDirectoryPath + fileName).isDirectory();
-  });
+const readPostConfigFromFile = postDirectoryName => {
+  const configFilePath = path.join(__dirname, 'data', postDirectoryName, 'config.json');
+  return JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
+};
+
+const getCanonicalPostUrl = (websiteConfig, postConfig) => (
+  `${websiteConfig.url}${path.join(postConfig.slug, '/')}`
+);
+
+const readWebsiteConfigFromFile = () => {
+  const configFilePath = path.join(__dirname, 'data/config.json');
+  return JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
+};
+
+const getListOfDirectoriesInDataDirectory = () => {
+  const dataDirectoryPath = path.join(__dirname, 'data');
+  const fileNames = fs.readdirSync(dataDirectoryPath, 'utf8');
+  const directoryNames = fileNames
+  .filter(fileName => (
+    fs.statSync(path.join(dataDirectoryPath, fileName)).isDirectory()
+  ));
 
   return directoryNames;
-}
+};
 
-function getListOfPostsInDataDirectory() {
-  var dataDirectoryPath = __dirname + '/data/';
-  var fileNames = fs.readdirSync(dataDirectoryPath, 'utf8');
-  var posts = fileNames
-              .filter(function checkIfDirectory(fileName) {
-                return fs.statSync(dataDirectoryPath + fileName).isDirectory();
-              })
+const getListOfPostsInDataDirectory = () => {
+  const dataDirectoryPath = path.join(__dirname, 'data');
+  const fileNames = fs.readdirSync(dataDirectoryPath, 'utf8');
+  const posts = fileNames
+              .filter(fileName => (
+                fs.statSync(path.join(dataDirectoryPath, fileName)).isDirectory()
+              ))
               .map(readPostConfigFromFile)
-              .sort(function compare(a, b) {
-                var dateA = new Date(a.date);
-                var dateB = new Date(b.date);
+              .sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
 
                 if (dateA < dateB) {
                   return 1;
@@ -39,40 +55,40 @@ function getListOfPostsInDataDirectory() {
               });
 
   return posts;
-}
+};
 
-function convertMarkdownToHtml(markdown) {
-  var converter = new showdown.Converter({
-    noHeaderId: true
+const convertMarkdownToHtml = markdown => {
+  const converter = new showdown.Converter({
+    noHeaderId: true,
   });
-  
+
   return converter.makeHtml(markdown);
-}
+};
 
-function readMarkdownFromFile(markdownFilePath) {
-  return fs.readFileSync(markdownFilePath, 'utf8');
-}
+const readMarkdownFromFile = markdownFilePath => (
+  fs.readFileSync(markdownFilePath, 'utf8')
+);
 
-function getPostBuildDirectoryPath(postConfig) {
-  return __dirname + '/build/' + postConfig.slug;
-}
+const getPostBuildDirectoryPath = postConfig => (
+  path.join(__dirname, 'build', postConfig.slug)
+);
 
-function createPostHtmlFile(postHtmlContent, postConfig) {
-  var directoryPath = getPostBuildDirectoryPath(postConfig);
-  var htmlFilePath = __dirname + '/build/' + postConfig.slug + '/index.html';
+const createPostHtmlFile = (postHtmlContent, postConfig) => {
+  const directoryPath = getPostBuildDirectoryPath(postConfig);
+  const htmlFilePath = path.join(__dirname, 'build', postConfig.slug, 'index.html');
 
   mkdirp.sync(directoryPath);
 
   // https://github.com/mde/ejs/issues/124
-  var templateFilePath = __dirname + '/source/templates/post/index.ejs';
+  const templateFilePath = path.join(__dirname, 'source/templates/post/index.ejs');
 
-  var compiled = ejs.compile(fs.readFileSync(templateFilePath, 'utf8'), {
-    filename: templateFilePath
+  const compiled = ejs.compile(fs.readFileSync(templateFilePath, 'utf8'), {
+    filename: templateFilePath,
   });
 
-  var websiteConfig = readWebsiteConfigFromFile();
+  const websiteConfig = readWebsiteConfigFromFile();
 
-  var htmlContent = compiled({
+  let htmlContent = compiled({
     websiteName: websiteConfig.name,
     websiteDescription: websiteConfig.description,
     showHomeLink: true,
@@ -82,87 +98,73 @@ function createPostHtmlFile(postHtmlContent, postConfig) {
     postSlug: postConfig.slug,
     googleAnalyticsTrackingId: websiteConfig.googleAnalyticsTrackingId,
     addThisPubId: websiteConfig.addThisPubId,
-    canonicalPostUrl: getCanonicalPostUrl(websiteConfig, postConfig)
+    canonicalPostUrl: getCanonicalPostUrl(websiteConfig, postConfig),
   });
 
   htmlContent = minify(htmlContent, {
-    collapseWhitespace: true
+    collapseWhitespace: true,
   });
 
   fs.writeFileSync(htmlFilePath, htmlContent);
-}
+};
 
-function readPostConfigFromFile(postDirectoryName) {
-  var configFilePath = __dirname + '/data/' + postDirectoryName + '/config.json';
-  return JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
-}
+const copyPostImagesToBuild = postConfig => {
+  const postImagesDirectory = path.join(__dirname, 'data', postConfig.slug, 'images');
 
-function readWebsiteConfigFromFile() {
-  var configFilePath = __dirname + '/data/config.json';
-  return JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
-}
-
-function copyPostImagesToBuild(postConfig) {
-  var postImagesDirectory = __dirname + '/data/' + postConfig.slug + '/images/';
-
-  fs.stat(postImagesDirectory, function (error, stats) {
-    if (! error) {
-      var buildPostImagesDirectory = getPostBuildDirectoryPath(postConfig) + '/images/';
+  fs.stat(postImagesDirectory, error => {
+    if (!error) {
+      const buildPostImagesDirectory = path.join(getPostBuildDirectoryPath(postConfig), 'images/');
       fsExtra.copySync(postImagesDirectory, buildPostImagesDirectory);
     }
   });
-}
+};
 
-function getCanonicalPostUrl(websiteConfig, postConfig) {
-  return websiteConfig.url + postConfig.slug + '/';
-}
+const createPost = postDirectoryName => {
+  const postConfig = readPostConfigFromFile(postDirectoryName);
+  const contentFilePath = path.join(__dirname, 'data', postConfig.slug, 'content.md');
+  const postMarkdown = readMarkdownFromFile(contentFilePath);
+  const postHtml = convertMarkdownToHtml(postMarkdown);
 
-function createPost(postDirectoryName) {
-  var postConfig = readPostConfigFromFile(postDirectoryName);
-  var contentFilePath = __dirname + '/data/' + postConfig.slug + '/content.md';
-  var postMarkdown = readMarkdownFromFile(contentFilePath);
-  var postHtml = convertMarkdownToHtml(postMarkdown);
-
-  console.log('💡 Creating: ' + postConfig.title);
+  console.log(`💡 Creating: ${postConfig.title}`); // eslint-disable-line no-console
 
   createPostHtmlFile(postHtml, postConfig);
   copyPostImagesToBuild(postConfig);
-}
+};
 
-function createPosts() {
-  getListOfDirectoriesInDataDirectory().forEach(createPost);
-}
+const createPosts = () => (
+  getListOfDirectoriesInDataDirectory().forEach(createPost)
+);
 
-function createHomePage() {
-  var htmlFilePath = __dirname + '/build/index.html';
+const createHomePage = () => {
+  const htmlFilePath = path.join(__dirname, 'build/index.html');
 
   // https://github.com/mde/ejs/issues/124
-  var templateFilePath = __dirname + '/source/templates/home/index.ejs';
+  const templateFilePath = path.join(__dirname, 'source/templates/home/index.ejs');
 
-  var compiled = ejs.compile(fs.readFileSync(templateFilePath, 'utf8'), {
-    filename: templateFilePath
+  const compiled = ejs.compile(fs.readFileSync(templateFilePath, 'utf8'), {
+    filename: templateFilePath,
   });
 
-  var posts = getListOfPostsInDataDirectory();
+  const posts = getListOfPostsInDataDirectory();
 
-  var websiteConfig = readWebsiteConfigFromFile();
+  const websiteConfig = readWebsiteConfigFromFile();
 
-  var htmlContent = compiled({
+  let htmlContent = compiled({
     websiteName: websiteConfig.name,
     websiteDescription: websiteConfig.description,
-    posts: posts,
+    posts,
     showHomeLink: false,
-    googleAnalyticsTrackingId: websiteConfig.googleAnalyticsTrackingId
+    googleAnalyticsTrackingId: websiteConfig.googleAnalyticsTrackingId,
   });
 
   htmlContent = minify(htmlContent, {
-    collapseWhitespace: true
+    collapseWhitespace: true,
   });
 
   fs.writeFileSync(htmlFilePath, htmlContent);
-}
+};
 
 createPosts();
 createHomePage();
 
-console.log('🏁  Finished.');
+console.log('🏁  Finished.'); // eslint-disable-line no-console
