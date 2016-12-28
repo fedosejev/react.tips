@@ -234,16 +234,21 @@ state = {
 </code>
 </pre><figcaption class="figure-caption">Code snippet 18. Checkbox.js</figcaption></figure><p>The state of our component is represented by <code>isChecked</code> property. By the default its value is set to <code>false</code> because initially we want every checkbox to render as unchecked.</p><p>Let's see what our <code>Checkbox</code> component renders:</p><figure class="figure"><pre>
 <code class="language-jsx">
-render: function () {
+render() {
+  const { label } = this.props;
+  const { isChecked } = this.state;
+
   return (
     &lt;div className="checkbox"&gt;
       &lt;label&gt;
-        &lt;input type="checkbox"
-                        value={this.props.label}
-                        checked={this.state.isChecked}
-                        onChange={this.toggleCheckbox} /&gt;
+        &lt;input
+          type="checkbox"
+          value={label}
+          checked={isChecked}
+          onChange={this.toggleCheckboxChange}
+        /&gt;
 
-        {this.props.label}
+        {label}
       &lt;/label&gt;
     &lt;/div&gt;
   );

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-<url> <loc>http://react.tips/</loc> <lastmod>2016-12-28T13:27:59Z</lastmod> <changefreq>weekly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>http://react.tips/checkboxes-in-react</loc> <lastmod>2016-12-28T13:27:58Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>http://react.tips/from-react-to-flux-to-redux</loc> <lastmod>2016-12-28T13:27:58Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>http://react.tips/how-reactjs-components-communicate</loc> <lastmod>2016-12-28T13:27:58Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>http://react.tips/how-to-create-reactjs-components-dynamically</loc> <lastmod>2016-12-28T13:27:58Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>http://react.tips/how-to-use-default-properties-in-react</loc> <lastmod>2016-12-28T13:27:58Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>http://react.tips/how-to-use-react-component-lifecycle-methods</loc> <lastmod>2016-12-28T13:27:58Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>http://react.tips/radio-buttons-in-reactjs</loc> <lastmod>2016-12-28T13:27:59Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>http://react.tips/reactjs-and-geocoding</loc> <lastmod>2016-12-28T13:27:59Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>weekly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/checkboxes-in-react</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/from-react-to-flux-to-redux</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/how-reactjs-components-communicate</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/how-to-create-reactjs-components-dynamically</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/how-to-use-default-properties-in-react</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/how-to-use-react-component-lifecycle-methods</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/radio-buttons-in-reactjs</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>http://react.tips/reactjs-and-geocoding</loc> <lastmod>2016-12-28T13:28:42Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
 </urlset>

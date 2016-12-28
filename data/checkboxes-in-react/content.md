@@ -471,16 +471,21 @@ Let's see what our `Checkbox` component renders:
 <figure class="figure">
 <pre>
 <code class="language-jsx">
-render: function () {
+render() {
+  const { label } = this.props;
+  const { isChecked } = this.state;
+
   return (
     <div className="checkbox">
       <label>
-        <input type="checkbox"
-                        value={this.props.label}
-                        checked={this.state.isChecked}
-                        onChange={this.toggleCheckbox} />
+        <input
+          type="checkbox"
+          value={label}
+          checked={isChecked}
+          onChange={this.toggleCheckboxChange}
+        />
 
-        {this.props.label}
+        {label}
       </label>
     </div>
   );
