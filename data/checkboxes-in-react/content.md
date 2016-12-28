@@ -451,16 +451,14 @@ export default Checkbox;
 
 Our `Checkbox` component is a stateful component because it needs to know whether a checkbox element should be rendered as checked or unchecked.
 
-And as every stateful component in React it has `getInitialState` function:
+We'll use [class property](https://babeljs.io/docs/plugins/transform-class-properties/) `state` to set the initial state of our `Checkbox` component:
 
 <figure class="figure">
 <pre>
 <code class="language-js">
-getInitialState: function () {
-  return {
-    isChecked: false
-  };
-},
+state = {
+  isChecked: false,
+}
 </code>
 </pre>
 <figcaption class="figure-caption">Code snippet 18. Checkbox.js</figcaption>
