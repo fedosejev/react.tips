@@ -93,9 +93,9 @@ render() {
 </code>
 </pre><figcaption class="figure-caption">Code snippet 3. Application.jsx</figcaption></figure><p>Inside of our <code>form</code> element we call <code>this.createCheckboxes</code> function that creates three instances of a <code>Checkbox</code> component. We'll see how exactly it does that in a moment. It's important to recognise that here we're creating our instances of a <code>Checkbox</code> component <strong>dynamically</strong>. If you're not familiar with this approach, then please read <a href="http://react.tips/how-to-create-reactjs-components-dynamically/">this tutorial</a> first.</p><p>We then create a button element of type <code>submit</code> which will submit our form when user clicks on it, we're telling React to call <code>this.handleFormSubmit</code> function when this happens: <code>&lt;form onSubmit={this.handleFormSubmit}&gt;</code>.</p><p>Let's take a look at how exactly we're creating our instances of <code>Checkbox</code> component dynamically. Here is our <code>createCheckboxes</code> function:</p><figure class="figure"><pre>
 <code class="language-jsx">
-createCheckboxes: function () {
-  return items.map(this.createCheckbox);
-},
+createCheckboxes = () =&gt; (
+  items.map(this.createCheckbox)
+)
 </code>
 </pre><figcaption class="figure-caption">Code snippet 4. Application.jsx</figcaption></figure><p>It iterates over <code>items</code> array and calls <code>this.createCheckbox</code> function for each item in that array. Where is <code>items</code> array coming from and what is it for?</p><p>In our <code>Application.jsx</code> file before declaring our <code>Application</code> component, we create <code>items</code> constant that references an array of three items:</p><figure class="figure"><pre>
 <code class="language-js">
