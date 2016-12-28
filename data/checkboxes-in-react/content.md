@@ -534,6 +534,7 @@ It changes `Checkbox` component's state. It set's `isChecked`'s value to the opp
 <pre>
 <code class="language-js">
 const { handleCheckboxChange, label } = this.props;
+// ...
 handleCheckboxChange(label);
 </code>
 </pre>
