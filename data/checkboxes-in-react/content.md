@@ -478,7 +478,7 @@ render() {
   return (
     <div className="checkbox">
       <label>
-                    <input
+        <input
                     type="checkbox"
                     value={label}
                     checked={isChecked}
