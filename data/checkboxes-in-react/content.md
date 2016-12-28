@@ -363,7 +363,7 @@ handleFormSubmit = formSubmitEvent => {
 <figcaption class="figure-caption">Code snippet 14. Application.js</figcaption>
 </figure>
 
-First it prevents the default behavior of a form's submit event
+First it prevents the default behavior of a form's submit event:
 
 <figure class="figure">
 <pre>
