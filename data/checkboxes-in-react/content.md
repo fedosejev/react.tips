@@ -464,7 +464,7 @@ state = {
 <figcaption class="figure-caption">Code snippet 18. Checkbox.js</figcaption>
 </figure>
 
-That state is represented by `isChecked` property. By the default its value is set to `false` because initially we want every checkbox to render as unchecked.
+The state of our component is represented by `isChecked` property. By the default its value is set to `false` because initially we want every checkbox to render as unchecked.
 
 Let's see what our `Checkbox` component renders:
 
