@@ -271,9 +271,9 @@ The answer is: we want our Set to be created right before we mount our `Applicat
 <figure class="figure">
 <pre>
 <code class="language-js">
-componentWillMount: function () {
+componentWillMount = () => {
   this.selectedCheckboxes = new Set();
-},
+}
 </code>
 </pre>
 <figcaption class="figure-caption">Code snippet 8. Application.js</figcaption>
@@ -288,13 +288,13 @@ Now we have an empty set created right before our `Application` component is ren
 <figure class="figure">
 <pre>
 <code class="language-js">
-toggleCheckbox: function (label) {
+toggleCheckbox = label => {
   if (this.selectedCheckboxes.has(label)) {
     this.selectedCheckboxes.delete(label);
   } else {
     this.selectedCheckboxes.add(label);
   }
-},
+}
 </code>
 </pre>
 <figcaption class="figure-caption">Code snippet 9. Application.js</figcaption>
@@ -351,19 +351,19 @@ Let's take a look at `handleFormSubmit` function:
 <figure class="figure">
 <pre>
 <code class="language-jsx">
-handleFormSubmit: function (formSubmitEvent) {
+handleFormSubmit = formSubmitEvent => {
   formSubmitEvent.preventDefault();
 
-  for (let checkbox of this.selectedCheckboxes) {
+  for (const checkbox of this.selectedCheckboxes) {
     console.log(checkbox, 'is selected.');
   }
-},
+}
 </code>
 </pre>
 <figcaption class="figure-caption">Code snippet 14. Application.js</figcaption>
 </figure>
 
-First it prevents the default behavious of a form's submit event
+First it prevents the default behavior of a form's submit event
 
 <figure class="figure">
 <pre>
@@ -379,7 +379,7 @@ And then it's
 <figure class="figure">
 <pre>
 <code class="language-js">
-for (let checkbox of this.selectedCheckboxes) {
+for (const checkbox of this.selectedCheckboxes) {
   console.log(checkbox, 'is selected.');
 }
 </code>
@@ -398,43 +398,55 @@ Next let's take a look at our `Checkbox` component:
 <figure class="figure">
 <pre>
 <code class="language-jsx">
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-let Checkbox = React.createClass({
-  getInitialState: function () {
-    return {
-      isChecked: false
-    };
-  },
+class Checkbox extends Component {
+  state = {
+    isChecked: false,
+  }
 
-  toggleCheckbox: function () {
-    this.setState({
-      isChecked: ! this.state.isChecked
-    });
+  toggleCheckboxChange = () => {
+    const { handleCheckboxChange, label } = this.props;
 
-    this.props.handleCheckboxChange(this.props.label);
-  },
+    this.setState(({ isChecked }) => (
+      {
+        isChecked: !isChecked,
+      }
+    ));
 
-  render: function () {
+    handleCheckboxChange(label);
+  }
+
+  render() {
+    const { label } = this.props;
+    const { isChecked } = this.state;
+
     return (
       <div className="checkbox">
         <label>
-          <input type="checkbox"
-                          value={this.props.label}
-                          checked={this.state.isChecked}
-                          onChange={this.toggleCheckbox} />
+          <input
+            type="checkbox"
+            value={label}
+            checked={isChecked}
+            onChange={this.toggleCheckboxChange}
+          />
 
-          {this.props.label}
+          {label}
         </label>
       </div>
     );
   }
-});
+}
+
+Checkbox.propTypes = {
+  label: PropTypes.string.isRequired,
+  handleCheckboxChange: PropTypes.func.isRequired,
+};
 
 export default Checkbox;
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 17. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 17. Checkbox.js</figcaption>
 </figure>
 
 Our `Checkbox` component is a stateful component because it needs to know whether a checkbox element should be rendered as checked or unchecked.
@@ -451,7 +463,7 @@ getInitialState: function () {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 18. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 18. Checkbox.js</figcaption>
 </figure>
 
 That state is represented by `isChecked` property. By the default its value is set to `false` because initially we want every checkbox to render as unchecked.
@@ -477,7 +489,7 @@ render: function () {
 }
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 19. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 19. Checkbox.js</figcaption>
 </figure>
 
 It renders `div` element with a Bootstrap class name that we use for styling. Inside of it we have `label` element with two children: 1) `input` element and 2) label text.
@@ -506,7 +518,7 @@ toggleCheckbox: function () {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 20. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 20. Checkbox.js</figcaption>
 </figure>
 
 It changes `Checkbox` component's state. It set's `isChecked`'s value to the opposite of it's current value __and__ it calls `handleCheckboxChange` function which is passed to `Checkbox` component as a property by it's parent `Application` component:
@@ -517,7 +529,7 @@ It changes `Checkbox` component's state. It set's `isChecked`'s value to the opp
 this.props.handleCheckboxChange(this.props.label);
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 21. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 21. Checkbox.js</figcaption>
 </figure>
 
 This function call will trigger `toggleCheckbox` function in `Application` component that will add or delete the label name that we're passing as an argument via `this.props.label` from the set.
