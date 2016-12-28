@@ -158,9 +158,9 @@ Let's take a look at how exactly we're creating our instances of `Checkbox` comp
 <figure class="figure">
 <pre>
 <code class="language-jsx">
-createCheckboxes: function () {
-  return items.map(this.createCheckbox);
-},
+createCheckboxes = () => (
+  items.map(this.createCheckbox)
+)
 </code>
 </pre>
 <figcaption class="figure-caption">Code snippet 4. Application.jsx</figcaption>
