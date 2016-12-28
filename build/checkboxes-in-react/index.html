@@ -256,17 +256,22 @@ render() {
 </code>
 </pre><figcaption class="figure-caption">Code snippet 19. Checkbox.js</figcaption></figure><p>It renders <code>div</code> element with a Bootstrap class name that we use for styling. Inside of it we have <code>label</code> element with two children: 1) <code>input</code> element and 2) label text.</p><p>The <code>input</code> element renders the checkbox. It has 4 properties:</p><ol><li><code>type</code> - the type of input: <code>checkbox</code> in our case.</li><li><code>value</code> - the value of input: which is a label name passed as property from a parent <code>Application</code> component.</li><li><code>checked</code> - whether it's checked or not. The value comes from component's state property <code>isChecked</code>.</li><li><code>onChange</code> - <code>change</code> event handler: <code>this.toggleCheckboxChange</code> function will be called when user checks or unchecks a checkbox.</li></ol><p>The label text is coming from a property <code>label</code> that is passed from a parent <code>Application</code> component. It will be either <code>One</code>, <code>Two</code> or <code>Three</code>.</p><p>Now if you read <a href="http://react.tips/radio-buttons-in-reactjs/">this tutorial</a>, you will recognise that our <code>input</code> element is a <a href="https://facebook.github.io/react/docs/forms.html#controlled-components">controlled component</a> because we "control" the <code>value</code> property by providing our own value that comes from <code>this.props.label</code>. If you're not sure about the difference between controlled components and uncontrolled components, then I recommend you read <a href="http://react.tips/radio-buttons-in-reactjs/">this tutorial</a>.</p><p>What happens when the user toggles our checkbox? <code>this.toggleCheckboxChange</code> function is called:</p><figure class="figure"><pre>
 <code class="language-js">
-toggleCheckbox: function () {
-  this.setState({
-    isChecked: ! this.state.isChecked
-  });
+toggleCheckboxChange = () =&gt; {
+  const { handleCheckboxChange, label } = this.props;
 
-  this.props.handleCheckboxChange(this.props.label);
-},
+  this.setState(({ isChecked }) =&gt; (
+    {
+      isChecked: !isChecked,
+    }
+  ));
+
+  handleCheckboxChange(label);
+}
 </code>
 </pre><figcaption class="figure-caption">Code snippet 20. Checkbox.js</figcaption></figure><p>It changes <code>Checkbox</code> component's state. It set's <code>isChecked</code>'s value to the opposite of it's current value <strong>and</strong> it calls <code>handleCheckboxChange</code> function which is passed to <code>Checkbox</code> component as a property by it's parent <code>Application</code> component:</p><figure class="figure"><pre>
 <code class="language-js">
-this.props.handleCheckboxChange(this.props.label);
+const { handleCheckboxChange, label } = this.props;
+handleCheckboxChange(label);
 </code>
 </pre><figcaption class="figure-caption">Code snippet 21. Checkbox.js</figcaption></figure><p>This function call will trigger <code>toggleCheckbox</code> function in <code>Application</code> component that will add or delete the label name that we're passing as an argument via <code>this.props.label</code> from the set.</p><p>That's how our <code>Application</code> component will always know which checkboxes are selected at any given moment in time.</p><p>And now you know how to use checkboxes in React.js!</p><p>Notice that this solution works great for <em>our specific</em> needs. If you have different requirements you might need to think of a different way of creating checkboxes. For example, how do you implement a button that checks all checkboxes? I'll leave it for you to figure it out as a challenge! And if you do figure it out - please <a href="http://bit.ly/PublishMyTutorial">propose your tutorial</a> for this website!</p><p>Thank you for reading this React tutorial!</p><p>Please take a look at <a href="https://github.com/fedosejev/checkboxes-in-react">the complete source code on GitHub</a> and <a href="https://fedosejev.github.io/checkboxes-in-react/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p><p>P.S. I've also written <a href="http://reactessentials.com">React.js Essentials book</a> and <a href="http://progressdots.com">I teach people React.js and JavaScript</a>!</p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
     /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.

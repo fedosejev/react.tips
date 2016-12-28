@@ -512,13 +512,17 @@ What happens when the user toggles our checkbox? `this.toggleCheckboxChange` fun
 <figure class="figure">
 <pre>
 <code class="language-js">
-toggleCheckbox: function () {
-  this.setState({
-    isChecked: ! this.state.isChecked
-  });
+toggleCheckboxChange = () => {
+  const { handleCheckboxChange, label } = this.props;
 
-  this.props.handleCheckboxChange(this.props.label);
-},
+  this.setState(({ isChecked }) => (
+    {
+      isChecked: !isChecked,
+    }
+  ));
+
+  handleCheckboxChange(label);
+}
 </code>
 </pre>
 <figcaption class="figure-caption">Code snippet 20. Checkbox.js</figcaption>
@@ -529,7 +533,8 @@ It changes `Checkbox` component's state. It set's `isChecked`'s value to the opp
 <figure class="figure">
 <pre>
 <code class="language-js">
-this.props.handleCheckboxChange(this.props.label);
+const { handleCheckboxChange, label } = this.props;
+handleCheckboxChange(label);
 </code>
 </pre>
 <figcaption class="figure-caption">Code snippet 21. Checkbox.js</figcaption>
