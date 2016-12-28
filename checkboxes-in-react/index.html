@@ -226,13 +226,11 @@ Checkbox.propTypes = {
 
 export default Checkbox;
 </code>
-</pre><figcaption class="figure-caption">Code snippet 17. Checkbox.js</figcaption></figure><p>Our <code>Checkbox</code> component is a stateful component because it needs to know whether a checkbox element should be rendered as checked or unchecked.</p><p>And as every stateful component in React it has <code>getInitialState</code> function:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 17. Checkbox.js</figcaption></figure><p>Our <code>Checkbox</code> component is a stateful component because it needs to know whether a checkbox element should be rendered as checked or unchecked.</p><p>We'll use <a href="https://babeljs.io/docs/plugins/transform-class-properties/">class property</a> <code>state</code> to set the initial state of our <code>Checkbox</code> component:</p><figure class="figure"><pre>
 <code class="language-js">
-getInitialState: function () {
-  return {
-    isChecked: false
-  };
-},
+state = {
+  isChecked: false,
+}
 </code>
 </pre><figcaption class="figure-caption">Code snippet 18. Checkbox.js</figcaption></figure><p>That state is represented by <code>isChecked</code> property. By the default its value is set to <code>false</code> because initially we want every checkbox to render as unchecked.</p><p>Let's see what our <code>Checkbox</code> component renders:</p><figure class="figure"><pre>
 <code class="language-jsx">
