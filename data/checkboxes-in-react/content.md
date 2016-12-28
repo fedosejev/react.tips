@@ -248,22 +248,9 @@ No. Remember in React you want to keep as little information in component's stat
 
 In the case of our `Application` component - when user checks or unchecks any checkbox that we render - do we need to rerender our `Application` component? The answer is clearly no. Therefore, we don't want to store a list of checked checkboxes in `Application` component's state.
 
-Ok, if not in the component's state, then where?
+Ok, if not in the component's state, then where? In a property that we can set on the component's class.
 
-You can see that our `Application` component is "defined" by a component specification object (CSO) that we pass as an argument to `React.createClass` function call:
-
-<figure class="figure">
-<pre>
-<code class="language-jsx">
-let Application = React.createClass({ /* This is a component specification object. */ });
-</code>
-</pre>
-<figcaption class="figure-caption">Code snippet 8. Application.js</figcaption>
-</figure>
-
-Since CSO is just a JavaScript object we can add our own properties to it, just like you would do with any other JavaScript object.
-
-Let's create a property on CSO that will store information about which checkboxes are checked. The next question that we should ask ourselves is: which data structure should I choose for storing that information?
+Let's set a property on the component's class that will store information about which checkboxes are checked. The next question that we should ask ourselves is: which data structure should I choose for storing that information?
 
 What are the requirements for our perfect data structure?
 
@@ -289,7 +276,7 @@ componentWillMount: function () {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 9. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 8. Application.js</figcaption>
 </figure>
 
 If you're not familiar with `componentDidMount` method or any other React component lifecycle methods, then please read [this tutorial](http://react.tips/how-to-use-react-component-lifecycle-methods/) first.
@@ -310,7 +297,7 @@ toggleCheckbox: function (label) {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 10. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 9. Application.js</figcaption>
 </figure>
 
 That function will reference our set and check if a specific checkbox label is in that set:
@@ -321,7 +308,7 @@ That function will reference our set and check if a specific checkbox label is i
 if (this.selectedCheckboxes.has(label)) {}
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 11. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 10. Application.js</figcaption>
 </figure>
 
 If the label is already in our set then we delete from the set:
@@ -332,7 +319,7 @@ If the label is already in our set then we delete from the set:
 this.selectedCheckboxes.delete(label);
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 12. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 11. Application.js</figcaption>
 </figure>
 
 Otherwise, we add it to our set:
@@ -343,7 +330,7 @@ Otherwise, we add it to our set:
 this.selectedCheckboxes.add(label);
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 13. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 12. Application.js</figcaption>
 </figure>
 
 And that's how our `Application` component is going to know which checkboxes are checked at any given moment in time. If the label in the set - it's checked; if not - it's unchecked.
@@ -356,7 +343,7 @@ What happens when the user clicks `Save` button? Our form is submitted and our `
 <form onSubmit={this.handleFormSubmit}>...</form>
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 14. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 13. Application.js</figcaption>
 </figure>
 
 Let's take a look at `handleFormSubmit` function:
@@ -373,7 +360,7 @@ handleFormSubmit: function (formSubmitEvent) {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 15. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 14. Application.js</figcaption>
 </figure>
 
 First it prevents the default behavious of a form's submit event
@@ -384,7 +371,7 @@ First it prevents the default behavious of a form's submit event
 formSubmitEvent.preventDefault();
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 16. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 15. Application.js</figcaption>
 </figure>
 
 And then it's
@@ -397,7 +384,7 @@ for (let checkbox of this.selectedCheckboxes) {
 }
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 17. Application.js</figcaption>
+<figcaption class="figure-caption">Code snippet 16. Application.js</figcaption>
 </figure>
 
 And then it uses `for... of` statement to iterate through our `this.selectedCheckboxes` set and log every item from that set. Which effectively prints the label of every checked checkbox.
@@ -447,7 +434,7 @@ let Checkbox = React.createClass({
 export default Checkbox;
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 18. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 17. Checkbox.jsx</figcaption>
 </figure>
 
 Our `Checkbox` component is a stateful component because it needs to know whether a checkbox element should be rendered as checked or unchecked.
@@ -464,7 +451,7 @@ getInitialState: function () {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 19. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 18. Checkbox.jsx</figcaption>
 </figure>
 
 That state is represented by `isChecked` property. By the default its value is set to `false` because initially we want every checkbox to render as unchecked.
@@ -490,7 +477,7 @@ render: function () {
 }
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 20. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 19. Checkbox.jsx</figcaption>
 </figure>
 
 It renders `div` element with a Bootstrap class name that we use for styling. Inside of it we have `label` element with two children: 1) `input` element and 2) label text.
@@ -519,7 +506,7 @@ toggleCheckbox: function () {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 21. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 20. Checkbox.jsx</figcaption>
 </figure>
 
 It changes `Checkbox` component's state. It set's `isChecked`'s value to the opposite of it's current value __and__ it calls `handleCheckboxChange` function which is passed to `Checkbox` component as a property by it's parent `Application` component:
@@ -530,7 +517,7 @@ It changes `Checkbox` component's state. It set's `isChecked`'s value to the opp
 this.props.handleCheckboxChange(this.props.label);
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 22. Checkbox.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 21. Checkbox.jsx</figcaption>
 </figure>
 
 This function call will trigger `toggleCheckbox` function in `Application` component that will add or delete the label name that we're passing as an argument via `this.props.label` from the set.
