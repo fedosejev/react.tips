@@ -478,12 +478,12 @@ render() {
   return (
     <div className="checkbox">
       <label>
-        <input
-          type="checkbox"
-          value={label}
-          checked={isChecked}
-          onChange={this.toggleCheckboxChange}
-        />
+                    <input
+                    type="checkbox"
+                    value={label}
+                    checked={isChecked}
+                    onChange={this.toggleCheckboxChange}
+                />
 
         {label}
       </label>
