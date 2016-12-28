@@ -70,10 +70,10 @@ class Application extends Component {
 
   createCheckbox = label => (
     <Checkbox
-      label={label}
-      handleCheckboxChange={this.toggleCheckbox}
-      key={label}
-    />
+          label={label}
+          handleCheckboxChange={this.toggleCheckbox}
+          key={label}
+        />
   )
 
   createCheckboxes = () => (
