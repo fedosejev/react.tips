@@ -374,7 +374,7 @@ formSubmitEvent.preventDefault();
 <figcaption class="figure-caption">Code snippet 15. Application.js</figcaption>
 </figure>
 
-And then it's
+And then:
 
 <figure class="figure">
 <pre>
@@ -387,7 +387,7 @@ for (const checkbox of this.selectedCheckboxes) {
 <figcaption class="figure-caption">Code snippet 16. Application.js</figcaption>
 </figure>
 
-And then it uses `for... of` statement to iterate through our `this.selectedCheckboxes` set and log every item from that set. Which effectively prints the label of every checked checkbox.
+It uses `for... of` statement to iterate through our `this.selectedCheckboxes` set and log every item from that set. Which effectively prints the label of every checked checkbox.
 
 [`for... of` statement](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/for...of) is available to us in JavaScript version ES2015.
 

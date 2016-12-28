@@ -171,13 +171,13 @@ handleFormSubmit = formSubmitEvent =&gt; {
 <code class="language-js">
 formSubmitEvent.preventDefault();
 </code>
-</pre><figcaption class="figure-caption">Code snippet 15. Application.js</figcaption></figure><p>And then it's</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 15. Application.js</figcaption></figure><p>And then:</p><figure class="figure"><pre>
 <code class="language-js">
 for (const checkbox of this.selectedCheckboxes) {
   console.log(checkbox, 'is selected.');
 }
 </code>
-</pre><figcaption class="figure-caption">Code snippet 16. Application.js</figcaption></figure><p>And then it uses <code>for... of</code> statement to iterate through our <code>this.selectedCheckboxes</code> set and log every item from that set. Which effectively prints the label of every checked checkbox.</p><p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/for...of"><code>for... of</code> statement</a> is available to us in JavaScript version ES2015.</p><p>Now you know how what our <code>Application</code> component does and how it works.</p><p>Next let's take a look at our <code>Checkbox</code> component:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 16. Application.js</figcaption></figure><p>It uses <code>for... of</code> statement to iterate through our <code>this.selectedCheckboxes</code> set and log every item from that set. Which effectively prints the label of every checked checkbox.</p><p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/for...of"><code>for... of</code> statement</a> is available to us in JavaScript version ES2015.</p><p>Now you know how what our <code>Application</code> component does and how it works.</p><p>Next let's take a look at our <code>Checkbox</code> component:</p><figure class="figure"><pre>
 <code class="language-jsx">
 import React, { Component, PropTypes } from 'react';
 
