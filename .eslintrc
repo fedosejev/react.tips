@@ -5,6 +5,7 @@
     "node": true
   },
   "rules": {
-    "arrow-parens": ["error", "as-needed"]
+    "arrow-parens": ["error", "as-needed"],
+    "no-console": 0,
   }
 }
