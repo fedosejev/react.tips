@@ -501,13 +501,13 @@ The `input` element renders the checkbox. It has 4 properties:
 1. `type` - the type of input: `checkbox` in our case.
 2. `value` - the value of input: which is a label name passed as property from a parent `Application` component.
 3. `checked` - whether it's checked or not. The value comes from component's state property `isChecked`.
-4. `onChange` - `change` event handler: `this.toggleCheckbox` function will be called when user checks or unchecks a checkbox.
+4. `onChange` - `change` event handler: `this.toggleCheckboxChange` function will be called when user checks or unchecks a checkbox.
 
 The label text is coming from a property `label` that is passed from a parent `Application` component. It will be either `One`, `Two` or `Three`.
 
 Now if you read [this tutorial](http://react.tips/radio-buttons-in-reactjs/), you will recognise that our `input` element is a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components) because we "control" the `value` property by providing our own value that comes from `this.props.label`. If you're not sure about the difference between controlled components and uncontrolled components, then I recommend you read [this tutorial](http://react.tips/radio-buttons-in-reactjs/).
 
-What happens when the user toggles our checkbox? `this.toggleCheckbox` function is called:
+What happens when the user toggles our checkbox? `this.toggleCheckboxChange` function is called:
 
 <figure class="figure">
 <pre>
