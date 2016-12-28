@@ -132,7 +132,7 @@ render() {
 <figcaption class="figure-caption">Code snippet 2. Application.jsx</figcaption>
 </figure>
 
-We see three `div` elements with class names that you might recognise if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us create layout for our page.
+We see three `div` elements with class names that you might recognize if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us create layout for our page.
 
 Now let's focus on the `form` element:
 
