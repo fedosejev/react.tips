@@ -1,48 +1,48 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>React Tips - Checkboxes in React.js</title><meta name="description" content="Intuitive example of how to use checkboxes in React.js."><link rel="canonical" href="http://react.tips/checkboxes-in-react/"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css" rel="stylesheet" type="text/css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li><a href="/">React Tips</a></li><li><a href="http://reactessentials.com" target="_blank">React Essentials Book</a></li><li><a href="https://github.com/fedosejev/react-project-starter" target="_blank">React Project Starter</a></li><li><a href="http://bit.ly/PublishMyTutorial" target="_blank">Write your React.js tutorial</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>Checkboxes in React.js</h1><p>How do you use checkboxes in React.js? We've learnt about radio buttons in <a href="http://react.tips/radio-buttons-in-reactjs/">this tutorial</a>, but what about checkboxes - do you use them differently in React?</p><p>The short answer is: yes.</p><p>Let me demonstrate how to use checkboxes with the help of a simple React application:</p><figure class="figure"><a href="https://fedosejev.github.io/checkboxes-in-react/" target="_blank"><img src="./images/app1.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/checkboxes-in-react">this GitHub repository</a>.</p><p>Our application is going to render a list of checkboxes with labels and a <code>Save</code> button. We can toggle checkboxes and click <code>Save</code> button. We will then see in the Developer Tools Console log messages that tell us which checkboxes were checked:</p><figure class="figure"><a href="https://fedosejev.github.io/checkboxes-in-react/" target="_blank"><img src="./images/app2.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 2. Our application.</figcaption></figure><p>Our application will be made of <a href="https://github.com/fedosejev/checkboxes-in-react/tree/master/source/js/components">two React components</a>:</p><ol><li><code>Application</code></li><li><code>Checkbox</code></li></ol><p><code>Application</code> component is a container component - it encapsulates our entire React.js application, and renders three instances of <code>Checkbox</code> component and a <code>Save</code> button. <code>Application</code> component also logs into the Developer Tools Console which checkboxes were checked when users click the <code>Save</code> button.</p><p><code>Checkbox</code> component renders a checkbox with a label.</p><p>Let's create our <code>Application</code> component first:</p><figure class="figure"><pre>
 <code class="language-jsx">
-import React from 'react';
-import Checkbox from './Checkbox.jsx';
+import React, { Component } from 'react';
+import Checkbox from './Checkbox';
 
 const items = [
   'One',
   'Two',
-  'Three'
+  'Three',
 ];
 
-let Application = React.createClass({
+class Application extends Component {
+  componentWillMount = () =&gt; {
+    this.selectedCheckboxes = new Set();
+  }
 
-  handleFormSubmit: function (formSubmitEvent) {
-    formSubmitEvent.preventDefault();
-
-    for (let checkbox of this.selectedCheckboxes) {
-      console.log(checkbox, 'is selected.');
-    }
-  },
-
-  toggleCheckbox: function (label) {
+  toggleCheckbox = label =&gt; {
     if (this.selectedCheckboxes.has(label)) {
       this.selectedCheckboxes.delete(label);
     } else {
       this.selectedCheckboxes.add(label);
     }
-  },
+  }
 
-  componentWillMount: function () {
-    this.selectedCheckboxes = new Set();
-  },
+  handleFormSubmit = formSubmitEvent =&gt; {
+    formSubmitEvent.preventDefault();
 
-  createCheckbox: function (label) {
-    return &lt;Checkbox 
-              label={label} 
-              handleCheckboxChange={this.toggleCheckbox}
-              key={label} /&gt;;
-  },
+    for (const checkbox of this.selectedCheckboxes) {
+      console.log(checkbox, 'is selected.');
+    }
+  }
 
-  createCheckboxes: function () {
-    return items.map(this.createCheckbox);
-  },
+  createCheckbox = label =&gt; (
+    &lt;Checkbox
+      label={label}
+      handleCheckboxChange={this.toggleCheckbox}
+      key={label}
+    /&gt;
+  )
 
-  render: function () {
+  createCheckboxes = () =&gt; (
+    items.map(this.createCheckbox)
+  )
+
+  render() {
     return (
       &lt;div className="container"&gt;
         &lt;div className="row"&gt;
@@ -59,13 +59,13 @@ let Application = React.createClass({
       &lt;/div&gt;
     );
   }
-});
+}
 
 export default Application;
 </code>
 </pre><figcaption class="figure-caption">Code snippet 1. Application.jsx</figcaption></figure><p>First, let's focus on its <code>render</code> function:</p><figure class="figure"><pre>
 <code class="language-jsx">
-render: function () {
+render() {
   return (
     &lt;div className="container"&gt;
       &lt;div className="row"&gt;
@@ -108,8 +108,8 @@ const items = [
 </pre><figcaption class="figure-caption">Code snippet 5. Application.jsx</figcaption></figure><p><code>['One', 'Two', 'Three']</code> - these are labels for our checkboxes. This array represents data that will dictate how many checkboxes we need to render and what their labels will be. For the purpose of this tutorial, we declare this data in our React component file, but in a real world web application this data can be received from a server or imported from another file.</p><p>Now we know that <code>createCheckboxes</code> function calls <code>this.createCheckbox</code> function for each label in <code>items</code> array. <code>createCheckboxes</code> function also returns an array of three instances of <code>Checkbox</code> component. That's because we call <code>this.createCheckbox</code> three times and each time it creates and returns an individual 'Checkbox' component instance:</p><figure class="figure"><pre>
 <code class="language-js">
 createCheckbox: function (label) {
-  return &lt;Checkbox 
-            label={label} 
+  return &lt;Checkbox
+            label={label}
             handleCheckboxChange={this.toggleCheckbox}
             key={label} /&gt;;
 },
@@ -203,9 +203,9 @@ let Checkbox = React.createClass({
     return (
       &lt;div className="checkbox"&gt;
         &lt;label&gt;
-          &lt;input type="checkbox" 
-                          value={this.props.label} 
-                          checked={this.state.isChecked} 
+          &lt;input type="checkbox"
+                          value={this.props.label}
+                          checked={this.state.isChecked}
                           onChange={this.toggleCheckbox} /&gt;
 
           {this.props.label}
@@ -231,9 +231,9 @@ render: function () {
   return (
     &lt;div className="checkbox"&gt;
       &lt;label&gt;
-        &lt;input type="checkbox" 
-                        value={this.props.label} 
-                        checked={this.state.isChecked} 
+        &lt;input type="checkbox"
+                        value={this.props.label}
+                        checked={this.state.isChecked}
                         onChange={this.toggleCheckbox} /&gt;
 
         {this.props.label}

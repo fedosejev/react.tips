@@ -38,49 +38,49 @@ Let's create our `Application` component first:
 <figure class="figure">
 <pre>
 <code class="language-jsx">
-import React from 'react';
-import Checkbox from './Checkbox.jsx';
+import React, { Component } from 'react';
+import Checkbox from './Checkbox';
 
 const items = [
   'One',
   'Two',
-  'Three'
+  'Three',
 ];
 
-let Application = React.createClass({
+class Application extends Component {
+  componentWillMount = () => {
+    this.selectedCheckboxes = new Set();
+  }
 
-  handleFormSubmit: function (formSubmitEvent) {
-    formSubmitEvent.preventDefault();
-
-    for (let checkbox of this.selectedCheckboxes) {
-      console.log(checkbox, 'is selected.');
-    }
-  },
-
-  toggleCheckbox: function (label) {
+  toggleCheckbox = label => {
     if (this.selectedCheckboxes.has(label)) {
       this.selectedCheckboxes.delete(label);
     } else {
       this.selectedCheckboxes.add(label);
     }
-  },
+  }
 
-  componentWillMount: function () {
-    this.selectedCheckboxes = new Set();
-  },
+  handleFormSubmit = formSubmitEvent => {
+    formSubmitEvent.preventDefault();
 
-  createCheckbox: function (label) {
-    return <Checkbox 
-              label={label} 
-              handleCheckboxChange={this.toggleCheckbox}
-              key={label} />;
-  },
+    for (const checkbox of this.selectedCheckboxes) {
+      console.log(checkbox, 'is selected.');
+    }
+  }
 
-  createCheckboxes: function () {
-    return items.map(this.createCheckbox);
-  },
+  createCheckbox = label => (
+    <Checkbox
+      label={label}
+      handleCheckboxChange={this.toggleCheckbox}
+      key={label}
+    />
+  )
 
-  render: function () {
+  createCheckboxes = () => (
+    items.map(this.createCheckbox)
+  )
+
+  render() {
     return (
       <div className="container">
         <div className="row">
@@ -97,7 +97,7 @@ let Application = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default Application;
 </code>
@@ -110,7 +110,7 @@ First, let's focus on its `render` function:
 <figure class="figure">
 <pre>
 <code class="language-jsx">
-render: function () {
+render() {
   return (
     <div className="container">
       <div className="row">
@@ -132,7 +132,7 @@ render: function () {
 <figcaption class="figure-caption">Code snippet 2. Application.jsx</figcaption>
 </figure>
 
-We see three `div` elements with class names that you might recognise if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us create layout for our page. 
+We see three `div` elements with class names that you might recognise if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us create layout for our page.
 
 Now let's focus on the `form` element:
 
@@ -191,8 +191,8 @@ Now we know that `createCheckboxes` function calls `this.createCheckbox` functio
 <pre>
 <code class="language-js">
 createCheckbox: function (label) {
-  return <Checkbox 
-            label={label} 
+  return <Checkbox
+            label={label}
             handleCheckboxChange={this.toggleCheckbox}
             key={label} />;
 },
@@ -386,7 +386,7 @@ formSubmitEvent.preventDefault();
 <figcaption class="figure-caption">Code snippet 16. Application.jsx</figcaption>
 </figure>
 
-And then it's 
+And then it's
 
 <figure class="figure">
 <pre>
@@ -431,9 +431,9 @@ let Checkbox = React.createClass({
     return (
       <div className="checkbox">
         <label>
-          <input type="checkbox" 
-                          value={this.props.label} 
-                          checked={this.state.isChecked} 
+          <input type="checkbox"
+                          value={this.props.label}
+                          checked={this.state.isChecked}
                           onChange={this.toggleCheckbox} />
 
           {this.props.label}
@@ -477,9 +477,9 @@ render: function () {
   return (
     <div className="checkbox">
       <label>
-        <input type="checkbox" 
-                        value={this.props.label} 
-                        checked={this.state.isChecked} 
+        <input type="checkbox"
+                        value={this.props.label}
+                        checked={this.state.isChecked}
                         onChange={this.toggleCheckbox} />
 
         {this.props.label}
