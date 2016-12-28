@@ -429,7 +429,7 @@ class Checkbox extends Component {
                             value={label}
                             checked={isChecked}
                             onChange={this.toggleCheckboxChange}
-                          />
+                        />
 
           {label}
         </label>
