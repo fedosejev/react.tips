@@ -63,7 +63,7 @@ class Application extends Component {
 
 export default Application;
 </code>
-</pre><figcaption class="figure-caption">Code snippet 1. Application.jsx</figcaption></figure><p>First, let's focus on its <code>render</code> function:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 1. Application.js</figcaption></figure><p>First, let's focus on its <code>render</code> function:</p><figure class="figure"><pre>
 <code class="language-jsx">
 render() {
   return (
@@ -83,7 +83,7 @@ render() {
   );
 }
 </code>
-</pre><figcaption class="figure-caption">Code snippet 2. Application.jsx</figcaption></figure><p>We see three <code>div</code> elements with class names that you might recognize if you're familiar with <a href="http://getbootstrap.com">Bootstrap</a>. Bootstrap helps us create layout for our page.</p><p>Now let's focus on the <code>form</code> element:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 2. Application.js</figcaption></figure><p>We see three <code>div</code> elements with class names that you might recognize if you're familiar with <a href="http://getbootstrap.com">Bootstrap</a>. Bootstrap helps us create layout for our page.</p><p>Now let's focus on the <code>form</code> element:</p><figure class="figure"><pre>
 <code class="language-jsx">
 &lt;form onSubmit={this.handleFormSubmit}&gt;
   {this.createCheckboxes()}
@@ -91,50 +91,51 @@ render() {
   &lt;button className="btn btn-default" type="submit"&gt;Save&lt;/button&gt;
 &lt;/form&gt;
 </code>
-</pre><figcaption class="figure-caption">Code snippet 3. Application.jsx</figcaption></figure><p>Inside of our <code>form</code> element we call <code>this.createCheckboxes</code> function that creates three instances of a <code>Checkbox</code> component. We'll see how exactly it does that in a moment. It's important to recognise that here we're creating our instances of a <code>Checkbox</code> component <strong>dynamically</strong>. If you're not familiar with this approach, then please read <a href="http://react.tips/how-to-create-reactjs-components-dynamically/">this tutorial</a> first.</p><p>We then create a button element of type <code>submit</code> which will submit our form when user clicks on it, we're telling React to call <code>this.handleFormSubmit</code> function when this happens: <code>&lt;form onSubmit={this.handleFormSubmit}&gt;</code>.</p><p>Let's take a look at how exactly we're creating our instances of <code>Checkbox</code> component dynamically. Here is our <code>createCheckboxes</code> function:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 3. Application.js</figcaption></figure><p>Inside of our <code>form</code> element we call <code>this.createCheckboxes</code> function that creates three instances of a <code>Checkbox</code> component. We'll see how exactly it does that in a moment. It's important to recognise that here we're creating our instances of a <code>Checkbox</code> component <strong>dynamically</strong>. If you're not familiar with this approach, then please read <a href="http://react.tips/how-to-create-reactjs-components-dynamically/">this tutorial</a> first.</p><p>We then create a button element of type <code>submit</code> which will submit our form when user clicks on it, we're telling React to call <code>this.handleFormSubmit</code> function when this happens: <code>&lt;form onSubmit={this.handleFormSubmit}&gt;</code>.</p><p>Let's take a look at how exactly we're creating our instances of <code>Checkbox</code> component dynamically. Here is our <code>createCheckboxes</code> function:</p><figure class="figure"><pre>
 <code class="language-jsx">
 createCheckboxes = () =&gt; (
   items.map(this.createCheckbox)
 )
 </code>
-</pre><figcaption class="figure-caption">Code snippet 4. Application.jsx</figcaption></figure><p>It iterates over <code>items</code> array and calls <code>this.createCheckbox</code> function for each item in that array. Where is <code>items</code> array coming from and what is it for?</p><p>In our <code>Application.jsx</code> file before declaring our <code>Application</code> component, we create <code>items</code> constant that references an array of three items:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 4. Application.js</figcaption></figure><p>It iterates over <code>items</code> array and calls <code>this.createCheckbox</code> function for each item in that array. Where is <code>items</code> array coming from and what is it for?</p><p>In our <code>Application.js</code> file before declaring our <code>Application</code> component, we create <code>items</code> constant that references an array of three items:</p><figure class="figure"><pre>
 <code class="language-js">
 const items = [
   'One',
   'Two',
-  'Three'
+  'Three',
 ];
 </code>
-</pre><figcaption class="figure-caption">Code snippet 5. Application.jsx</figcaption></figure><p><code>['One', 'Two', 'Three']</code> - these are labels for our checkboxes. This array represents data that will dictate how many checkboxes we need to render and what their labels will be. For the purpose of this tutorial, we declare this data in our React component file, but in a real world web application this data can be received from a server or imported from another file.</p><p>Now we know that <code>createCheckboxes</code> function calls <code>this.createCheckbox</code> function for each label in <code>items</code> array. <code>createCheckboxes</code> function also returns an array of three instances of <code>Checkbox</code> component. That's because we call <code>this.createCheckbox</code> three times and each time it creates and returns an individual 'Checkbox' component instance:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 5. Application.js</figcaption></figure><p><code>['One', 'Two', 'Three']</code> - these are labels for our checkboxes. This array represents data that will dictate how many checkboxes we need to render and what their labels will be. For the purpose of this tutorial, we declare this data in our React component file, but in a real world web application this data can be received from a server or imported from another file.</p><p>Now we know that <code>createCheckboxes</code> function calls <code>this.createCheckbox</code> function for each label in <code>items</code> array. <code>createCheckboxes</code> function also returns an array of three instances of <code>Checkbox</code> component. That's because we call <code>this.createCheckbox</code> three times and each time it creates and returns an individual 'Checkbox' component instance:</p><figure class="figure"><pre>
 <code class="language-js">
-createCheckbox: function (label) {
-  return &lt;Checkbox
-            label={label}
-            handleCheckboxChange={this.toggleCheckbox}
-            key={label} /&gt;;
-},
+createCheckbox = label =&gt; (
+  &lt;Checkbox
+    label={label}
+    handleCheckboxChange={this.toggleCheckbox}
+    key={label}
+  /&gt;
+)
 </code>
-</pre><figcaption class="figure-caption">Code snippet 6. Application.jsx</figcaption></figure><p>Each <code>Checkbox</code> component instance gets three properties:</p><ol><li><code>label</code> - the text that you see rendered next to a checkbox. This value is coming from our <code>items</code> array.</li><li><code>handleCheckboxChange</code> - a reference to <code>this.toggleCheckbox</code> function. Every time user checks/unchecks a checkbox React calls <code>this.toggleCheckbox</code> function. We'll see what it does in a moment.</li><li><code>key</code> - as you already know, each dynamically created React component instance needs a <code>key</code> property that React uses to uniquely identify that instance.</li></ol><p>Now we understand how we create and render three checkboxes in our application. What happens when user checks/unchecks our checkbox? As you will see later - every time user change checkbox's state - our <code>this.toggleCheckbox</code> is called.</p><p>Let's take a look at that <code>toggleCheckbox</code> function:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 6. Application.js</figcaption></figure><p>Each <code>Checkbox</code> component instance gets three properties:</p><ol><li><code>label</code> - the text that you see rendered next to a checkbox. This value is coming from our <code>items</code> array.</li><li><code>handleCheckboxChange</code> - a reference to <code>this.toggleCheckbox</code> function. Every time user checks/unchecks a checkbox React calls <code>this.toggleCheckbox</code> function. We'll see what it does in a moment.</li><li><code>key</code> - as you already know, each dynamically created React component instance needs a <code>key</code> property that React uses to uniquely identify that instance.</li></ol><p>Now we understand how we create and render three checkboxes in our application. What happens when user checks/unchecks our checkbox? As you will see later - every time user change checkbox's state - our <code>this.toggleCheckbox</code> is called.</p><p>Let's take a look at that <code>toggleCheckbox</code> function:</p><figure class="figure"><pre>
 <code class="language-js">
-toggleCheckbox: function (label) {
+toggleCheckbox = label =&gt; {
   if (this.selectedCheckboxes.has(label)) {
     this.selectedCheckboxes.delete(label);
   } else {
     this.selectedCheckboxes.add(label);
   }
-},
+}
 </code>
-</pre><figcaption class="figure-caption">Code snippet 7. Application.jsx</figcaption></figure><p>It gets a <code>label</code> parameter that represents which checkbox is being toggled. Now what exactly <code>toggleCheckbox</code> function does with a <code>label</code>?</p><p>It's a good time to zoom out for a second and talk about how our application works. There are a couple of questions we need to ask:</p><ol><li><p>Each checkbox has two states: checked and unchecked. Which React component is responsible for managing that state?</p></li><li><p>How do we know which checkboxes are checked at any given moment in time?</p></li></ol><p>We want to keep our application as simple as possible, so a simple answer for our first question is: let each <code>Checkbox</code> component instance maintain it's own state. Meaning: each <code>Checkbox</code> component instance is responsible for managing it's own state and knowing when it's checked or unchecked.</p><p>That's the key point: our <code>Application</code> component is not responsible for managing <code>Checkbox</code> component instance state and <em>hence</em> it doesn't know anything about it. The advantage of this approach is that now our <code>Application</code> component can create as many instances of a <code>Checkbox</code> component as we need and it doesn't need to deal with managing the state of each <code>Checkbox</code> instance. In addition this solution makes our <code>Checkbox</code> component more reusable as it doesn't depend on a parent component.</p><p>This sounds fantastic, but coming back to our second question: how do we know which checkboxes are checked in our <code>Application</code> component? This question highlights the disadvantage of our approach, because as I've mentioned earlier, our <code>Application</code> component knows nothing about state of each instance of a <code>Checkbox</code> component.</p><p>Luckily, there is no need for our <code>Application</code> component to know the state of each instance of a <code>Checkbox</code> component at any given time. All it needs to know is: which checkboxes <em>are selected</em> at any given time.</p><p>Should we store that information in <code>Application</code> component's state? Should we make our <code>Application</code> component stateful?</p><p>No. Remember in React you want to keep as little information in component's state as possible. And this should come naturally to you when you start thinking about it this way: does this information affects what my component is rendering? In other words, if that information changes - do I want React to rerender my component? If the answer is "no" - don't store it in component's state. If the answer is "yes", then that information represents your component's state and it should be stored in your component's state.</p><p>In the case of our <code>Application</code> component - when user checks or unchecks any checkbox that we render - do we need to rerender our <code>Application</code> component? The answer is clearly no. Therefore, we don't want to store a list of checked checkboxes in <code>Application</code> component's state.</p><p>Ok, if not in the component's state, then where?</p><p>You can see that our <code>Application</code> component is "defined" by a component specification object (CSO) that we pass as an argument to <code>React.createClass</code> function call:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 7. Application.js</figcaption></figure><p>It gets a <code>label</code> parameter that represents which checkbox is being toggled. Now what exactly <code>toggleCheckbox</code> function does with a <code>label</code>?</p><p>It's a good time to zoom out for a second and talk about how our application works. There are a couple of questions we need to ask:</p><ol><li><p>Each checkbox has two states: checked and unchecked. Which React component is responsible for managing that state?</p></li><li><p>How do we know which checkboxes are checked at any given moment in time?</p></li></ol><p>We want to keep our application as simple as possible, so a simple answer for our first question is: let each <code>Checkbox</code> component instance maintain it's own state. Meaning: each <code>Checkbox</code> component instance is responsible for managing it's own state and knowing when it's checked or unchecked.</p><p>That's the key point: our <code>Application</code> component is not responsible for managing <code>Checkbox</code> component instance state and <em>hence</em> it doesn't know anything about it. The advantage of this approach is that now our <code>Application</code> component can create as many instances of a <code>Checkbox</code> component as we need and it doesn't need to deal with managing the state of each <code>Checkbox</code> instance. In addition this solution makes our <code>Checkbox</code> component more reusable as it doesn't depend on a parent component.</p><p>This sounds fantastic, but coming back to our second question: how do we know which checkboxes are checked in our <code>Application</code> component? This question highlights the disadvantage of our approach, because as I've mentioned earlier, our <code>Application</code> component knows nothing about state of each instance of a <code>Checkbox</code> component.</p><p>Luckily, there is no need for our <code>Application</code> component to know the state of each instance of a <code>Checkbox</code> component at any given time. All it needs to know is: which checkboxes <em>are selected</em> at any given time.</p><p>Should we store that information in <code>Application</code> component's state? Should we make our <code>Application</code> component stateful?</p><p>No. Remember in React you want to keep as little information in component's state as possible. And this should come naturally to you when you start thinking about it this way: does this information affects what my component is rendering? In other words, if that information changes - do I want React to rerender my component? If the answer is "no" - don't store it in component's state. If the answer is "yes", then that information represents your component's state and it should be stored in your component's state.</p><p>In the case of our <code>Application</code> component - when user checks or unchecks any checkbox that we render - do we need to rerender our <code>Application</code> component? The answer is clearly no. Therefore, we don't want to store a list of checked checkboxes in <code>Application</code> component's state.</p><p>Ok, if not in the component's state, then where?</p><p>You can see that our <code>Application</code> component is "defined" by a component specification object (CSO) that we pass as an argument to <code>React.createClass</code> function call:</p><figure class="figure"><pre>
 <code class="language-jsx">
 let Application = React.createClass({ /* This is a component specification object. */ });
 </code>
-</pre><figcaption class="figure-caption">Code snippet 8. Application.jsx</figcaption></figure><p>Since CSO is just a JavaScript object we can add our own properties to it, just like you would do with any other JavaScript object.</p><p>Let's create a property on CSO that will store information about which checkboxes are checked. The next question that we should ask ourselves is: which data structure should I choose for storing that information?</p><p>What are the requirements for our perfect data structure?</p><ol><li>We should be able to easily add and delete our elements.</li><li>All elements must be unique.</li><li>We should be able to easily find out if the element is already stored.</li></ol><p>That sounds like a description of a data structure that you might know about: Set.</p><p>Sets are not supported in ES5 version of JavaScript, but luckily, we're using ES2015 version of JavaScript where Sets are supported.</p><p>Now we know that we want to create a new Set and assign it to <code>Application</code>'s component specification object.</p><p>The next question we need to answer is: when should we create our empty Set? That will depend on whether we want our Set to be created before or after the <code>Application</code> component is rendered.</p><p>The answer is: we want our Set to be created right before we mount our <code>Application</code> component:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 8. Application.js</figcaption></figure><p>Since CSO is just a JavaScript object we can add our own properties to it, just like you would do with any other JavaScript object.</p><p>Let's create a property on CSO that will store information about which checkboxes are checked. The next question that we should ask ourselves is: which data structure should I choose for storing that information?</p><p>What are the requirements for our perfect data structure?</p><ol><li>We should be able to easily add and delete our elements.</li><li>All elements must be unique.</li><li>We should be able to easily find out if the element is already stored.</li></ol><p>That sounds like a description of a data structure that you might know about: Set.</p><p>Sets are not supported in ES5 version of JavaScript, but luckily, we're using ES2015 version of JavaScript where Sets are supported.</p><p>Now we know that we want to create a new Set and assign it to <code>Application</code>'s component specification object.</p><p>The next question we need to answer is: when should we create our empty Set? That will depend on whether we want our Set to be created before or after the <code>Application</code> component is rendered.</p><p>The answer is: we want our Set to be created right before we mount our <code>Application</code> component:</p><figure class="figure"><pre>
 <code class="language-js">
 componentWillMount: function () {
   this.selectedCheckboxes = new Set();
 },
 </code>
-</pre><figcaption class="figure-caption">Code snippet 9. Application.jsx</figcaption></figure><p>If you're not familiar with <code>componentDidMount</code> method or any other React component lifecycle methods, then please read <a href="http://react.tips/how-to-use-react-component-lifecycle-methods/">this tutorial</a> first.</p><p><code>this.selectedCheckboxes = new Set();</code> creates a new <code>selectedCheckboxes</code> property on component specification object and assigns a new set to it.</p><p>Now we have an empty set created right before our <code>Application</code> component is rendered. Then, when user checks/unchecks our checkboxes React will call <code>toggleCheckbox</code> function:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 9. Application.js</figcaption></figure><p>If you're not familiar with <code>componentDidMount</code> method or any other React component lifecycle methods, then please read <a href="http://react.tips/how-to-use-react-component-lifecycle-methods/">this tutorial</a> first.</p><p><code>this.selectedCheckboxes = new Set();</code> creates a new <code>selectedCheckboxes</code> property on component specification object and assigns a new set to it.</p><p>Now we have an empty set created right before our <code>Application</code> component is rendered. Then, when user checks/unchecks our checkboxes React will call <code>toggleCheckbox</code> function:</p><figure class="figure"><pre>
 <code class="language-js">
 toggleCheckbox: function (label) {
   if (this.selectedCheckboxes.has(label)) {
@@ -144,23 +145,23 @@ toggleCheckbox: function (label) {
   }
 },
 </code>
-</pre><figcaption class="figure-caption">Code snippet 10. Application.jsx</figcaption></figure><p>That function will reference our set and check if a specific checkbox label is in that set:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 10. Application.js</figcaption></figure><p>That function will reference our set and check if a specific checkbox label is in that set:</p><figure class="figure"><pre>
 <code class="language-js">
 if (this.selectedCheckboxes.has(label)) {}
 </code>
-</pre><figcaption class="figure-caption">Code snippet 11. Application.jsx</figcaption></figure><p>If the label is already in our set then we delete from the set:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 11. Application.js</figcaption></figure><p>If the label is already in our set then we delete from the set:</p><figure class="figure"><pre>
 <code class="language-js">
 this.selectedCheckboxes.delete(label);
 </code>
-</pre><figcaption class="figure-caption">Code snippet 12. Application.jsx</figcaption></figure><p>Otherwise, we add it to our set:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 12. Application.js</figcaption></figure><p>Otherwise, we add it to our set:</p><figure class="figure"><pre>
 <code class="language-js">
 this.selectedCheckboxes.add(label);
 </code>
-</pre><figcaption class="figure-caption">Code snippet 13. Application.jsx</figcaption></figure><p>And that's how our <code>Application</code> component is going to know which checkboxes are checked at any given moment in time. If the label in the set - it's checked; if not - it's unchecked.</p><p>What happens when the user clicks <code>Save</code> button? Our form is submitted and our <code>handleFormSubmit</code> function is called by React:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 13. Application.js</figcaption></figure><p>And that's how our <code>Application</code> component is going to know which checkboxes are checked at any given moment in time. If the label in the set - it's checked; if not - it's unchecked.</p><p>What happens when the user clicks <code>Save</code> button? Our form is submitted and our <code>handleFormSubmit</code> function is called by React:</p><figure class="figure"><pre>
 <code class="language-jsx">
 &lt;form onSubmit={this.handleFormSubmit}&gt;...&lt;/form&gt;
 </code>
-</pre><figcaption class="figure-caption">Code snippet 14. Application.jsx</figcaption></figure><p>Let's take a look at <code>handleFormSubmit</code> function:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 14. Application.js</figcaption></figure><p>Let's take a look at <code>handleFormSubmit</code> function:</p><figure class="figure"><pre>
 <code class="language-jsx">
 handleFormSubmit: function (formSubmitEvent) {
   formSubmitEvent.preventDefault();
@@ -170,17 +171,17 @@ handleFormSubmit: function (formSubmitEvent) {
   }
 },
 </code>
-</pre><figcaption class="figure-caption">Code snippet 15. Application.jsx</figcaption></figure><p>First it prevents the default behavious of a form's submit event</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 15. Application.js</figcaption></figure><p>First it prevents the default behavious of a form's submit event</p><figure class="figure"><pre>
 <code class="language-js">
 formSubmitEvent.preventDefault();
 </code>
-</pre><figcaption class="figure-caption">Code snippet 16. Application.jsx</figcaption></figure><p>And then it's</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 16. Application.js</figcaption></figure><p>And then it's</p><figure class="figure"><pre>
 <code class="language-js">
 for (let checkbox of this.selectedCheckboxes) {
   console.log(checkbox, 'is selected.');
 }
 </code>
-</pre><figcaption class="figure-caption">Code snippet 17. Application.jsx</figcaption></figure><p>And then it uses <code>for... of</code> statement to iterate through our <code>this.selectedCheckboxes</code> set and log every item from that set. Which effectively prints the label of every checked checkbox.</p><p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/for...of"><code>for... of</code> statement</a> is available to us in JavaScript version ES2015.</p><p>Now you know how what our <code>Application</code> component does and how it works.</p><p>Next let's take a look at our <code>Checkbox</code> component:</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 17. Application.js</figcaption></figure><p>And then it uses <code>for... of</code> statement to iterate through our <code>this.selectedCheckboxes</code> set and log every item from that set. Which effectively prints the label of every checked checkbox.</p><p><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/for...of"><code>for... of</code> statement</a> is available to us in JavaScript version ES2015.</p><p>Now you know how what our <code>Application</code> component does and how it works.</p><p>Next let's take a look at our <code>Checkbox</code> component:</p><figure class="figure"><pre>
 <code class="language-jsx">
 import React from 'react';
 

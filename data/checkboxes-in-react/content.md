@@ -102,7 +102,7 @@ class Application extends Component {
 export default Application;
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 1. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 1. Application.js</figcaption>
 </figure>
 
 First, let's focus on its `render` function:
@@ -129,7 +129,7 @@ render() {
 }
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 2. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 2. Application.js</figcaption>
 </figure>
 
 We see three `div` elements with class names that you might recognize if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us create layout for our page.
@@ -146,7 +146,7 @@ Now let's focus on the `form` element:
 </form>
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 3. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 3. Application.js</figcaption>
 </figure>
 
 Inside of our `form` element we call `this.createCheckboxes` function that creates three instances of a `Checkbox` component. We'll see how exactly it does that in a moment. It's important to recognise that here we're creating our instances of a `Checkbox` component __dynamically__. If you're not familiar with this approach, then please read [this tutorial](http://react.tips/how-to-create-reactjs-components-dynamically/) first.
@@ -163,12 +163,12 @@ createCheckboxes = () => (
 )
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 4. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 4. Application.js</figcaption>
 </figure>
 
 It iterates over `items` array and calls `this.createCheckbox` function for each item in that array. Where is `items` array coming from and what is it for?
 
-In our `Application.jsx` file before declaring our `Application` component, we create `items` constant that references an array of three items:
+In our `Application.js` file before declaring our `Application` component, we create `items` constant that references an array of three items:
 
 <figure class="figure">
 <pre>
@@ -176,11 +176,11 @@ In our `Application.jsx` file before declaring our `Application` component, we c
 const items = [
   'One',
   'Two',
-  'Three'
+  'Three',
 ];
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 5. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 5. Application.js</figcaption>
 </figure>
 
 `['One', 'Two', 'Three']` - these are labels for our checkboxes. This array represents data that will dictate how many checkboxes we need to render and what their labels will be. For the purpose of this tutorial, we declare this data in our React component file, but in a real world web application this data can be received from a server or imported from another file.
@@ -190,15 +190,16 @@ Now we know that `createCheckboxes` function calls `this.createCheckbox` functio
 <figure class="figure">
 <pre>
 <code class="language-js">
-createCheckbox: function (label) {
-  return <Checkbox
-            label={label}
-            handleCheckboxChange={this.toggleCheckbox}
-            key={label} />;
-},
+createCheckbox = label => (
+  <Checkbox
+    label={label}
+    handleCheckboxChange={this.toggleCheckbox}
+    key={label}
+  />
+)
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 6. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 6. Application.js</figcaption>
 </figure>
 
 Each `Checkbox` component instance gets three properties:
@@ -213,16 +214,16 @@ Let's take a look at that `toggleCheckbox` function:
 <figure class="figure">
 <pre>
 <code class="language-js">
-toggleCheckbox: function (label) {
+toggleCheckbox = label => {
   if (this.selectedCheckboxes.has(label)) {
     this.selectedCheckboxes.delete(label);
   } else {
     this.selectedCheckboxes.add(label);
   }
-},
+}
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 7. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 7. Application.js</figcaption>
 </figure>
 
 It gets a `label` parameter that represents which checkbox is being toggled. Now what exactly `toggleCheckbox` function does with a `label`?
@@ -257,7 +258,7 @@ You can see that our `Application` component is "defined" by a component specifi
 let Application = React.createClass({ /* This is a component specification object. */ });
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 8. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 8. Application.js</figcaption>
 </figure>
 
 Since CSO is just a JavaScript object we can add our own properties to it, just like you would do with any other JavaScript object.
@@ -288,7 +289,7 @@ componentWillMount: function () {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 9. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 9. Application.js</figcaption>
 </figure>
 
 If you're not familiar with `componentDidMount` method or any other React component lifecycle methods, then please read [this tutorial](http://react.tips/how-to-use-react-component-lifecycle-methods/) first.
@@ -309,7 +310,7 @@ toggleCheckbox: function (label) {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 10. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 10. Application.js</figcaption>
 </figure>
 
 That function will reference our set and check if a specific checkbox label is in that set:
@@ -320,7 +321,7 @@ That function will reference our set and check if a specific checkbox label is i
 if (this.selectedCheckboxes.has(label)) {}
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 11. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 11. Application.js</figcaption>
 </figure>
 
 If the label is already in our set then we delete from the set:
@@ -331,7 +332,7 @@ If the label is already in our set then we delete from the set:
 this.selectedCheckboxes.delete(label);
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 12. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 12. Application.js</figcaption>
 </figure>
 
 Otherwise, we add it to our set:
@@ -342,7 +343,7 @@ Otherwise, we add it to our set:
 this.selectedCheckboxes.add(label);
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 13. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 13. Application.js</figcaption>
 </figure>
 
 And that's how our `Application` component is going to know which checkboxes are checked at any given moment in time. If the label in the set - it's checked; if not - it's unchecked.
@@ -355,7 +356,7 @@ What happens when the user clicks `Save` button? Our form is submitted and our `
 <form onSubmit={this.handleFormSubmit}>...</form>
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 14. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 14. Application.js</figcaption>
 </figure>
 
 Let's take a look at `handleFormSubmit` function:
@@ -372,7 +373,7 @@ handleFormSubmit: function (formSubmitEvent) {
 },
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 15. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 15. Application.js</figcaption>
 </figure>
 
 First it prevents the default behavious of a form's submit event
@@ -383,7 +384,7 @@ First it prevents the default behavious of a form's submit event
 formSubmitEvent.preventDefault();
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 16. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 16. Application.js</figcaption>
 </figure>
 
 And then it's
@@ -396,7 +397,7 @@ for (let checkbox of this.selectedCheckboxes) {
 }
 </code>
 </pre>
-<figcaption class="figure-caption">Code snippet 17. Application.jsx</figcaption>
+<figcaption class="figure-caption">Code snippet 17. Application.js</figcaption>
 </figure>
 
 And then it uses `for... of` statement to iterate through our `this.selectedCheckboxes` set and log every item from that set. Which effectively prints the label of every checked checkbox.
