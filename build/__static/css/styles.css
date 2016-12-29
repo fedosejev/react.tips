@@ -141,7 +141,7 @@ a:hover {
       width: 200px; }
 
 .social {
-  margin: 20px 0;
+  margin: 20px 0 0 0;
   padding: 40px 0;
   border-top: 1px dotted #ccc;
   font-size: 14px;
