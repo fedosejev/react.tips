@@ -135,3 +135,9 @@ a:hover {
     vertical-align: top; }
     .footer aside .book-cover img {
       width: 200px; }
+  .footer .social-buttons {
+    margin: 0;
+    padding: 0; }
+    .footer .social-buttons li {
+      display: inline-block;
+      margin: 0; }

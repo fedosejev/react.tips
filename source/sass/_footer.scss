@@ -1,7 +1,7 @@
 .footer {
   margin: 20px 0;
   padding: 40px 0;
-  border-top: 1px dotted #ccc; 
+  border-top: 1px dotted #ccc;
   font-size: 14px;
   color: #aaa;
   text-align: left;
@@ -20,10 +20,20 @@
       margin: 0 20px;
       margin-bottom: 20px;
       vertical-align: top;
-      
+
       img {
         width: 200px;
       }
+    }
+  }
+
+  .social-buttons {
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline-block;
+      margin: 0;
     }
   }
 }
