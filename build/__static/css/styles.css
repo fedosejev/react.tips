@@ -127,7 +127,9 @@ a:hover {
   .footer p {
     margin: 0 20px 20px 20px; }
   .footer a {
-    color: #555; }
+    color: #777; }
+    .footer a:hover {
+      color: #333; }
   .footer .fa {
     color: inherit; }
   .footer aside .book-cover {
