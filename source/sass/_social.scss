@@ -1,4 +1,4 @@
-.footer {
+.social {
   margin: 20px 0;
   padding: 40px 0;
   border-top: 1px dotted #ccc;
@@ -11,7 +11,7 @@
   }
 
   a {
-    color: #666;
+    color: #777;
 
     &:hover {
       color: #333;
@@ -22,16 +22,14 @@
     color: inherit;
   }
 
-  .books {
-    .book-cover {
-      display: inline-block;
-      margin: 0 20px;
-      margin-bottom: 20px;
-      vertical-align: top;
+  .social-buttons {
+    margin: 0 0 0 10px;
+    padding: 0;
 
-      img {
-        width: 200px;
-      }
+    li {
+      display: inline-block;
+      margin: 0 10px;
+      font-size: 28px;
     }
   }
 }

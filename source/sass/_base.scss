@@ -1,5 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=Bitter:400,400italic,700);
-
 * {
   font-family: 'Bitter', serif;
   margin: 0;
@@ -14,9 +12,9 @@ a .fa {
   color: #000;
 }
 
-a, 
-a:hover, 
-a:active, 
+a,
+a:hover,
+a:active,
 a:visited {
   color: #ec6563;
 }
@@ -25,9 +23,3 @@ a:hover {
   color: #666;
   text-decoration: none;
 }
-
-@import 'home';
-@import 'post';
-@import 'mailchimp';
-@import 'header';
-@import 'footer';

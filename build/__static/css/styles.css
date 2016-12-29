@@ -127,22 +127,38 @@ a:hover {
   .footer p {
     margin: 0 20px 20px 20px; }
   .footer a {
-    color: #777; }
+    color: #666; }
     .footer a:hover {
       color: #333; }
   .footer .fa {
     color: inherit; }
-  .footer aside .book-cover {
+  .footer .books .book-cover {
     display: inline-block;
     margin: 0 20px;
     margin-bottom: 20px;
     vertical-align: top; }
-    .footer aside .book-cover img {
+    .footer .books .book-cover img {
       width: 200px; }
-  .footer .social-buttons {
+
+.social {
+  margin: 20px 0;
+  padding: 40px 0;
+  border-top: 1px dotted #ccc;
+  font-size: 14px;
+  color: #aaa;
+  text-align: left; }
+  .social p {
+    margin: 0 20px 20px 20px; }
+  .social a {
+    color: #777; }
+    .social a:hover {
+      color: #333; }
+  .social .fa {
+    color: inherit; }
+  .social .social-buttons {
     margin: 0 0 0 10px;
     padding: 0; }
-    .footer .social-buttons li {
+    .social .social-buttons li {
       display: inline-block;
       margin: 0 10px;
       font-size: 28px; }
