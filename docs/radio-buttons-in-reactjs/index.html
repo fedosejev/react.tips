@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>React Tips - Radio Buttons in React.js</title><meta name="description" content="Example of how to use radio buttons in React.js."><link rel="canonical" href="http://react.tips/radio-buttons-in-reactjs/"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css" rel="stylesheet" type="text/css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li><a href="/">React Tips</a></li><li><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React Essentials Book</a></li><li><a href="https://github.com/fedosejev/react-project-starter" target="_blank">React Project Starter</a></li><li><a href="http://bit.ly/PublishMyTutorial" target="_blank">Write your React.js tutorial</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>Radio Buttons in React.js</h1><p>How do you use radio buttons in React.js?</p><p>I agree, it can be confusing at first. Let me explain it to you with a help of a simple example.</p><p>Here is the application that we're going to build:</p><figure class="figure"><a href="http://fedosejev.github.io/radio-buttons-react/" target="_blank"><img src="./images/app.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/radio-buttons-react">this GitHub repository</a>.</p><p>We'll start by creating new React.js component called <code>Application</code>:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+
+var Application = React.createClass({
+  render: function () {
+    return ({/* JSX code */});
+  }
+});
+
+module.exports = Application;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1.</figcaption></figure><p>Our component doesn't render anything, yet.</p><p>What should it render? From Figure 1 you can clearly see the following 2 user interface elements:</p><ol><li>Radio buttons</li><li>Save button</li></ol><p>Let's start with creating radio button elements. In <code>render()</code> function we'll write JSX code that creates <code>&lt;form&gt;</code> element with 3 <code>&lt;input&gt;</code> elements nested inside:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;div className="container"&gt;
+  &lt;div className="row"&gt;
+    &lt;div className="col-sm-12"&gt;
+
+      &lt;form&gt;
+        &lt;div className="radio"&gt;
+          &lt;label&gt;
+            &lt;input type="radio" value="option1" checked={true} /&gt;
+            Option 1
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div className="radio"&gt;
+          &lt;label&gt;
+            &lt;input type="radio" value="option2" /&gt;
+            Option 2
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div className="radio"&gt;
+          &lt;label&gt;
+            &lt;input type="radio" value="option3" /&gt;
+            Option 3
+          &lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/form&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2.</figcaption></figure><p>Whoa, that's alot of <code>&lt;div&gt;</code> elements! Do we really need them?</p><p>Not really. Their purpose is to create a layout using <a href="http://getbootstrap.com/css/">Bootstrap grid system</a>. If you're not familiar with Bootstrap - don't worry, just focus on <code>&lt;form&gt;</code> element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{/* ... */}
+
+  &lt;form&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option1" checked={true} /&gt;
+        Option 1
+      &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option2" /&gt;
+        Option 2
+      &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option3" /&gt;
+        Option 3
+      &lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+
+{/* ... */}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3.</figcaption></figure><p>Now let's take a closer look at the first input element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;input type="radio" value="option1" checked={true} /&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4.</figcaption></figure><p>Apart from <code>checked={true}</code> it looks exactly as your usual <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input">HTML <code>&lt;input&gt;</code> element</a>. However it only <em>looks</em> like one (on purpose I guess). But it works differently, because in this case <code>&lt;input&gt;</code> is a React component, not an HTML element!</p><p>Just like with any other React component <code>type</code>, <code>value</code> and <code>checked</code> are component properties. However, <code>checked</code> is <a href="https://facebook.github.io/react/docs/forms.html#interactive-props">an interactive property</a>, because it's affected via user interactions: user can select it and unselect it by selecting another radio button.</p><p>If you pass <code>checked={true}</code> then React will render:</p><figure class="figure"><a href="http://fedosejev.github.io/radio-buttons-react/" target="_blank"><img src="./images/selected.png" alt="Selected radio button" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 2. Selected radio button.</figcaption></figure><p>If you pass <code>checked={false}</code> then React will render:</p><figure class="figure"><a href="http://fedosejev.github.io/radio-buttons-react/" target="_blank"><img src="./images/unselected.png" alt="Unselected radio button" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 3. Unselected radio button.</figcaption></figure><p>We know that if React component can render different things, then it has to maintain state that tells it which thing to render. It's clear that our <code>&lt;input&gt;</code> component has 2 states to render: selected radio button and unselected radio button.</p><p>Let's make our Application component stateful:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+
+var Application = React.createClass({
+
+  getInitialState: function () {
+    return {
+      selectedOption: 'option1'
+    };
+  },
+
+  render: function () {
+    return ({/* JSX code */});
+  }
+});
+
+module.exports = Application;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5.</figcaption></figure><p></p><p>In our state object we have <code>selectedOption</code> property with the initial value of <code>option1</code>. This tells our <code>Application</code> component which radio button should be selected. Naturally all other radio buttons should be unselected.</p><p>In our application we have 3 radio buttons where each of them has 2 states: <code>selected</code> and <code>unselected</code>. By explicitly specifying which radio button is <em>selected</em>, we're also implicitly specifying which should be <em>unselected</em>. When you create radio buttons using HTML, the same result is achieved by grouping radio buttons together using <code>name</code> HTML attribute.</p><p>Now we need to pass <code>true</code> or <code>false</code> value to <code>checked</code> property for all 3 <code>&lt;input&gt;</code> components. Only this time the value for <code>checked</code> is calculated by comparing component's state with input's name:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{/* ... */}
+
+  &lt;form&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option1" checked={this.state.selectedOption === 'option1'} /&gt;
+        Option 1
+      &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option2" checked={this.state.selectedOption === 'option2'} /&gt;
+        Option 2
+      &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option3" checked={this.state.selectedOption === 'option3'} /&gt;
+        Option 3
+      &lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+
+{/* ... */}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6.</figcaption></figure><p></p><p>Expressions <code>this.state.selectedOption === 'option1'</code>, <code>this.state.selectedOption === 'option2'</code> and <code>this.state.selectedOption === 'option3'</code> will be evaluated into <code>true</code> or <code>false</code> based on what is component's state and they will tell React how to render our <code>&lt;input&gt;</code> elements: selected or unselected.</p><p>Notice that we're in control of which <code>&lt;input&gt;</code> component should be rendered selected and which - unselected. And by providing <code>value</code> property we're taking all of the control over our <code>&lt;input&gt;</code> components and turning them into <a href="https://facebook.github.io/react/docs/forms.html#controlled-components">controlled components</a>.</p><blockquote><p>A Controlled component does not maintain its own internal state; the component renders purely based on props.</p><footer>From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#controlled-components">React.js documentation</a></cite></footer></blockquote><p>However, notice that at the moment, we're rending 3 radio buttons where the first one is selected. If I click on any other 2 - nothing happens. They're not selected. Or to be more specific: they're not rendered any differently.</p><p>And that should make sense to you, because when user intracts with our radio buttons we don't update our component's state and hence - don't render them differently. As a result, from the user's point of view: our radio buttons "dont't work".</p><p>How do we make sure that our component's state changes when use clicks on our radio buttons?</p><p>React offers <code>onChange</code> property that we can pass to our <code>&lt;input&gt;</code> components to handle changes:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{/* ... */}
+
+  &lt;form&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option1" 
+                      checked={this.state.selectedOption === 'option1'} 
+                      onChange={this.handleOptionChange} /&gt;
+        Option 1
+      &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option2" 
+                      checked={this.state.selectedOption === 'option2'} 
+                      onChange={this.handleOptionChange} /&gt;
+        Option 2
+      &lt;/label&gt;
+    &lt;/div&gt;
+    &lt;div className="radio"&gt;
+      &lt;label&gt;
+        &lt;input type="radio" value="option3" 
+                      checked={this.state.selectedOption === 'option3'} 
+                      onChange={this.handleOptionChange} /&gt;
+        Option 3
+      &lt;/label&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+
+{/* ... */}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7.</figcaption></figure><p></p><p>Now whenever user clicks on our radio buttons, React will call <code>handleOptionChange</code> function.</p><p>Let's create that function on our component specification object:</p><figure class="figure"><pre>
+<code class="language-js">
+handleOptionChange: function (changeEvent) {
+  this.setState({
+    selectedOption: changeEvent.target.value
+  });
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8.</figcaption></figure><p><code>handleOptionChange</code> will get <code>changeEvent</code> object that we can use to reference the value of <code>&lt;input&gt;</code> element that user clicked on: <code>changeEvent.target.value</code>. We're assigning that value to <code>selectedOption</code> property of our state object and calling <code>setState()</code> function to update component's state.</p><p>Now React will render our radio buttons differently. Now they're "working" from the user's point of view.</p><p>And it's all it takes to implement radio buttons in React.</p><p>Our <code>&lt;input&gt;</code> components are controlled by us. Or more specifically - by our component's state and user's ability to change that state by interacting with rendered radio buttons.</p><p>On the other hand we could have made our <code>&lt;input&gt;</code> component <a href="https://facebook.github.io/react/docs/forms.html#uncontrolled-components">uncontrolled</a> - all we need to do is to remove <code>value</code> and <code>checked</code> properties from <code>&lt;input&gt;</code> components.</p><blockquote><p>An uncontrolled component maintains its own internal state.</p><footer>From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#uncontrolled-components">React.js documentation</a></cite></footer></blockquote><p>According to React documentation: <a href="https://facebook.github.io/react/docs/forms.html#uncontrolled-components">uncontroled components</a> maintain their own state - that's why they're called "uncontrolled", because <em>we</em>, developers, don't have the control. It's incapsulated inside of the component itself.</p><p>However, if we give up the control, we need to pass <code>name</code> property to our <code>&lt;input&gt;</code> components in order to group them together (like with HTML <code>&lt;input type="radio"&gt;</code> elements) so that when user selects one radio button - the other ones are then unselected.</p><p>Wouldn't it be easier? After all our component would be stateless and we would write less code!</p><p>True, but consider this: how would you tell React which radio button should be selected intially? You don't have control, so it wouldn't be straightforward.</p><p>Now let's implement the second UI element in our application: the "Save" button. Insert this JSX code right before closing <code>&lt;/body&gt;</code> tag:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button className="btn btn-default" type="submit"&gt;Save&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9.</figcaption></figure><p>And then add <code>onSubmit</code> property to our <code>&lt;form&gt;</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;form onSubmit={this.handleFormSubmit}&gt;
+{/* ... */}
+&lt;/form&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10.</figcaption></figure><p>When user submits our form we want React to call <code>handleFormSubmit</code> function. Let's declare it on our component specification object:</p><figure class="figure"><pre>
+<code class="language-js">
+handleFormSubmit: function (formSubmitEvent) {
+  formSubmitEvent.preventDefault();
+
+  console.log('You have selected:', this.state.selectedOption);
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 11.</figcaption></figure><p>It gets <code>formSubmitEvent</code> object as a parameter. We then <code>preventDefault()</code> on it, to prevent the default form submit behaviour.</p><p>Finally we log selected option's name in a web browser's console. We get selected option's name from our component's state: <code>this.state.selectedOption</code>.</p><p>And that's the convinience and the power of being in control of your inputs with React!</p><p>Thank you for your attention!</p><p>Please take a look at <a href="https://github.com/fedosejev/radio-buttons-react">the complete source code on GitHub</a> and <a href="http://fedosejev.github.io/radio-buttons-react/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p><p>P.S. I've also written <a href="http://reactessentials.com">React.js Essentials book</a> and <a href="http://progressdots.com">I teach people React.js and JavaScript</a>!</p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */</style><div id="mc_embed_signup"><form action="//exchange.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><div id="mc_embed_signup_scroll"><input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div><div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div></div></form></div><!--End mc_embed_signup--></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/radio-buttons-in-reactjs/';
+    this.page.identifier = 'radio-buttons-in-reactjs';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>

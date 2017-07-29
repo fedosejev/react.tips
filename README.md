@@ -1,15 +1,14 @@
 # React.Tips
 
-http://react.tips
+Website source code.
 
-## Run
+## Install
 
 1. `npm install -g yarn`
-1. `yarn install`
-2. `./generate.sh`
-3. `./serve.sh`
-4. Open `http://localhost:8080` in a web browser.
-
-## Author
-
-[Artemij Fedosejev](http://artemij.com)
+2. `yarn install`
+3. Configure `config.js`, `generate.sh`, `serve.sh`, `publish.sh` as needed.
+4. Configure `data/config.json` as needed.
+5. `npm install --global gulp http-server`
+6. `./generate.sh`
+7. `./serve.sh`
+8. Open `http://localhost:8080` in a web browser.

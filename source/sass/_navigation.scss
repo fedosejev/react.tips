@@ -5,18 +5,16 @@
   li {
     list-style-type: none;
     display: inline-block;
-    margin: 0 20px;
+    margin: 0 20px 0 0;
     letter-spacing: 0px;
     font-size: 20px;
-    line-height: 40px;
+    line-height: 36px;
 
     &:first-of-type {
       margin-left: 0;
     }
 
     a {
-      color: #888;
-
       &:hover {
         text-decoration: none;
         color: #000;

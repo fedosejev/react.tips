@@ -1,0 +1,169 @@
+@import url("https://fonts.googleapis.com/css?family=Zilla+Slab:400,400i,500,500i,600,600i,700,700i");
+* {
+  font-family: 'Zilla Slab', serif;
+  margin: 0;
+  padding: 0; }
+
+body {
+  background-color: #fff; }
+
+a .fa {
+  color: #000; }
+
+a,
+a:hover,
+a:active,
+a:visited {
+  color: #ec6563; }
+
+a:hover {
+  color: #666; }
+
+a:hover,
+a:focus {
+  text-decoration: none; }
+
+.landing-page .posts {
+  list-style-type: none;
+  margin: 0; }
+  .landing-page .posts li {
+    font-size: 30px;
+    line-height: 36px;
+    text-align: left;
+    margin: 20px 20px 20px 0; }
+    .landing-page .posts li .fa {
+      color: #cecece;
+      margin-right: 10px; }
+
+.post-page {
+  font-size: 20px; }
+  .post-page h1 {
+    font-weight: 500;
+    line-height: 40px;
+    margin: 20px 0 40px 0; }
+  .post-page img {
+    max-width: 100%; }
+  .post-page blockquote {
+    margin: 40px 0; }
+  .post-page p {
+    margin: 20px 0;
+    line-height: 32px; }
+  .post-page pre {
+    margin: 20px 0;
+    border: 0;
+    border-radius: 0;
+    font-size: 20px; }
+  .post-page ol, .post-page ul {
+    margin-left: 40px; }
+  .post-page figure {
+    margin: 40px 0; }
+    .post-page figure figcaption {
+      text-align: center;
+      font-size: 16px;
+      font-style: italic;
+      color: #999; }
+  .post-page h2 {
+    margin-top: 60px; }
+  .post-page .author-photo {
+    width: 150px;
+    display: block;
+    margin-top: 40px; }
+  .post-page .clip-shape {
+    -webkit-clip-path: circle(50% at 50% 50%);
+    clip-path: circle(50% at 50% 50%); }
+  .post-page a .fa {
+    color: #000; }
+  .post-page a,
+  .post-page a:hover,
+  .post-page a:active,
+  .post-page a:visited {
+    color: #ec6563; }
+  .post-page a:hover {
+    color: #666;
+    text-decoration: none; }
+  .post-page #disqus_thread {
+    margin-top: 20px; }
+
+.mailchimp {
+  border-top: 1px dotted #ccc;
+  border-bottom: 1px dotted #ccc;
+  margin: 30px 0;
+  padding: 30px 0 20px 0; }
+  .mailchimp h3 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+    line-height: 32px; }
+  .mailchimp #mc_embed_signup form {
+    text-align: left; }
+    .mailchimp #mc_embed_signup form input {
+      margin-right: 10px; }
+
+.header {
+  margin: 20px 0;
+  border-bottom: 1px dotted #ccc; }
+  .header .navigation {
+    text-align: left;
+    margin: 30px 0; }
+    .header .navigation li {
+      list-style-type: none;
+      display: inline-block;
+      margin: 0 20px 0 0;
+      letter-spacing: 0px;
+      font-size: 20px;
+      line-height: 36px; }
+      .header .navigation li:first-of-type {
+        margin-left: 0; }
+      .header .navigation li a:hover {
+        text-decoration: none;
+        color: #000; }
+      .header .navigation li a .fa {
+        color: inherit;
+        margin-right: 5px; }
+
+.footer {
+  margin: 20px 0 0 0;
+  padding: 40px 0 0 0;
+  border-top: 1px dotted #ccc;
+  font-size: 14px;
+  color: #aaa;
+  text-align: left; }
+  .footer p {
+    margin: 0 20px 20px 20px;
+    line-height: 20px; }
+  .footer a {
+    color: #666; }
+    .footer a:hover {
+      color: #333; }
+  .footer .fa {
+    color: inherit; }
+  .footer .books .book-cover {
+    display: inline-block;
+    margin: 0 20px;
+    margin-bottom: 20px;
+    vertical-align: top; }
+    .footer .books .book-cover img {
+      width: 200px; }
+
+.social {
+  margin: 20px 0 0 0;
+  padding: 40px 0;
+  border-top: 1px dotted #ccc;
+  font-size: 14px;
+  color: #aaa;
+  text-align: left; }
+  .social p {
+    margin: 0 20px 20px 20px; }
+  .social a {
+    color: #999; }
+    .social a:hover {
+      color: #333; }
+  .social .fa {
+    color: inherit; }
+  .social .social-buttons {
+    margin: 0 0 0 10px;
+    padding: 0; }
+    .social .social-buttons li {
+      display: inline-block;
+      margin: 0 10px;
+      font-size: 28px; }

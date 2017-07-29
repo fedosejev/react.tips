@@ -3,7 +3,8 @@
   font-size: 20px;
 
   h1 {
-    font-weight: bold;
+    font-weight: 500;
+    line-height: 40px;
     margin: 20px 0 40px 0;
   }
 
@@ -61,9 +62,9 @@
     color: #000;
   }
 
-  a, 
-  a:hover, 
-  a:active, 
+  a,
+  a:hover,
+  a:active,
   a:visited {
     color: #ec6563;
   }
