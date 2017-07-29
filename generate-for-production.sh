@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -r build
+rm -r docs
 node generate.js
 node create-sitemap.js
 gulp build-for-production

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-http-server -c-1 ./build
+http-server -c-1 ./docs

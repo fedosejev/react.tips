@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const sitemap = require('sitemap');
-
-const URL = 'http://react.tips';
+const BUILD_DIR = require('./config').BUILD_DIR;
+const URL = require('./config').WEBSITE_URL;
 
 const getListOfDirectoriesInDataDirectory = () => {
   const dataDirectoryPath = path.join(__dirname, 'data');
@@ -16,14 +16,14 @@ const getListOfDirectoriesInDataDirectory = () => {
 };
 
 const generateSitemapFile = () => {
-  const outputFile = path.join(__dirname, './build/sitemap.xml');
+  const outputFile = path.join(__dirname, `./${BUILD_DIR}/sitemap.xml`);
   const tutorials = getListOfDirectoriesInDataDirectory();
   const rootUrl = {
     url: '/',
     changefreq: 'weekly',
     priority: 0.8,
     lastmodrealtime: true,
-    lastmodfile: path.join(__dirname, '/build/index.html'),
+    lastmodfile: path.join(__dirname, `/${BUILD_DIR}/index.html`),
   };
 
   const urls = tutorials.map(tutorial => (
@@ -32,7 +32,7 @@ const generateSitemapFile = () => {
       changefreq: 'monthly',
       priority: 0.8,
       lastmodrealtime: true,
-      lastmodfile: path.join(__dirname, `/build/${tutorial}/index.html`),
+      lastmodfile: path.join(__dirname, `/${BUILD_DIR}/${tutorial}/index.html`),
     }
   ));
 
@@ -49,7 +49,7 @@ const generateSitemapFile = () => {
 
 const generateRobotsFile = () => {
   const robotsFileContent = `User-agent: * \n\nDisallow: \n\nSitemap: ${URL}/sitemap.xml`;
-  const filePath = path.join(__dirname, '/build/robots.txt');
+  const filePath = path.join(__dirname, `/${BUILD_DIR}/robots.txt`);
 
   fs.writeFileSync(filePath, robotsFileContent);
 };

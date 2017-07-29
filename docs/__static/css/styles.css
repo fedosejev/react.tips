@@ -1,6 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Bitter:400,400italic,700);
+@import url("https://fonts.googleapis.com/css?family=Zilla+Slab:400,400i,500,500i,600,600i,700,700i");
 * {
-  font-family: 'Bitter', serif;
+  font-family: 'Zilla Slab', serif;
   margin: 0;
   padding: 0; }
 
@@ -17,17 +17,20 @@ a:visited {
   color: #ec6563; }
 
 a:hover {
-  color: #666;
+  color: #666; }
+
+a:hover,
+a:focus {
   text-decoration: none; }
 
 .landing-page .posts {
   list-style-type: none;
   margin: 0; }
   .landing-page .posts li {
-    font-size: 20px;
+    font-size: 30px;
+    line-height: 36px;
     text-align: left;
-    margin: 20px;
-    line-height: 30px; }
+    margin: 20px 20px 20px 0; }
     .landing-page .posts li .fa {
       color: #cecece;
       margin-right: 10px; }
@@ -35,7 +38,8 @@ a:hover {
 .post-page {
   font-size: 20px; }
   .post-page h1 {
-    font-weight: bold;
+    font-weight: 500;
+    line-height: 40px;
     margin: 20px 0 40px 0; }
   .post-page img {
     max-width: 100%; }
@@ -104,20 +108,18 @@ a:hover {
     .header .navigation li {
       list-style-type: none;
       display: inline-block;
-      margin: 0 20px;
+      margin: 0 20px 0 0;
       letter-spacing: 0px;
       font-size: 20px;
-      line-height: 40px; }
+      line-height: 36px; }
       .header .navigation li:first-of-type {
         margin-left: 0; }
-      .header .navigation li a {
-        color: #888; }
-        .header .navigation li a:hover {
-          text-decoration: none;
-          color: #000; }
-        .header .navigation li a .fa {
-          color: inherit;
-          margin-right: 5px; }
+      .header .navigation li a:hover {
+        text-decoration: none;
+        color: #000; }
+      .header .navigation li a .fa {
+        color: inherit;
+        margin-right: 5px; }
 
 .footer {
   margin: 20px 0 0 0;
@@ -127,7 +129,8 @@ a:hover {
   color: #aaa;
   text-align: left; }
   .footer p {
-    margin: 0 20px 20px 20px; }
+    margin: 0 20px 20px 20px;
+    line-height: 20px; }
   .footer a {
     color: #666; }
     .footer a:hover {

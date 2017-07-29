@@ -6,6 +6,8 @@ const minify = require('html-minifier').minify;
 const showdown = require('showdown');
 const fsExtra = require('fs-extra');
 
+const BUILD_DIR = require('./config').BUILD_DIR;
+
 const readPostConfigFromFile = postDirectoryName => {
   const configFilePath = path.join(__dirname, 'data', postDirectoryName, 'config.json');
   return JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
@@ -70,12 +72,12 @@ const readMarkdownFromFile = markdownFilePath => (
 );
 
 const getPostBuildDirectoryPath = postConfig => (
-  path.join(__dirname, 'build', postConfig.slug)
+  path.join(__dirname, BUILD_DIR, postConfig.slug)
 );
 
 const createPostHtmlFile = (postHtmlContent, postConfig) => {
   const directoryPath = getPostBuildDirectoryPath(postConfig);
-  const htmlFilePath = path.join(__dirname, 'build', postConfig.slug, 'index.html');
+  const htmlFilePath = path.join(__dirname, BUILD_DIR, postConfig.slug, 'index.html');
 
   mkdirp.sync(directoryPath);
 
@@ -136,7 +138,7 @@ const createPosts = () => (
 );
 
 const createHomePage = () => {
-  const htmlFilePath = path.join(__dirname, 'build/index.html');
+  const htmlFilePath = path.join(__dirname, `${BUILD_DIR}/index.html`);
 
   // https://github.com/mde/ejs/issues/124
   const templateFilePath = path.join(__dirname, 'source/templates/home/index.ejs');

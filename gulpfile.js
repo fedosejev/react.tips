@@ -3,17 +3,19 @@ const sass = require('gulp-sass');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 
+const BUILD_DIR = require('./config').BUILD_DIR;
+
 gulp.task('build-js-for-development', () => (
   gulp
     .src('./source/js/app.js')
-    .pipe(gulp.dest('./build/__static/js/'))
+    .pipe(gulp.dest(`./${BUILD_DIR}/__static/js/`))
 ));
 
 gulp.task('build-js-for-production', () => (
   gulp
     .src('./source/js/app.js')
     .pipe(uglify())
-    .pipe(gulp.dest('./build/__static/js/'))
+    .pipe(gulp.dest(`./${BUILD_DIR}/__static/js/`))
 ));
 
 gulp.task('build-sass-for-development', () => (
@@ -21,7 +23,7 @@ gulp.task('build-sass-for-development', () => (
     .src('./source/sass/index.scss')
     .pipe(sass())
     .pipe(rename('styles.css'))
-    .pipe(gulp.dest('./build/__static/css/'))
+    .pipe(gulp.dest(`./${BUILD_DIR}/__static/css/`))
 ));
 
 gulp.task('build-sass-for-production', () => (
@@ -29,13 +31,13 @@ gulp.task('build-sass-for-production', () => (
     .src('./source/sass/index.scss')
     .pipe(sass())
     .pipe(rename('styles.css'))
-    .pipe(gulp.dest('./build/__static/css/'))
+    .pipe(gulp.dest(`./${BUILD_DIR}/__static/css/`))
 ));
 
 gulp.task('build-images-for-production', () => (
   gulp
     .src('./source/images/*.*')
-    .pipe(gulp.dest('./build/__static/images/'))
+    .pipe(gulp.dest(`./${BUILD_DIR}/__static/images/`))
 ));
 
 gulp.task('watch-for-development', () => {
