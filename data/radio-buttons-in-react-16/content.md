@@ -305,7 +305,7 @@ Expressions `this.state.selectedOption === 'option1'`, `this.state.selectedOptio
 
 Notice that we're in control of which `<input>` component should be rendered selected and which - unselected. And by providing `value` property we're taking all of the control over our `<input>` components and turning them into [controlled components](https://facebook.github.io/react/docs/forms.html#controlled-components).
 
-<blockquote>
+<blockquote class="blockquote">
   <p>A Controlled component does not maintain its own internal state; the component renders purely based on props.</p>
   <footer>From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#controlled-components">React.js documentation</a></cite></footer>
 </blockquote>
