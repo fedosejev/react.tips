@@ -53,10 +53,12 @@ a:focus {
     border: 0;
     border-radius: 0;
     font-size: 20px; }
-  .post-page ol, .post-page ul {
+  .post-page ol,
+  .post-page ul {
     margin-left: 40px; }
   .post-page figure {
-    margin: 40px 0; }
+    width: 100%;
+    margin: 0 0 40px 0; }
     .post-page figure figcaption {
       text-align: center;
       font-size: 16px;

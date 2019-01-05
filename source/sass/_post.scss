@@ -1,5 +1,4 @@
 .post-page {
-
   font-size: 20px;
 
   h1 {
@@ -28,12 +27,14 @@
     font-size: 20px;
   }
 
-  ol, ul {
+  ol,
+  ul {
     margin-left: 40px;
   }
 
   figure {
-    margin: 40px 0;
+    width: 100%;
+    margin: 0 0 40px 0;
 
     figcaption {
       text-align: center;
