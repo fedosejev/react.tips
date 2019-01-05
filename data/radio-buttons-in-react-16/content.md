@@ -408,9 +408,9 @@ Our `<input>` components are controlled by us. Or more specifically - by our com
 
 On the other hand we could have made our `<input>` component [uncontrolled](https://reactjs.org/docs/uncontrolled-components.html) - all we need to do is to remove `value` and `checked` properties from `<input>` components.
 
-<blockquote>
+<blockquote class="blockquote">
   <p>An uncontrolled component maintains its own internal state.</p>
-  <footer>From <cite title="React.js documentation"><a href="https://reactjs.org/docs/uncontrolled-components.html">React.js documentation</a></cite></footer>
+  <footer class="blockquote-footer">From <cite title="React.js documentation"><a href="https://reactjs.org/docs/uncontrolled-components.html">React.js documentation</a></cite></footer>
 </blockquote>
 
 According to React documentation: [uncontroled components](https://reactjs.org/docs/uncontrolled-components.html) maintain their own state - that's why they're called "uncontrolled", because _we_, developers, don't have the control. It's incapsulated inside of the component itself.

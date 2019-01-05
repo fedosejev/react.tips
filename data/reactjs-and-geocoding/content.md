@@ -2,9 +2,9 @@
 
 If you ever wondered how to do geocoding with React.js, then this tutorial is for you.
 
-<blockquote>
+<blockquote class="blockquote">
   <p>Geocoding is the process of converting addresses (like "1600 Amphitheatre Parkway, Mountain View, CA") into geographic coordinates.</p>
-  <footer>From <cite title="Google Maps JavaScript API documentation"><a href="https://developers.google.com/maps/documentation/javascript/geocoding">Google Maps JavaScript API documentation</a></cite></footer>
+  <footer class="blockquote-footer">From <cite title="Google Maps JavaScript API documentation"><a href="https://developers.google.com/maps/documentation/javascript/geocoding">Google Maps JavaScript API documentation</a></cite></footer>
 </blockquote>
 
 In this tutorial we're going to build React.js component that implements this application:

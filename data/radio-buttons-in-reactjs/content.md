@@ -230,9 +230,9 @@ Expressions `this.state.selectedOption === 'option1'`, `this.state.selectedOptio
 
 Notice that we're in control of which `<input>` component should be rendered selected and which - unselected. And by providing `value` property we're taking all of the control over our `<input>` components and turning them into [controlled components](https://facebook.github.io/react/docs/forms.html#controlled-components).
 
-<blockquote>
+<blockquote class="blockquote">
   <p>A Controlled component does not maintain its own internal state; the component renders purely based on props.</p>
-  <footer>From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#controlled-components">React.js documentation</a></cite></footer>
+  <footer class="blockquote-footer">From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#controlled-components">React.js documentation</a></cite></footer>
 </blockquote>
 
 However, notice that at the moment, we're rending 3 radio buttons where the first one is selected. If I click on any other 2 - nothing happens. They're not selected. Or to be more specific: they're not rendered any differently.
@@ -308,9 +308,9 @@ Our `<input>` components are controlled by us. Or more specifically - by our com
 
 On the other hand we could have made our `<input>` component [uncontrolled](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) - all we need to do is to remove `value` and `checked` properties from `<input>` components.
 
-<blockquote>
+<blockquote class="blockquote">
   <p>An uncontrolled component maintains its own internal state.</p>
-  <footer>From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#uncontrolled-components">React.js documentation</a></cite></footer>
+  <footer class="blockquote-footer">From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#uncontrolled-components">React.js documentation</a></cite></footer>
 </blockquote>
 
 According to React documentation: [uncontroled components](https://facebook.github.io/react/docs/forms.html#uncontrolled-components) maintain their own state - that's why they're called "uncontrolled", because _we_, developers, don't have the control. It's incapsulated inside of the component itself.
