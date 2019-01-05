@@ -307,7 +307,7 @@ Notice that we're in control of which `<input>` component should be rendered sel
 
 <blockquote class="blockquote">
   <p>A Controlled component does not maintain its own internal state; the component renders purely based on props.</p>
-  <footer>From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#controlled-components">React.js documentation</a></cite></footer>
+  <footer class="blockquote-footer">From <cite title="React.js documentation"><a href="https://facebook.github.io/react/docs/forms.html#controlled-components">React.js documentation</a></cite></footer>
 </blockquote>
 
 However, notice that at the moment, we're rending 3 radio buttons where the first one is selected. If I click on any other 2 - nothing happens. They're not selected. Or to be more specific: they're not rendered any differently.
