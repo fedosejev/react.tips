@@ -56,6 +56,7 @@ Let's start with creating radio button elements. In `render()` function we'll wr
           <label>
             <input
               type="radio"
+              name="react-tips"
               value="option1"
               checked={true}
               className="form-check-input"
@@ -68,6 +69,7 @@ Let's start with creating radio button elements. In `render()` function we'll wr
           <label>
             <input
               type="radio"
+              name="react-tips"
               value="option2"
               className="form-check-input"
             />
@@ -79,6 +81,7 @@ Let's start with creating radio button elements. In `render()` function we'll wr
           <label>
             <input
               type="radio"
+              name="react-tips"
               value="option3"
               className="form-check-input"
             />
@@ -117,6 +120,7 @@ Not really. Their purpose is to create a layout using <a href="https://getbootst
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option1"
         checked={true}
         className="form-check-input"
@@ -129,6 +133,7 @@ Not really. Their purpose is to create a layout using <a href="https://getbootst
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option2"
         className="form-check-input"
       />
@@ -140,6 +145,7 @@ Not really. Their purpose is to create a layout using <a href="https://getbootst
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option3"
         className="form-check-input"
       />
@@ -168,6 +174,7 @@ Now let's take a closer look at the first input element:
 <code class="language-jsx">
 <input
   type="radio"
+  name="react-tips"
   value="option1"
   checked={true}
   className="form-check-input"
@@ -244,6 +251,7 @@ Now we need to pass `true` or `false` value to `checked` property for all 3 `<in
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option1"
         checked={this.state.selectedOption === "option1"}
         className="form-check-input"
@@ -256,6 +264,7 @@ Now we need to pass `true` or `false` value to `checked` property for all 3 `<in
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option2"
         checked={this.state.selectedOption === "option2"}
         className="form-check-input"
@@ -268,6 +277,7 @@ Now we need to pass `true` or `false` value to `checked` property for all 3 `<in
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option3"
         checked={this.state.selectedOption === "option3"}
         className="form-check-input"
@@ -319,6 +329,7 @@ React offers `onChange` property that we can pass to our `<input>` components to
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option1"
         checked={this.state.selectedOption === "option1"}
         onChange={this.handleOptionChange}
@@ -332,6 +343,7 @@ React offers `onChange` property that we can pass to our `<input>` components to
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option2"
         checked={this.state.selectedOption === "option2"}
         onChange={this.handleOptionChange}
@@ -345,6 +357,7 @@ React offers `onChange` property that we can pass to our `<input>` components to
     <label>
       <input
         type="radio"
+        name="react-tips"
         value="option3"
         checked={this.state.selectedOption === "option3"}
         onChange={this.handleOptionChange}
