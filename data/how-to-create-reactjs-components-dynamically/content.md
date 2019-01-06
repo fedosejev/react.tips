@@ -1,5 +1,17 @@
 # How To Create React.js Components Dynamically
 
+<div class="alert alert-warning mt-5 mb-5" role="alert">
+  <h4 class="alert-heading">Hold on!</h4>
+
+  <p>
+    This tutorial covers React 15 and is now out of date.
+  </p>
+
+  <p class="mb-0">
+    The good news is: <a href="/how-to-create-components-dynamically-in-react-16/">How To Create Components Dynamically in React 16</a> is available!
+  </p>
+</div>
+
 One of them most common tasks that we need to know how to do with React.js is to render a list of items _dynamically_ - meaning: we don't know how many items we're going to render at any given time. Zero or one hundred - it shouldn't matter.
 
 Let's learn how to do it with a help of an intuitive example.
