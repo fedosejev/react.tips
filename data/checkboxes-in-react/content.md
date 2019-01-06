@@ -1,5 +1,17 @@
 # Checkboxes in React.js
 
+<div class="alert alert-warning mt-5 mb-5" role="alert">
+  <h4 class="alert-heading">Hold on!</h4>
+
+  <p>
+    This tutorial covers React 15 and is now out of date.
+  </p>
+
+  <p class="mb-0">
+    The good news is: <a href="/checkboxes-in-react-16/">Checkboxes in React 16</a> is available!
+  </p>
+</div>
+
 How do you use checkboxes in React.js? We've learnt about radio buttons in [this tutorial](http://react.tips/radio-buttons-in-reactjs/), but what about checkboxes - do you use them differently in React?
 
 The short answer is: yes.
