@@ -50,7 +50,8 @@ a:focus {
   .post-page p {
     margin: 20px 0;
     line-height: 32px;
-    font-family: sans-serif; }
+    font-family: sans-serif;
+    font-weight: 100; }
   .post-page pre {
     margin: 20px 0;
     border: 0;
