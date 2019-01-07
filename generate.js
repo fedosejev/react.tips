@@ -8,10 +8,10 @@ const fsExtra = require("fs-extra");
 
 const BUILD_DIR = require("./config").BUILD_DIR;
 
-const readPostConfigFromFile = postDirectoryName => {
+const readPostConfigFromFile = (postDirectoryName, rootDirectoryName) => {
   const configFilePath = path.join(
     __dirname,
-    "data",
+    rootDirectoryName,
     postDirectoryName,
     "config.json"
   );
@@ -26,8 +26,8 @@ const readWebsiteConfigFromFile = () => {
   return JSON.parse(fs.readFileSync(configFilePath, "utf8"));
 };
 
-const getListOfDirectoriesInDataDirectory = directoryName => {
-  const dataDirectoryPath = path.join(__dirname, directoryName);
+const getListOfDirectoriesInDataDirectory = rootDirectoryName => {
+  const dataDirectoryPath = path.join(__dirname, rootDirectoryName);
   const fileNames = fs.readdirSync(dataDirectoryPath, "utf8");
   const directoryNames = fileNames.filter(fileName =>
     fs.statSync(path.join(dataDirectoryPath, fileName)).isDirectory()
@@ -36,14 +36,14 @@ const getListOfDirectoriesInDataDirectory = directoryName => {
   return directoryNames;
 };
 
-const getListOfPostsInDataDirectory = () => {
+const getListOfPostsInDataDirectory = rootDirectoryName => {
   const dataDirectoryPath = path.join(__dirname, "data");
   const fileNames = fs.readdirSync(dataDirectoryPath, "utf8");
   const posts = fileNames
     .filter(fileName =>
       fs.statSync(path.join(dataDirectoryPath, fileName)).isDirectory()
     )
-    .map(readPostConfigFromFile)
+    .map(post => readPostConfigFromFile(post, rootDirectoryName))
     .sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
@@ -119,10 +119,10 @@ const createPostHtmlFile = (postHtmlContent, postConfig) => {
   fs.writeFileSync(htmlFilePath, htmlContent);
 };
 
-const copyPostImagesToBuild = postConfig => {
+const copyPostImagesToBuild = (postConfig, rootDirectoryName) => {
   const postImagesDirectory = path.join(
     __dirname,
-    "data",
+    rootDirectoryName,
     postConfig.slug,
     "images"
   );
@@ -138,11 +138,33 @@ const copyPostImagesToBuild = postConfig => {
   });
 };
 
-const createPost = postDirectoryName => {
-  const postConfig = readPostConfigFromFile(postDirectoryName);
+const copyPostFilesToBuild = (postConfig, rootDirectoryName) => {
+  const postImagesDirectory = path.join(
+    __dirname,
+    rootDirectoryName,
+    postConfig.slug,
+    "files"
+  );
+
+  fs.stat(postImagesDirectory, error => {
+    if (!error) {
+      const buildPostImagesDirectory = path.join(
+        getPostBuildDirectoryPath(postConfig),
+        "files/"
+      );
+      fsExtra.copySync(postImagesDirectory, buildPostImagesDirectory);
+    }
+  });
+};
+
+const createPost = (postDirectoryName, rootDirectoryName) => {
+  const postConfig = readPostConfigFromFile(
+    postDirectoryName,
+    rootDirectoryName
+  );
   const contentFilePath = path.join(
     __dirname,
-    "data",
+    rootDirectoryName,
     postConfig.slug,
     "content.md"
   );
@@ -152,13 +174,16 @@ const createPost = postDirectoryName => {
   console.log(`💡 Creating: ${postConfig.title}`); // eslint-disable-line no-console
 
   createPostHtmlFile(postHtml, postConfig);
-  copyPostImagesToBuild(postConfig);
+  copyPostImagesToBuild(postConfig, rootDirectoryName);
+  copyPostFilesToBuild(postConfig, rootDirectoryName);
 };
 
-const createPosts = () =>
-  getListOfDirectoriesInDataDirectory("data").forEach(createPost);
+const createPosts = rootDirectoryName =>
+  getListOfDirectoriesInDataDirectory(rootDirectoryName).forEach(directory =>
+    createPost(directory, rootDirectoryName)
+  );
 
-const createHomePage = () => {
+const createHomePage = rootDirectoryName => {
   const htmlFilePath = path.join(__dirname, `${BUILD_DIR}/index.html`);
 
   // https://github.com/mde/ejs/issues/124
@@ -171,7 +196,7 @@ const createHomePage = () => {
     filename: templateFilePath
   });
 
-  const posts = getListOfPostsInDataDirectory();
+  const posts = getListOfPostsInDataDirectory(rootDirectoryName);
 
   const websiteConfig = readWebsiteConfigFromFile();
 
@@ -190,7 +215,8 @@ const createHomePage = () => {
   fs.writeFileSync(htmlFilePath, htmlContent);
 };
 
-createPosts();
-createHomePage();
+createPosts("data");
+createPosts("pages");
+createHomePage("data");
 
 console.log("🏁  Finished."); // eslint-disable-line no-console
