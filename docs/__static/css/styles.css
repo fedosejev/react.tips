@@ -115,6 +115,10 @@ a:focus {
     margin: 30px 0;
     font-family: sans-serif;
     font-weight: 100; }
+    .header .navigation .logo {
+      font-family: "Zilla Slab", serif;
+      font-size: 30px;
+      color: #666; }
     .header .navigation li {
       list-style-type: none;
       display: inline-block;
@@ -124,12 +128,17 @@ a:focus {
       line-height: 36px; }
       .header .navigation li:first-of-type {
         margin-left: 0; }
-      .header .navigation li a:hover {
-        text-decoration: none;
-        color: #000; }
-      .header .navigation li a .fa {
-        color: inherit;
-        margin-right: 5px; }
+      .header .navigation li a {
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 300;
+        color: #212529; }
+        .header .navigation li a:hover {
+          text-decoration: none;
+          color: #ec6563; }
+        .header .navigation li a .fa {
+          color: inherit;
+          margin-right: 5px; }
 
 .footer {
   margin: 20px 0 0 0;

@@ -4,6 +4,12 @@
   font-family: sans-serif;
   font-weight: 100;
 
+  .logo {
+    font-family: "Zilla Slab", serif;
+    font-size: 30px;
+    color: #666;
+  }
+
   li {
     list-style-type: none;
     display: inline-block;
@@ -17,9 +23,14 @@
     }
 
     a {
+      text-transform: uppercase;
+      font-size: 16px;
+      font-weight: 300;
+      color: #212529;
+
       &:hover {
         text-decoration: none;
-        color: #000;
+        color: #ec6563;
       }
 
       .fa {
