@@ -112,7 +112,9 @@ a:focus {
   border-bottom: 1px dotted #ccc; }
   .header .navigation {
     text-align: left;
-    margin: 30px 0; }
+    margin: 30px 0;
+    font-family: sans-serif;
+    font-weight: 100; }
     .header .navigation li {
       list-style-type: none;
       display: inline-block;
