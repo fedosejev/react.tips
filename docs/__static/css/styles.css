@@ -49,7 +49,8 @@ a:focus {
     padding-left: 20px; }
   .post-page p {
     margin: 20px 0;
-    line-height: 32px; }
+    line-height: 32px;
+    font-family: sans-serif; }
   .post-page pre {
     margin: 20px 0;
     border: 0;
