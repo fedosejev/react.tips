@@ -1,37 +1,31 @@
 <body class="landing-page">
   <div class="container text-center">
-
     <%- include('../../__partials/header') %>
 
     <div class="row">
       <div class="col-sm-12">
-        <ul class="posts">
+        <h1>React Tutorials</h1>
 
-          <%
-          for (var iterator = 0; iterator < posts.length; iterator++) {
-          %>
-            <li>
-              <a href="/<%= posts[iterator].slug %>/">
-                <%= posts[iterator].title %>
-              </a>
-            </li>
-          <%
-          }
-          %>
+        <ul class="posts">
+          <% for (var iterator = 0; iterator < posts.length; iterator++) { %>
+          <li>
+            <a href="/<%= posts[iterator].slug %>/">
+              <%= posts[iterator].title %>
+            </a>
+          </li>
+          <% } %>
 
           <li>
             <a href="http://bit.ly/PublishMyTutorial">
               Add your React.js Tutorial
             </a>
           </li>
-
         </ul>
       </div>
     </div>
 
-    <%- include('../../__partials/footer') %>
-    <%- include('../../__partials/social') %>
-
+    <%- include('../../__partials/footer') %> <%-
+    include('../../__partials/social') %>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>

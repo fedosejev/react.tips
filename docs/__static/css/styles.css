@@ -23,6 +23,12 @@ a:hover,
 a:focus {
   text-decoration: none; }
 
+.landing-page h1 {
+  font-weight: 500;
+  line-height: 40px;
+  margin: 20px 0 40px 0;
+  text-align: left; }
+
 .landing-page .posts {
   list-style-type: none;
   margin: 0; }
@@ -131,11 +137,10 @@ a:focus {
       .header .navigation li a {
         text-transform: uppercase;
         font-size: 16px;
-        font-weight: 300;
-        color: #212529; }
+        font-weight: 300; }
         .header .navigation li a:hover {
           text-decoration: none;
-          color: #ec6563; }
+          color: #212529; }
         .header .navigation li a .fa {
           color: inherit;
           margin-right: 5px; }
@@ -149,7 +154,9 @@ a:focus {
   text-align: left; }
   .footer p {
     margin: 0 20px 20px 20px;
-    line-height: 20px; }
+    line-height: 32px;
+    font-family: sans-serif;
+    font-weight: 100; }
   .footer a {
     color: #666; }
     .footer a:hover {
@@ -172,7 +179,10 @@ a:focus {
   color: #aaa;
   text-align: left; }
   .social p {
-    margin: 0 20px 20px 20px; }
+    margin: 0 20px 20px 20px;
+    line-height: 32px;
+    font-family: sans-serif;
+    font-weight: 100; }
   .social a {
     color: #999; }
     .social a:hover {

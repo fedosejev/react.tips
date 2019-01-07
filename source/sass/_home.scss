@@ -1,4 +1,11 @@
 .landing-page {
+  h1 {
+    font-weight: 500;
+    line-height: 40px;
+    margin: 20px 0 40px 0;
+    text-align: left;
+  }
+
   .posts {
     list-style-type: none;
     margin: 0;
