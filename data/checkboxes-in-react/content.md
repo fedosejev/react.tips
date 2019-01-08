@@ -1,6 +1,6 @@
 # Checkboxes in React.js
 
-<div class="alert alert-warning mt-5 mb-5" role="alert">
+<div class="alert alert-danger mt-5 mb-5" role="alert">
   <h4 class="alert-heading">Hold on!</h4>
 
   <p>
