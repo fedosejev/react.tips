@@ -4,7 +4,7 @@
   <h4 class="alert-heading">Hold on!</h4>
 
   <p>
-    This tutorial covers React 15 and is now <strong>out of date</strong>.
+    This tutorial covers React 15 and is now out of date.
   </p>
 
   <p
