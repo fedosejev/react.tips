@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>React.js and Geocoding - React Tips</title><meta name="description" content="Example of how to do geocoding with Google Maps JavaScript API and React.js."><link rel="canonical" href="http://react.tips/reactjs-and-geocoding/"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li class="logo">React.Tips</li><li><a href="/">Tutorials</a></li><li><a href="/write-your-tutorial-for-react-tips">Write for React.Tips</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>React.js and Geocoding</h1><p>If you ever wondered how to do geocoding with React.js, then this tutorial is for you.</p><blockquote class="blockquote"><p>Geocoding is the process of converting addresses (like "1600 Amphitheatre Parkway, Mountain View, CA") into geographic coordinates.</p><footer class="blockquote-footer">From <cite title="Google Maps JavaScript API documentation"><a href="https://developers.google.com/maps/documentation/javascript/geocoding">Google Maps JavaScript API documentation</a></cite></footer></blockquote><p>In this tutorial we're going to build React.js component that implements this application:</p><figure class="figure"><a href="http://fedosejev.github.io/google-maps-api-geocoder-react/" target="_blank"><img src="./images/app.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/google-maps-api-geocoder-react">this GitHub repository</a>.</p><h2 id="rendering-a-map-and-a-marker"><a href="#rendering-a-map-and-a-marker">Rendering a map and a marker</a></h2><p>We'll start by creating new React.js component called <code>Application</code>:</p><figure class="figure"><pre>
+<code class="language-jsx">
+var React = require('react');
+
+var Application = React.createClass({
+  render: function () {
+    return ({/* JSX code */});
+  }
+});
+
+module.exports = Application;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1.</figcaption></figure><p>Our component doesn't render anything, yet.</p><p>What should it render? From Figure 1 you can clearly see the following 3 user interface elements:</p><ol><li>Search - renders search form.</li><li>Status - renders current address that is displayed on the map.</li><li>Map - renders map.</li></ol><p>Let's start with the search. We'll write JSX code that creates <code>&lt;form&gt;</code> element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;div className="container"&gt;
+  &lt;div className="row"&gt;
+    &lt;div className="col-sm-12"&gt;
+
+      &lt;form className="form-inline"&gt;
+        &lt;div className="row"&gt;
+          &lt;div className="col-xs-8 col-sm-10"&gt;
+
+            &lt;div className="form-group"&gt;
+              &lt;label className="sr-only" htmlFor="address"&gt;Address&lt;/label&gt;
+              &lt;input type="text" 
+                                                className="form-control input-lg" 
+                                                id="address" 
+                                                placeholder="London" 
+                                                required /&gt;
+            &lt;/div&gt;
+
+          &lt;/div&gt;
+          &lt;div className="col-xs-4 col-sm-2"&gt;
+
+            &lt;button type="submit" className="btn btn-default btn-lg"&gt;
+              &lt;span className="glyphicon glyphicon-search" aria-hidden="true"&gt;&lt;/span&gt;
+            &lt;/button&gt;
+
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/form&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2.</figcaption></figure><p>Whoa, that's alot of <code>&lt;div&gt;</code> elements! Do we really need them?</p><p>Not really. Their purpose is to create a layout using <a href="http://getbootstrap.com/css/">Bootstrap grid system</a>. If you're not familiar with Bootstrap - don't worry, just focus on <code>&lt;form&gt;</code> element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;div className="container"&gt;
+
+{/* ... */}
+
+&lt;form className="form-inline"&gt;
+
+  {/* ... */}
+
+  &lt;label className="sr-only" htmlFor="address"&gt;Address&lt;/label&gt;
+  &lt;input type="text" 
+                    className="form-control input-lg" 
+                    id="address" 
+                    placeholder="London" 
+                    required /&gt;
+
+  {/* ... */}
+
+  &lt;button type="submit" className="btn btn-default btn-lg"&gt;
+    &lt;span className="glyphicon glyphicon-search" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+
+  {/* ... */}
+
+&lt;/form&gt;
+
+{/* ... */}
+
+&lt;/div&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3.</figcaption></figure><p>Now it's clear that we have a <code>&lt;form&gt;</code> with nested <code>&lt;label&gt;</code>, <code>&lt;input&gt;</code> and <code>&lt;button&gt;</code> elements.</p><p>We're done with creating our <code>&lt;form&gt;</code> for the moment. The next UI element is status message box - it tells you which address was found:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;div className="container"&gt;
+
+  {/* form */}
+
+  &lt;div className="row"&gt;
+    &lt;div className="col-sm-12"&gt;
+
+      &lt;p className="bg-info"&gt;London, United Kingdom&lt;/p&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4.</figcaption></figure><p>As you can see it's a simple <code>&lt;p&gt;</code> element with address in it. Nothing fancy at the moment.</p><p>Finally, let's create the map element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;div className="container"&gt;
+
+  {/* form */}
+
+  &lt;div className="row"&gt;
+    &lt;div className="col-sm-12"&gt;
+
+      &lt;p className="bg-info"&gt;London, United Kingdom&lt;/p&gt;
+
+      &lt;div className="map"&gt;&lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5.</figcaption></figure><p>Our map is an empty <code>&lt;div&gt;</code> element.</p><p>For now that's all we want our <code>Application</code> React component to render initially. But then who's going to create the actual map?</p><p>Google Maps JavaScript API.</p><p>It's their job to render the rest of the DOM that it needs for display the map. The next question you should ask yourself is: when should Google Maps JavaScript API start rendering the map?</p><p>Right after our <code>Application</code> component has finished mounting. React provides a lifecycle function that we can use to tell React what to do right after component finished mounting - <code>componentDidMount()</code>:</p><figure class="figure"><pre>
+<code class="language-js">
+componentDidMount: function () {
+  // tell Google Maps JavaScript API to create a map
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6.</figcaption></figure><p>How do we create a map using Google Maps JavaScript API?</p><p>First we need to select the DOM element that will act as a container for our map. I am sure you're already familiar with <code>document.getElementById()</code> or <code>document.querySelector()</code> or other DOM API functions that allow you to select elements from the DOM.</p><p>However React offers another way to access DOM elements by using <a href="https://facebook.github.io/react/docs/more-about-refs.html"><code>refs</code></a> and we're going to use <a href="https://facebook.github.io/react/docs/more-about-refs.html#the-ref-callback-attribute">the <code>ref</code> Callback Attribute</a>.</p><p>Let's create <code>setMapElementReference</code> property on our component specification object and assign a function to it:</p><figure class="figure"><pre>
+<code class="language-js">
+var Application = React.createClass({
+  componentDidMount: function () { /* ... */ },
+  setMapElementReference: function (mapElementReference) {
+    this.mapElement = mapElementReference;
+  },
+  render: function () { /* ... */ }
+});
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7.</figcaption></figure><p><code>setMapElementReference()</code> function will assign <code>mapElementReference</code> to <code>mapElement</code> property on our component specification object. Now we need to add <code>ref</code> attribute to our <code>&lt;div className="map"&gt;</code> element inside of <code>render()</code> function:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;div className="map" ref={this.setMapElementReference}&gt;&lt;/div&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8.</figcaption></figure><p>We're assigning <code>this.setMapElementReference</code> to <code>ref</code> attribute. In this case our <code>ref</code> attribute is <a href="https://facebook.github.io/react/docs/more-about-refs.html#the-ref-callback-attribute">the Callback Attribute</a>. Now React will call <code>setMapElementReference()</code> function immediately after the <code>Application</code> component is mounted. As a result the reference to <code>&lt;div className="map"&gt;</code> DOM element will be stored in <code>mapElement</code> property and now we can use it in our component whenever we need to reference our map element.</p><p>Where do we want to reference out map element? In <code>componentDidMount()</code>, because we want to render the map right after <code>Application</code> component is mounted:</p><figure class="figure"><pre>
+<code class="language-js">
+componentDidMount: function () {
+  this.map = new google.maps.Map(this.mapElement, {
+    zoom: 8,
+    center: {
+      lat: 51.5085300,
+      lng: -0.1257400
+    }
+  });
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9.</figcaption></figure><p>Here we're calling <code>new google.maps.Map()</code> function to render the map. This function takes two parameters: 1) <code>mapElement</code> which references our map DOM element and 2) options object that sets <code>zoom</code> and <code>center</code> properties of the map. Latitude of <code>51.5085300</code> and longitude of <code>-0.1257400</code> is a central point in London, United Kingdom.</p><p>Providing literal values like we did in the previous code snippet is a bad practice, so instead let's create a couple of new variables before we declare our React component:</p><figure class="figure"><pre>
+<code class="language-js">
+var React = require('react');
+
+var INITIAL_LOCATION = {
+  address: 'London, United Kingdom',
+  position: {
+    latitude: 51.5085300,
+    longitude: -0.1257400
+  }
+};
+
+var INITIAL_MAP_ZOOM_LEVEL = 8;
+
+var ATLANTIC_OCEAN = {
+  latitude: 29.532804,
+  longitude: -55.491477
+};
+
+var Application = React.createClass({ /* ... * / });
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10.</figcaption></figure><p><code>INITIAL_LOCATION</code> stores the initial location that we want to show on the map when user runs our application. <code>INITIAL_MAP_ZOOM_LEVEL</code> is the initial zoom level of our map. And finally we've created <code>ATLANTIC_OCEAN</code> variable that stores coordinates of Atlantic Ocean - this is what we want to show on our map when user searches for a non-existing address.</p><p>Now let's go back to <code>componentDidMount()</code> function and replace literal values with references:</p><figure class="figure"><pre>
+<code class="language-js">
+componentDidMount: function () {  
+  this.map = new google.maps.Map(this.mapElement, {
+    zoom: INITIAL_MAP_ZOOM_LEVEL,
+    center: {
+      lat: INITIAL_LOCATION.position.latitude,
+      lng: INITIAL_LOCATION.position.longitude
+    }
+  });
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 11.</figcaption></figure><p>Notice that we're assigning our new map object to <code>this.map</code>. We're going to store the reference to the map object in our component specification object.</p><p>Let's review what's happening in our application at the moment:</p><ol><li>React component mounts.</li><li>We render map using Google Maps JavaScript API.</li></ol><p>The next step is to create a marker:</p><figure class="figure"><pre>
+<code class="language-js">
+componentDidMount: function () {  
+  this.map = new google.maps.Map(this.mapElement, {
+    zoom: INITIAL_MAP_ZOOM_LEVEL,
+    center: {
+      lat: INITIAL_LOCATION.position.latitude,
+      lng: INITIAL_LOCATION.position.longitude
+    }
+  });
+
+  this.marker = new google.maps.Marker({
+    map: this.map,
+    position: {
+      lat: INITIAL_LOCATION.position.latitude,
+      lng: INITIAL_LOCATION.position.longitude
+    }
+  });
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12.</figcaption></figure><p>Just like with the <code>map</code> object, we're assigning the reference to our new marker object to our component specification object.</p><p>Next we need to create a new <code>geocoder</code> object:</p><figure class="figure"><pre>
+<code class="language-js">
+componentDidMount: function () {  
+  this.map = new google.maps.Map(this.mapElement, {
+    zoom: INITIAL_MAP_ZOOM_LEVEL,
+    center: {
+      lat: INITIAL_LOCATION.position.latitude,
+      lng: INITIAL_LOCATION.position.longitude
+    }
+  });
+
+  this.marker = new google.maps.Marker({
+    map: this.map,
+    position: {
+      lat: INITIAL_LOCATION.position.latitude,
+      lng: INITIAL_LOCATION.position.longitude
+    }
+  });
+
+  this.geocoder = new google.maps.Geocoder();
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 13.</figcaption></figure><p>Once again, we're assigning the reference to our new geocoder object to our component specification object.</p><p>Now right after component is mounted we do 3 things:</p><ol><li>Create new map.</li><li>Create new marker.</li><li>Create new geocoder.</li></ol><p>At this point, our application will display a map with a marker pinned in a center of London, United Kindom.</p><p>The next step is to make our search form work.</p><h2 id="reacting-to-user-input"><a href="#reacting-to-user-input">Reacting to user input</a></h2><p>What happens when user submits the search form? We need to do a couple of things, but first let's create a new <code>handleFormSubmit()</code> function and assign it as a property to our component specification object:</p><figure class="figure"><pre>
+<code class="language-js">
+handleFormSubmit: function (submitEvent) {/* ... */},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 14.</figcaption></figure><p>When should <code>handleFormSubmit</code> function be called? When user submits our search form. Let's go back to our <code>&lt;form&gt;</code> element and add <code>onSubmit</code> attribute:</p><figure class="figure"><pre>
+<code class="language-jsx">
+ &lt;form className="form-inline" onSubmit={this.handleFormSubmit}&gt;{/* ... */}&lt;/form&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 15.</figcaption></figure><p>What should <code>handleFormSubmit</code> function do?</p><p>3 things:</p><ol><li>Prevent the default submit behaviour.</li><li>Get address string that user typed into our search input element.</li><li>Geocode the address string.</li></ol><p>Let's start with preventing the default submit behaviour:</p><figure class="figure"><pre>
+<code class="language-js">
+handleFormSubmit: function (submitEvent) {
+  submitEvent.preventDefault();
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 16.</figcaption></figure><p>Next, we need to get the value that user typed into search input. How can we reference that input element? The same way we referenced our map element: using <a href="https://facebook.github.io/react/docs/more-about-refs.html#the-ref-callback-attribute"><code>ref</code> callback attribute</a>.</p><p>Let's go back to our <code>&lt;input&gt;</code> element inside of <code>render</code> function and add a new <code>ref</code> attribute:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;input type="text" 
+                className="form-control input-lg" 
+                id="address" 
+                placeholder="London, United Kingdom"
+                ref={this.setSearchInputElementReference}
+                required /&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 17.</figcaption></figure><p>We're assigning <code>this.setSearchInputElementReference</code> to <code>ref</code> attribute. Let's create <code>this.setSearchInputElementReference</code> property on our component specification object and assign a new function to it:</p><figure class="figure"><pre>
+<code class="language-js">
+setSearchInputElementReference: function (inputReference) {
+  this.searchInputElement = inputReference;
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 18.</figcaption></figure><p>Just like with the reference to a map element, we're assigning a reference to our input element to a property called <code>searchInputElement</code> on our component specification object, so that we could reference it from anywhere in our component.</p><p>Now when we have a way to reference our search input element, let's get it's <code>value</code> in <code>handleFormSubmit</code> function:</p><figure class="figure"><pre>
+<code class="language-js">
+handleFormSubmit: function (submitEvent) {
+  submitEvent.preventDefault();
+
+  var address = this.searchInputElement.value;
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 19.</figcaption></figure><p>We're assigning that value to a new <code>address</code> variable, because it will be an address string that user has typed into the search box.</p><p>Finally, we want to geocode that address string:</p><figure class="figure"><pre>
+<code class="language-js">
+handleFormSubmit: function (submitEvent) {
+  submitEvent.preventDefault();
+
+  var address = this.searchInputElement.value;
+
+  this.geocodeAddress(address);
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 20.</figcaption></figure><p>Here we're calling <code>geocodeAddress</code> function and passing <code>address</code> as an argument.</p><p>Now let's create <code>geocodeAddress</code> function as a property of our component specification object:</p><figure class="figure"><pre>
+<code class="language-js">
+geocodeAddress: function (address) {
+  this.geocoder.geocode({ 'address': address }, function handleResults(results, status) {
+
+    if (status === google.maps.GeocoderStatus.OK) {
+
+      this.map.setCenter(results[0].geometry.location);
+      this.marker.setPosition(results[0].geometry.location);
+
+      return;
+    }
+
+    this.map.setCenter({
+      lat: ATLANTIC_OCEAN.latitude,
+      lng: ATLANTIC_OCEAN.longitude
+    });
+
+    this.marker.setPosition({
+      lat: ATLANTIC_OCEAN.latitude,
+      lng: ATLANTIC_OCEAN.longitude
+    });
+
+  }.bind(this));
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 21.</figcaption></figure><p>Here we're calling <code>geocode</code> function on <code>geocoder</code> object that we've created earlier. <code>geocode</code> function takes two arguments: 1) <a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference#GeocoderRequest">request object</a> and 2) callback function.</p><p>Our request object is very simple: <code>{ 'address': address }</code> - it only has one property: the <code>address</code> that we want to geocode.</p><p>Our callback function is <code>handleResults</code> - it takes two parameters: 1) array of <a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference#GeocoderResult">geocoder result</a> objects and a <a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference#GeocoderStatus">geocoder status</a> object.</p><p>Let's discuss the logic behind our <code>handleResults</code> function.</p><p>It needs to handle 2 cases:</p><ol><li>When response contains a valid geocoder result object.</li><li>Everything else.</li></ol><p>We first handle our first case by writing this <code>if</code> statement:</p><figure class="figure"><pre>
+<code class="language-js">
+if (status === google.maps.GeocoderStatus.OK) {
+  // response contains a valid geocoder result object
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 22.</figcaption></figure><p>Inside of that <code>if</code> statement, we want to do 2 things:</p><ol><li>Change center of our map to position of the geocoder result object.</li><li>Change position of our marker to position of the geocoder result object.</li></ol><figure class="figure"><pre>
+<code class="language-js">
+if (status === google.maps.GeocoderStatus.OK) {
+  this.map.setCenter(results[0].geometry.location);
+  this.marker.setPosition(results[0].geometry.location);
+
+  return;
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 23.</figcaption></figure><p><code>results[0].geometry.location</code> is the location object of the first geocoder result object. It has coordinates that match best the address provided by our user. We pass it as an argument to <code>map.setCenter</code> and <code>marker.setPosition</code> function calls in order to change center of the map and position of the marker.</p><p>That's all we want to do in that case, so we add <code>return</code> statement to terminate our <code>handleResults</code> function.</p><p>This will cover our first case or <em>success</em> case when response contains a valid geocoder result object.</p><p>How should we handle our second case or a <em>failure</em> case when we didn't get a valid geocoder result object?</p><p>Remember we've created <code>ATLANTIC_OCEAN</code> variable that references object with the coordinates of Atlantic Ocean? This is the case when we need that object - we want to show Atlantic Ocean when user provides invalid address:</p><figure class="figure"><pre>
+<code class="language-js">
+geocodeAddress: function (address) {
+  this.geocoder.geocode({ 'address': address }, function handleResults(results, status) {
+
+    if (status === google.maps.GeocoderStatus.OK) {
+      this.map.setCenter(results[0].geometry.location);
+      this.marker.setPosition(results[0].geometry.location);
+
+      return;
+    }
+
+    this.map.setCenter({
+      lat: ATLANTIC_OCEAN.latitude,
+      lng: ATLANTIC_OCEAN.longitude
+    });
+
+    this.marker.setPosition({
+      lat: ATLANTIC_OCEAN.latitude,
+      lng: ATLANTIC_OCEAN.longitude
+    });
+
+  }.bind(this));
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 24.</figcaption></figure><p>After <code>if</code> statement, we set center of the map and position of the marker to Atlantic Ocean. These two function calls will be executed only if there is no valid geocoder result object.</p><p>Now our map and marker will update when user submits a valid address. Our search interacts with our map.</p><p>But what about the other UI element in our app - status? It's purpose is to render address text that is displayed on the map.</p><p>Let's build it!</p><p>Right now it renders static string <code>London, United Kingdom</code>:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;p className="bg-info"&gt;London, United Kingdom&lt;/p&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 25.</figcaption></figure><p>That string needs to be dynamic. And so it's time for our React component to become stateful.</p><p>Let's create <code>getInitialState</code> property on our component specification object and assign a function to it:</p><figure class="figure"><pre>
+<code class="language-js">
+var Application = React.createClass({  
+  getInitialState: function () {
+    return {
+      isGeocodingError: false,
+      foundAddress: INITIAL_LOCATION.address
+    };
+  },
+  geocodeAddress: function (address) { /* ... */ },
+  handleFormSubmit: function (submitEvent) { /* ... */ },
+  componentDidMount: function () { /* ... */ },
+  setSearchInputElementReference: function (inputReference) { /* ... */ },
+  setMapElementReference: function (mapElementReference) { /* ... */ },
+  render: function () { /* ... */ }
+});
+</code>
+</pre><figcaption class="figure-caption">Code snippet 26.</figcaption></figure><p>The initial state object for our component will have two properties:</p><ol><li><code>isGeocodingError</code> set to <code>false</code>.</li><li><code>foundAddress</code> set to <code>INITIAL_LOCATION.address</code></li></ol><p><code>isGeocodingError</code> flags if we didn't get a valid geocoder result object. If that's the case, then we need to render an error message.</p><p><code>foundAddress</code> stores the address string that was returned by our geocoder.</p><p>Next, inside of our <code>render</code> function, let's replace this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;p className="bg-info"&gt;London, United Kingdom&lt;/p&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 27.</figcaption></figure><p>With that:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{
+  this.state.isGeocodingError 
+  ? 
+  &lt;p className="bg-danger"&gt;Address not found.&lt;/p&gt;
+  :
+  &lt;p className="bg-info"&gt;{this.state.foundAddress}&lt;/p&gt;
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 28.</figcaption></figure><p>Here we're checking if <code>this.state.isGeocodingError</code> is <a href="https://developer.mozilla.org/en-US/docs/Glossary/Truthy">truthy</a>, and in that case we're rendering an error message, otherwise we're rendering address string from <code>this.state.foundAddress</code>.</p><p>When should we change our component's state?</p><p>Let's review our <code>geocodeAddress</code> function:</p><figure class="figure"><pre>
+<code class="language-js">
+geocodeAddress: function (address) {
+  this.geocoder.geocode({ 'address': address }, function handleResults(results, status) {
+
+    if (status === google.maps.GeocoderStatus.OK) {
+
+      this.setState({
+        foundAddress: results[0].formatted_address,
+        isGeocodingError: false
+      });
+
+      this.map.setCenter(results[0].geometry.location);
+      this.marker.setPosition(results[0].geometry.location);
+
+      return;
+    }
+
+    this.setState({
+      foundAddress: null,
+      isGeocodingError: true
+    });
+
+    this.map.setCenter({
+      lat: ATLANTIC_OCEAN.latitude,
+      lng: ATLANTIC_OCEAN.longitude
+    });
+
+    this.marker.setPosition({
+      lat: ATLANTIC_OCEAN.latitude,
+      lng: ATLANTIC_OCEAN.longitude
+    });
+
+  }.bind(this));
+},
+</code>
+</pre><figcaption class="figure-caption">Code snippet 29.</figcaption></figure><p>Here in both cases we're now changing component's state.</p><p>When response contains a valid geocoder result object, we're assigning new address string from <code>results[0].formatted_address</code> property and changing <code>isGeocodingError</code> to <code>false</code>:</p><figure class="figure"><pre>
+<code class="language-js">
+this.setState({
+  foundAddress: results[0].formatted_address,
+  isGeocodingError: false
+});
+</code>
+</pre><figcaption class="figure-caption">Code snippet 30.</figcaption></figure><p>This allows us to display the exact address string that geocoder found and remove any error messages that we could potentially display previously.</p><p>On the other hand, when we the response doesn't contain a valid geocoder result object, we're assigning <code>null</code> to <code>foundAddress</code> and <code>true</code> to <code>isGeocodingError</code>:</p><figure class="figure"><pre>
+<code class="language-js">
+this.setState({
+  foundAddress: null,
+  isGeocodingError: true
+});
+</code>
+</pre><figcaption class="figure-caption">Code snippet 31.</figcaption></figure><p>This state communicates the fact that no address found and there is no address string.</p><p>Now our application can gracefully handle both cases: success and failure.</p><p>And that's all folks!</p><p>Please take a look at the <a href="https://github.com/fedosejev/google-maps-api-geocoder-react">complete source code on GitHub</a> and the <a href="http://fedosejev.github.io/google-maps-api-geocoder-react">live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p><p>P.S. I've also written <a href="http://reactessentials.com">React.js Essentials book</a> and <a href="http://progressdots.com">I teach people React.js and JavaScript</a>!</p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */</style><div id="mc_embed_signup"><form action="//exchange.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><div id="mc_embed_signup_scroll"><input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div><div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div></div></form></div><!--End mc_embed_signup--></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/reactjs-and-geocoding/';
+    this.page.identifier = 'reactjs-and-geocoding';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>

@@ -4,10 +4,10 @@
   <h4 class="alert-heading">Hold on!</h4>
 
   <p>
-    This tutorial covers React 15 and is now out of date.
+    This tutorial covers React 15 and is now <strong>out of date</strong>.
   </p>
 
-  <p
+  <p class="mb-0">
     The good news is: <a href="/checkboxes-in-react-16/">Checkboxes in React 16</a> is available!
   </p>
 </div>

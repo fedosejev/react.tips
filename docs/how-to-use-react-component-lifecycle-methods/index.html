@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>How To Use React.js Component Lifecycle Methods - React Tips</title><meta name="description" content="Example of how to use component lifecycle methods in React.js."><link rel="canonical" href="http://react.tips/how-to-use-react-component-lifecycle-methods/"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li class="logo">React.Tips</li><li><a href="/">Tutorials</a></li><li><a href="/write-your-tutorial-for-react-tips">Write for React.Tips</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>How To Use React.js Component Lifecycle Methods</h1><p>Everything in this universe has a lifecycle. It means everything is constantly changing over time. From the moment you're born - you start changing - you're getting older. We divide our life into parts that we call <a href="http://www.ralphrowbottom.info/the-stages-of-life-a-new-look/">The Stages of Life</a>.</p><p>Your React.js components are no exception - they too have a lifecycle. They go through stages that are called <em>phases</em> in React terminology. Those phases are:</p><ol><li>Mounting</li><li>Updating</li><li>Unmounting</li></ol><p>From the moment your component is born - when it's initially being rendered - it enters the <strong>Mounting Phase</strong>. Once your component is living a happy life and is being updated it enters the <strong>Updating Phase</strong>. Finally when it's time to end it's life it enters the <strong>Unmounting Phase</strong>.</p><p>The lifecycle of your React components can vary from quite short to all-time long. It all depends on your web application needs and how your users use it.</p><p>When your user opens your React application - the necessary components go through Mounting Phase. Once your user starts interacting with your React application - some components go through the Updating Phase, while others - immediately face the Unmounting Phase.</p><p>As a developer you would like to tap into a component's lifecycle and get notified when that component is going through various lifecycle phases. This will allow you to control how your application looks and behaves at any given point in time.</p><p>How can we get notified when component is going through various lifecycle phases? React provides us with a collection of lifecycle <em>methods</em> that we can declare. When we declare them React will call them when component is going from one phase to another!</p><p>In this tutorial we're going to build a simple React application that demonstrates how to use React component lifecycle methods.</p><p>Here is our application:</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/" target="_blank"><img src="./images/app1.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application.</figcaption></figure><figure class="figure"><a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/" target="_blank"><img src="./images/app2.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 2. Our application.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/how-to-use-react-component-lifecycle-methods">this GitHub repository</a>.</p><p>Our application is going to render a text paragraph, <code>Show/Hide</code> button, <code>Increment</code> button and a counter value. A text paragraph will remind the user to open the Developer Tools Console - there we're going to log which component lifecycle methods is being executed by React. <code>Show/Hide</code> button will toggle our counter. <code>Increment</code> button will increase counter's value by 1.</p><p>Our application will be made of 2 React components:</p><ol><li><code>Application</code></li><li><code>Counter</code></li></ol><p><code>Application</code> component is a contrainer component - it encapsulates our entire React.js application. <code>Counter</code> component renders a counter text <strong>and</strong> <em>logs into the Developer Tools Console which React component lifecycle methods are being executed</em>.</p><p>Let's create our <code>Application</code> component first:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from 'react';
+import Counter from './Counter.jsx';
+
+let Application = React.createClass({
+
+  getInitialState: function () {
+    return {
+      counter: 0,
+      isCounterHidden: true
+    };
+  },
+
+  toggleCounter: function () {
+    this.setState({
+      isCounterHidden: ! this.state.isCounterHidden
+    });
+  },
+
+  incrementCounter: function () {
+    this.setState({
+      counter: this.state.counter + 1
+    });
+  },
+
+  render: function () {
+
+    let style = {
+      marginTop: '40px',
+      marginBottom: '10px'
+    };
+
+    return (
+      &lt;div className="container"&gt;
+        &lt;div className="row"&gt;
+          &lt;div className="col-sm-6 col-sm-offset-3 text-center"&gt;
+
+            &lt;p style={style}&gt;Make sure to open Developer Tools Console before you click anything.&lt;/p&gt;
+
+            &lt;div className="btn-group btn-group-lg" role="group" aria-label="..." style={style}&gt;
+              &lt;button type="button" className="btn btn-default" onClick={this.toggleCounter}&gt;{this.state.isCounterHidden ? 'Show' : 'Hide'}&lt;/button&gt;
+              &lt;button type="button" className="btn btn-success" onClick={this.incrementCounter}&gt;Increment&lt;/button&gt;
+            &lt;/div&gt;
+
+            {this.state.isCounterHidden ? null : &lt;Counter value={this.state.counter} /&gt;}
+
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+});
+
+export default Application;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1. Application.jsx</figcaption></figure><p>The first thing to notice about our <code>Application</code> component is that it's a stateful component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+getInitialState: function () {
+  return {
+    counter: 0,
+    isCounterHidden: true
+  };
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. Application.jsx</figcaption></figure><p>It has <code>getInitialState</code> function that returns an object with <code>counter</code> and <code>isCounterHidden</code> properties. <code>counter</code> property tracks the current value of our counter. <code>isCounterHidden</code> tracks whether our counter is hidden or not.</p><p>Initially, when our <code>Application</code> component is rendered for the first time we want our counter to be hidden and it's value to be <code>0</code>.</p><p>Let's talk about how are we going to change our <code>Application</code> component's state. How are we going to change those values - <code>0</code> and <code>true</code>? They have to change, otherwise, if those values will never change, we shouldn't declare them as component's state at all.</p><p>To change those values our <code>Application</code> component declares 2 functions: <code>toggleCounter</code> and <code>incrementCounter</code>.</p><p><code>toggleCounter</code> function sets <code>isCounterHidden</code>'s value to the opposite of it's current value:</p><figure class="figure"><pre>
+<code class="language-jsx">
+toggleCounter: function () {
+  this.setState({
+    isCounterHidden: ! this.state.isCounterHidden
+  });
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3. Application.jsx</figcaption></figure><p><code>incrementCounter</code> function adds 1 to the current value of the <code>counter</code> property:</p><figure class="figure"><pre>
+<code class="language-jsx">
+incrementCounter: function () {
+  this.setState({
+    counter: this.state.counter + 1
+  });
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4. Application.jsx</figcaption></figure><p>You might be wondering: who's calling <code>toggleCounter</code> and <code>incrementCounter</code> and when?</p><p>To answer these questions - let's take a look at the <code>render</code> function of our <code>Application</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render: function () {
+
+  let style = {
+    marginTop: '40px',
+    marginBottom: '10px'
+  };
+
+  return (
+    &lt;div className="container"&gt;
+      &lt;div className="row"&gt;
+        &lt;div className="col-sm-6 col-sm-offset-3 text-center"&gt;
+
+          &lt;p style={style}&gt;Make sure to open Developer Tools Console before you click anything.&lt;/p&gt;
+
+          &lt;div className="btn-group btn-group-lg" role="group" aria-label="..." style={style}&gt;
+            &lt;button type="button" className="btn btn-default" onClick={this.toggleCounter}&gt;{this.state.isCounterHidden ? 'Show' : 'Hide'}&lt;/button&gt;
+            &lt;button type="button" className="btn btn-success" onClick={this.incrementCounter}&gt;Increment&lt;/button&gt;
+          &lt;/div&gt;
+
+          {this.state.isCounterHidden ? null : &lt;Counter value={this.state.counter} /&gt;}
+
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. Application.jsx</figcaption></figure><p>In <code>render</code> function we declare <code>style</code> variable with some properties for our inline styling purposes. We also declare 3 <code>&lt;div&gt;</code> elements with various class names - these are <a href="http://getbootstrap.com/css/#grid">Bootstrap class names</a> that we use to create the layout for our page.</p><p>We then create <code>p</code> element with a static text and inline styling:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;p style={style}&gt;Make sure to open Developer Tools Console before you click anything.&lt;/p&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6. Application.jsx</figcaption></figure><p>The important part of the <code>render</code> function that we need to focus on is this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;div className="btn-group btn-group-lg" role="group" aria-label="..." style={style}&gt;
+  &lt;button type="button" className="btn btn-default" onClick={this.toggleCounter}&gt;{this.state.isCounterHidden ? 'Show' : 'Hide'}&lt;/button&gt;
+  &lt;button type="button" className="btn btn-success" onClick={this.incrementCounter}&gt;Increment&lt;/button&gt;
+&lt;/div&gt;
+
+{this.state.isCounterHidden ? null : &lt;Counter value={this.state.counter} /&gt;}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7. Application.jsx</figcaption></figure><p>Here we're rendering two buttons. The first one is <code>Show/Hide</code> button:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button type="button" className="btn btn-default" onClick={this.toggleCounter}&gt;{this.state.isCounterHidden ? 'Show' : 'Hide'}&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8. Application.jsx</figcaption></figure><p>This button's text can either be <code>Show</code> or <code>Hide</code> and we decide which one to render based on the current state of our <code>Application</code> component, or to be more specific - based on the value of <code>this.state.isCounterHidden</code> property:</p><figure class="figure"><pre>
+<code class="language-js">
+{this.state.isCounterHidden ? 'Show' : 'Hide'}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9. Application.jsx</figcaption></figure><p>If the value of <code>this.state.isCounterHidden</code> is <code>true</code> - we render <code>Show</code> text and if it's <code>false</code> - we render <code>Hide</code> text. Meaning: when our counter is hidden we want our button to say <code>Show</code>, and when it's shown - <code>Hide</code>.</p><p>So what happens when the user clicks that button? React will call our <code>toggleCounter</code> function, because our button has <code>onClick</code> property with the value of <code>this.toggleCounter</code>:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button ... onClick={this.toggleCounter}&gt;...&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10. Application.jsx</figcaption></figure><p>As we know <code>toggelCounter</code> function will call <code>setState</code> function that changes a component's state and when a component's state changes - React rerenders that component and all child components by default.</p><p>Effectively: when the user clicks <code>Show</code> button, <code>Application</code> component's state changes and <code>Hide</code> button is being rendered instead of <code>Show</code>.</p><p>The second button that our <code>Application</code> component renders is <code>Increment</code> button:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button type="button" className="btn btn-success" onClick={this.incrementCounter}&gt;Increment&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 11. Application.jsx</figcaption></figure><p>As you can see it also has <code>onClick</code> property with the value of <code>this.incrementCounter</code>. When the user clicks that button React will call our <code>incrementCounter</code> function that will change <code>Application</code> component's state and rerender <code>Application</code> component.</p><p>Now we know how we render our buttons and how they work.</p><p>What about our <code>Counter</code> component? Where do we render it and what does it do? Let's answer these questions.</p><p>If we look carefully at the <code>render</code> function in our <code>Application</code> component - we'll see this statement:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.state.isCounterHidden ? null : &lt;Counter value={this.state.counter} /&gt;}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12. Application.jsx</figcaption></figure><p>That's where we decide whether to render an instance of the <code>Counter</code> component or not. We make that decision based on the current state of our <code>Application</code> component: if <code>this.state.isCounterHidden</code> is set to <code>true</code> - we'll render <code>null</code>, otherwise if it's set to <code>false</code> - we'll render <code>&lt;Counter value={this.state.counter} /&gt;</code>.</p><p>As you can see, when we're rendering an instance of <code>Counter</code> component we're passing a property <code>value</code> with <code>this.state.counter</code> assigned to it. Meaning: the <code>Counter</code> component instance will always get the latest <code>counter</code> value that we store in <code>Application</code> component's state.</p><p>And that's our <code>Application</code> component.</p><p>In this tutorial we want to learn about how to use React component lifecycle methods. That's the goal for our <code>Counter</code> component - to render a counter value and <em>demonstrate when and which lifecycle methods are being called by React</em>.</p><p>Let's take a look at our <code>Counter</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from 'react';
+
+let Counter = React.createClass({
+
+  getDefaultProps: function () {
+    console.debug('getDefaultProps');
+
+    return {};
+  },
+
+  getInitialState: function () {
+    console.debug('getInitialState');
+
+    return {};
+  },
+
+  componentWillMount: function () {
+    console.debug('componentWillMount');
+  },
+
+  componentDidMount: function () {
+    console.debug('componentDidMount');
+  },
+
+  componentWillReceiveProps: function () {
+    console.debug('componentWillReceiveProps');
+  },
+
+  shouldComponentUpdate: function () {
+    console.debug('shouldComponentUpdate');
+
+    return true;
+  },
+
+  componentWillUpdate: function () {
+    console.debug('componentWillUpdate');
+  },
+
+  componentDidUpdate: function () {
+    console.debug('componentDidUpdate');
+  },
+
+  componentWillUnmount: function () {
+    console.debug('componentWillUnmount');
+  },
+
+  render: function () {
+    console.debug('render');
+
+    return (
+      &lt;h1 className="text-muted"&gt;Counter: {this.props.value}&lt;/h1&gt;
+    );
+  }
+});
+
+export default Counter;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 13. Counter.jsx</figcaption></figure><p>As you can see it has a lot of component lifecycle methods. They are:</p><ul><li><code>getDefaultProps</code></li><li><code>getInitialState</code></li><li><code>componentWillMount</code></li><li><code>componentDidMount</code></li><li><code>componentWillReceiveProps</code></li><li><code>shouldComponentUpdate</code></li><li><code>componentWillUpdate</code></li><li><code>componentDidUpdate</code></li><li><code>componentWillUnmount</code></li><li><code>render</code></li></ul><p>All these methods are being called by React. We don't call them explicitly ourselves. We <em>make</em> React to call them. For example, you already know that when we call <code>setState</code> function to update a component's state - React will call <code>render</code> method. In fact as you will learn in a moment - React will call other component lifecycle methods as well.</p><p>To make sure that we understand at what point in time these component lifecycle methods are being called we make each of these methods call <code>console.debug</code> function. This will print a log message in Developer Tools Console. What we want is to log the fact that a certain component lifecycle method is being called in a certain order. You will learn that component lifecycle methods are called in specific order.</p><p>Notice that our <code>Counter</code> component renders <code>&lt;h1&gt;</code> element with a <code>this.props.value</code> property that a parent <code>Application</code> component passed to it:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render: function () {
+  console.debug('render');
+
+  return (
+    &lt;h1 className="text-muted"&gt;Counter: {this.props.value}&lt;/h1&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 14. Counter.jsx</figcaption></figure><p>Other lifecycle methods in our <code>Counter</code> component don't do anything useful apart from logging the fact that React called them.</p><p><strong>It's time to run an experiment!</strong></p><h3>Step 1: Open our application in Google Chrome web browser</h3><p><a href="https://github.com/fedosejev/how-to-use-react-component-lifecycle-methods">Click here</a> to open a fully working application hosted on GitHub Pages.</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/" target="_blank"><img src="./images/demonstration-step1.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 3. Our application.</figcaption></figure><h3>Step 2: Open Developer Tools JavaScript Console</h3><p>In Google Chrome go to: <code>View</code> &gt; <code>Developer</code> &gt; <code>JavaScript Console</code> or use keyboard shortcut: <code>Cmd</code> + <code>Alt</code> + <code>J</code> on Mac and <code>Ctr</code> + <code>Shift</code> + <code>J</code> on Windows.</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/" target="_blank"><img src="./images/demonstration-step2.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 4. Our application with JavaScript Console opened</figcaption></figure><p>Notice that immediately we see <code>getDefaultProps</code> in blue in JavaScript Console. This is interesting: we can clearly tell that our <code>Counter</code> component instance was not rendered, but <code>getDefaultProps</code> method from our <code>Counter</code> component class was called by React (and that's where we're calling <code>console.debug</code> function that prints that blue message). This is because <code>getDefaultProps</code> is being called only once when we create <code>Counter</code> class - <em>not</em> when we render <code>Counter</code> component class instance. If you would like to learn more about <code>getDefaultProps</code> method - please read <a href="http://react.tips/how-to-use-default-properties-in-react/">this tutorial</a>.</p><p>Remember at the beginning of this tutorial I've mentioned that React component lifecycle methods are grouped by 3 phases: <code>Mounting</code>, <code>Updating</code> and <code>Unmounting</code>. Can you tell which phase our <code>Counter</code> component instance is going through?</p><p>None of them. Our <code>Counter</code> component class instance wasn't created yet. It wasn't born yet, so no lifecycle has begun yet. And so no lifecycle methods were called by React yet.</p><p>In React's terminology, <code>Counter</code> component was not mounted yet.</p><h3>Step 3: Click on <code>Show</code> button</h3><figure class="figure"><a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/" target="_blank"><img src="./images/demonstration-step3.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 5. Our application with JavaScript Console opened</figcaption></figure><p>It's alive!</p><p>We've just created and rendered our <code>Counter</code> component class instance! That instance has started it's lifecycle. React has called it's lifecycle methods: 1) <code>getInitialState</code>, 2) <code>componentWillMount</code>, 3) <code>render</code> and 4) <code>componentDidMount</code>. The order in which lifecycle methods are being called is important:</p><ol><li><p><strong><code>getInitialState</code></strong> - set's the initial state for our <code>Counter</code> component class instance. This state will then be available to us via <code>this.state</code> object.</p></li><li><p><strong><code>componentWillMount</code></strong> - is called <em>right before</em> React mounts (or renders) <code>Counter</code> component class instance into the DOM.</p></li><li><p><strong><code>render</code></strong> - renders <code>Counter</code> component class instance into the DOM - <strong>that's when we can see our counter on the screen</strong> and in our DOM.</p></li><li><p><strong><code>componentDidMount</code></strong> - is called <em>right after</em> React has finished mounting (or rendering) <code>Counter</code> component class instance into the DOM.</p></li></ol><p>As you might have guessed - what we've just witnessed and described is called - <strong><code>Mounting Phase</code></strong>. All those 4 lifecycle methods belong to the Mounting Phase.</p><p>So at the moment our <code>Counter</code> component instance is mounted into the DOM and we're waiting until some other event will trigger for that to change.</p><p>Our counter is showing <code>0</code> - let's change that!</p><h3>Step 4: Click on <code>Increment</code> button</h3><figure class="figure"><a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/" target="_blank"><img src="./images/demonstration-step4.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 6. Our application with JavaScript Console opened</figcaption></figure><p>Wow! What just happened? We see new blue messages in our JavaScript Console.</p><p>Well, we've just updated the state of our <code>Application</code> component by clicking <code>Increment</code> button. After updating <code>Application</code> component's state, React decided to rerender <code>Application</code> component instance including the rerendering of the <code>Counter</code> component instance and passing new properties to it - our <code>Counter</code> component instance now gets <code>1</code> instead of <code>0</code>.</p><p>So we've effectively updated our <code>Counter</code> component instance. We've changed it's life. It now entered it's <strong><code>Updating Phase</code></strong>, in which React calls the following lifecycle methods:</p><ul><li><p><strong><code>componentWillReceiveProps</code></strong> - this methods is called when our component instance receives new properties. <a href="https://facebook.github.io/react/docs/component-specs.html#updating-componentwillreceiveprops">Learn more about this methods</a>.</p></li><li><p><strong><code>shouldComponentUpdate</code></strong> - this method decides whether or not our <code>Counter</code> component instance needs to be rerendered. This is an opportunity for us to save time and skip rerendering if we know that it's not necessary. By default - React will rerender our component. We return <code>true</code> to signal that React should rerender it. Returning <code>false</code> will prevent React from rerendering it. <a href="https://facebook.github.io/react/docs/component-specs.html#updating-shouldcomponentupdate">Learn more about this methods</a>.</p></li><li><p><strong><code>componentWillUpdate</code></strong> - is called <em>right before</em> React will rerender <code>Counter</code> component class instance into the DOM. <a href="https://facebook.github.io/react/docs/component-specs.html#updating-componentwillupdate">Learn more about this methods</a>.</p></li><li><p><strong><code>render</code></strong> - rerenders <code>Counter</code> component class instance into the DOM - <strong>that's when we see our counter displaying 1 instead of 0</strong>.</p></li><li><p><strong><code>componentDidUpdate</code></strong> - is called <em>right after</em> React has rerendered <code>Counter</code> component class instance into the DOM. <a href="https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate">Learn more about this methods</a>.</p></li></ul><p>We can keep clicking <code>Increment</code> button - every click will trigger <code>Counter</code> component to go through another <code>Updating Phase</code>. Every click will trigger the same lifecycle methods.</p><p>But let's do something else instead.</p><h3>Step 5: Click on <code>Hide</code> button</h3><figure class="figure"><a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/" target="_blank"><img src="./images/demonstration-step5.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 7. Our application with JavaScript Console opened</figcaption></figure><p>That's how the life of our <code>Counter</code> component class instance ends. We've just unmounted our <code>Counter</code> component. In other words: we've just removed it from the DOM.</p><p>This lifecycle phase is called <code>Unmounting Phase</code> and there only one lifecycle methods is being called by React during that phase:</p><ul><li><strong><code>componentWillUnmount</code></strong> - is called <em>right before</em> React unmounts (or removes) <code>Counter</code> component instance from the DOM.</li></ul><p>Then it simply disappears from our screen and our DOM.</p><p>Now you've seen all three React component lifecycle phases:</p><ol><li><code>Mounting Phase</code></li><li><code>Updateing Phase</code></li><li><code>Unmounting Phase</code></li></ol><p><strong>During <code>Mounting Phase</code> React calls</strong>:</p><ol><li><code>getInitialState</code>.</li><li><code>componentWillMount</code>.</li><li><code>render</code>.</li><li><code>componentDidMount</code>.</li></ol><p>In that specific order. Every time.</p><p><strong>During <code>Updating Phase</code> React calls</strong>:</p><ol><li><code>componentWillReceiveProps</code>.</li><li><code>shouldComponentUpdate</code>.</li><li><code>componentWillUpdate</code>.</li><li><code>render</code>.</li><li><code>componentDidUpdate</code>.</li></ol><p>In that specific order. Every time. But not necessarily all 5 methods are being called every time. If <code>shouldComponentUpdate</code> returns <code>false</code> then React won't call <code>componentWillUpdate</code>, <code>render</code> and <code>componentDidUpdate</code> methods.</p><p><strong>During <code>Unmounting Phase</code> React calls</strong>:</p><ol><li><code>componentWillUnmount</code></li></ol><p>Just one method. Every time.</p><p>Notice that we might never update our <code>Counter</code> component. If you click <code>Show</code> and then <code>Hide</code> - our <code>Counter</code> component goes through <code>Mounting Phase</code> and <code>Unmounting Phase</code> - there is no <code>Updating Phase</code>:</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/" target="_blank"><img src="./images/demonstration-step6.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 8. Our application with JavaScript Console opened</figcaption></figure><p>As you can see <code>Updating Phase</code> might never happen. As well as <code>Unmounting Phase</code> might never happen if the user simply closes their web browser after initially loading your React web application.</p><p>And that's how to use React component lifecycle methods.</p><p>Thank you for reading this React tutorial!</p><p>Please take a look at <a href="https://github.com/fedosejev/how-to-use-react-component-lifecycle-methods">the complete source code on GitHub</a> and <a href="https://fedosejev.github.io/how-to-use-react-component-lifecycle-methods/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p><p>P.S. I've also written <a href="http://reactessentials.com">React.js Essentials book</a> and <a href="http://progressdots.com">I teach people React.js and JavaScript</a>!</p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */</style><div id="mc_embed_signup"><form action="//exchange.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><div id="mc_embed_signup_scroll"><input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div><div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div></div></form></div><!--End mc_embed_signup--></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/how-to-use-react-component-lifecycle-methods/';
+    this.page.identifier = 'how-to-use-react-component-lifecycle-methods';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>

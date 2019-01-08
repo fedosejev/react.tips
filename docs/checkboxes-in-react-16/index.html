@@ -1,0 +1,354 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Checkboxes in React 16 - React Tips</title><meta name="description" content="Intuitive example of how to create checkboxes in React 16."><link rel="canonical" href="http://react.tips/checkboxes-in-react-16/"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li class="logo">React.Tips</li><li><a href="/">Tutorials</a></li><li><a href="/write-your-tutorial-for-react-tips">Write for React.Tips</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>Checkboxes in React 16</h1><p>How do you use checkboxes in React.js? We've learnt about radio buttons in <a href="http://react.tips/radio-buttons-in-react-16/">this tutorial</a>, but what about checkboxes - do you use them differently in React?</p><p>The short answer is: yes.</p><p>Let me demonstrate how to use checkboxes with the help of a simple React application:</p><figure class="figure"><a href="https://fedosejev.github.io/checkboxes-in-react-16/" target="_blank"><img src="./images/app1.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/checkboxes-in-react-16">this GitHub repository</a>.</p><p>Our application is going to render a list of checkboxes with labels and a <code>Save</code> button. We can toggle checkboxes and click <code>Save</code> button. We will then see in the Developer Tools Console log messages that tell us which checkboxes were checked:</p><figure class="figure"><a href="https://fedosejev.github.io/checkboxes-in-react-16/" target="_blank"><img src="./images/app2.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 2. Our application.</figcaption></figure><p>Our application will be made of <a href="https://github.com/fedosejev/checkboxes-in-react-16/tree/master/src/components">two React components</a>:</p><ol><li><code>App</code></li><li><code>Checkbox</code></li></ol><p><code>App</code> component is a container component - it encapsulates our entire React application, and renders three instances of <code>Checkbox</code> component and three buttons - <code>Select All</code>, <code>Select None</code> and <code>Save</code> buttons. <code>App</code> component also logs into the Developer Tools Console which checkboxes were checked when users click the <code>Save</code> button.</p><p><code>Checkbox</code> component renders a checkbox with a label.</p><p>Let's create our <code>App</code> component first:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React, { Component } from "react";
+import Checkbox from "./Checkbox";
+
+const OPTIONS = ["One", "Two", "Three"];
+
+class App extends Component {
+  state = {
+    checkboxes: OPTIONS.reduce(
+      (options, option) =&gt; ({
+        ...options,
+        [option]: false
+      }),
+      {}
+    )
+  };
+
+  selectAllCheckboxes = isSelected =&gt; {
+    Object.keys(this.state.checkboxes).forEach(checkbox =&gt; {
+      // BONUS: Can you explain why we pass updater function to setState instead of an object?
+      this.setState(prevState =&gt; ({
+        checkboxes: {
+          ...prevState.checkboxes,
+          [checkbox]: isSelected
+        }
+      }));
+    });
+  };
+
+  selectAll = () =&gt; this.selectAllCheckboxes(true);
+
+  deselectAll = () =&gt; this.selectAllCheckboxes(false);
+
+  handleCheckboxChange = changeEvent =&gt; {
+    const { name } = changeEvent.target;
+
+    this.setState(prevState =&gt; ({
+      checkboxes: {
+        ...prevState.checkboxes,
+        [name]: !prevState.checkboxes[name]
+      }
+    }));
+  };
+
+  handleFormSubmit = formSubmitEvent =&gt; {
+    formSubmitEvent.preventDefault();
+
+    Object.keys(this.state.checkboxes)
+      .filter(checkbox =&gt; this.state.checkboxes[checkbox])
+      .forEach(checkbox =&gt; {
+        console.log(checkbox, "is selected.");
+      });
+  };
+
+  createCheckbox = option =&gt; (
+    &lt;Checkbox
+      label={option}
+      isSelected={this.state.checkboxes[option]}
+      onCheckboxChange={this.handleCheckboxChange}
+      key={option}
+    /&gt;
+  );
+
+  createCheckboxes = () =&gt; OPTIONS.map(this.createCheckbox);
+
+  render() {
+    return (
+      &lt;div className="container"&gt;
+        &lt;div className="row mt-5"&gt;
+          &lt;div className="col-sm-12"&gt;
+            &lt;form onSubmit={this.handleFormSubmit}&gt;
+              {this.createCheckboxes()}
+
+              &lt;div className="form-group mt-2"&gt;
+                &lt;button
+                  type="button"
+                  className="btn btn-outline-primary mr-2"
+                  onClick={this.selectAll}
+                &gt;
+                  Select All
+                &lt;/button&gt;
+                &lt;button
+                  type="button"
+                  className="btn btn-outline-primary mr-2"
+                  onClick={this.deselectAll}
+                &gt;
+                  Deselect All
+                &lt;/button&gt;
+                &lt;button type="submit" className="btn btn-primary"&gt;
+                  Save
+                &lt;/button&gt;
+              &lt;/div&gt;
+            &lt;/form&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default App;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1. App.js</figcaption></figure><p>First, let's focus on its <code>render</code> function:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render() {
+  return (
+    &lt;div className="container"&gt;
+      &lt;div className="row mt-5"&gt;
+        &lt;div className="col-sm-12"&gt;
+          &lt;form onSubmit={this.handleFormSubmit}&gt;
+            {this.createCheckboxes()}
+
+            &lt;div className="form-group mt-2"&gt;
+              &lt;button
+                type="button"
+                className="btn btn-outline-primary mr-2"
+                onClick={this.selectAll}
+              &gt;
+                Select All
+              &lt;/button&gt;
+              &lt;button
+                type="button"
+                className="btn btn-outline-primary mr-2"
+                onClick={this.deselectAll}
+              &gt;
+                Deselect All
+              &lt;/button&gt;
+              &lt;button type="submit" className="btn btn-primary"&gt;
+                Save
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. App.js</figcaption></figure><p>We see three <code>div</code> elements with class names that you might recognize if you're familiar with <a href="http://getbootstrap.com">Bootstrap</a>. Bootstrap helps us create layout for our page.</p><p>Now let's focus on the <code>form</code> element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;form onSubmit={this.handleFormSubmit}&gt;
+  {this.createCheckboxes()}
+
+  &lt;div className="form-group mt-2"&gt;
+    &lt;button
+      type="button"
+      className="btn btn-outline-primary mr-2"
+      onClick={this.selectAll}
+    &gt;
+      Select All
+    &lt;/button&gt;
+    &lt;button
+      type="button"
+      className="btn btn-outline-primary mr-2"
+      onClick={this.deselectAll}
+    &gt;
+      Deselect All
+    &lt;/button&gt;
+    &lt;button type="submit" className="btn btn-primary"&gt;
+      Save
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3. App.js</figcaption></figure><p>Inside of our <code>form</code> element we call <code>this.createCheckboxes</code> function that creates three instances of a <code>Checkbox</code> component. We'll see how this function works in a moment. It's important to recognise that here we're creating our instances of a <code>Checkbox</code> component <strong>dynamically</strong>. If you're not familiar with this approach, then please read <a href="http://react.tips/how-to-create-reactjs-components-dynamically/">this tutorial</a> first.</p><p>We then create three instances of <code>button</code> element.</p><p>The first <code>Select All</code> button will select all checkboxes:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button
+  type="button"
+  className="btn btn-outline-primary mr-2"
+  onClick={this.selectAll}
+&gt;
+  Select All
+&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4. App.js</figcaption></figure><p>When it's clicked it calls <code>this.selectAll</code> function. Later we'll see what that function does.</p><p>The second <code>Deselect All</code> button will deselect all checkboxes:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button
+  type="button"
+  className="btn btn-outline-primary mr-2"
+  onClick={this.deselectAll}
+&gt;
+  Deselect All
+&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. App.js</figcaption></figure><p>When it's clicked it calls <code>this.deselectAll</code> function. Later we'll see what that function does.</p><p>The third <code>Save</code> button is of type <code>submit</code> which will submit our form when user clicks on it:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button type="submit" className="btn btn-primary"&gt;
+  Save
+&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6. App.js</figcaption></figure><p>In our <code>form</code> element we're telling React to call <code>this.handleFormSubmit</code> function when user submits the form:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;form onSubmit={this.handleFormSubmit}&gt;
+{/* ... */}
+&lt;/form&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7. App.js</figcaption></figure><p>Next let's take a look at how exactly we're creating our instances of <code>Checkbox</code> component dynamically. Here is our <code>createCheckboxes</code> function:</p><figure class="figure"><pre>
+<code class="language-jsx">
+createCheckboxes = () =&gt; OPTIONS.map(this.createCheckbox);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8. App.js</figcaption></figure><p>It iterates over <code>OPTIONS</code> array and calls <code>this.createCheckbox</code> function for each item in that array. Where is <code>OPTIONS</code> array coming from and what is it for?</p><p>In our <code>App.js</code> file before declaring our <code>App</code> component, we've create <code>OPTIONS</code> constant that references an array of three items:</p><figure class="figure"><pre>
+<code class="language-js">
+const OPTIONS = ["One", "Two", "Three"];
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9. App.js</figcaption></figure><p><code>['One', 'Two', 'Three']</code> - these are labels for our checkboxes. This array represents data that will dictate how many checkboxes we need to render and what their labels will be. For the purpose of this tutorial, we declare this data in our React component file, but in a real world web application this data can be received from a server or imported from another file.</p><p>Now we know that <code>createCheckboxes</code> function calls <code>this.createCheckbox</code> function for each label in <code>OPTIONS</code> array. <code>createCheckboxes</code> function also returns an array of three instances of <code>Checkbox</code> component. That's because we call <code>this.createCheckbox</code> three times and each time it creates and returns an individual <code>Checkbox</code> component instance:</p><figure class="figure"><pre>
+<code class="language-js">
+createCheckbox = option =&gt; (
+  &lt;Checkbox
+    label={option}
+    isSelected={this.state.checkboxes[option]}
+    onCheckboxChange={this.handleCheckboxChange}
+    key={option}
+  /&gt;
+);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10. App.js</figcaption></figure><p>Each <code>Checkbox</code> component instance gets four properties:</p><ol><li><code>label</code> - the text that you see rendered next to a checkbox. This value is coming from our <code>OPTIONS</code> array.</li><li><code>isSelected</code> - <code>true</code> or <code>false</code> value that tells <code>Checkbox</code> component whether it should render selected or deselected checkbox.</li><li><code>onCheckboxChange</code> - a reference to <code>this.handleCheckboxChange</code> function. Every time user selects/deselects a checkbox React calls <code>this.handleCheckboxChange</code> function passing <code>change</code> event to it. We'll see how it works in a moment.</li><li><code>key</code> - as you already know, each dynamically created React component instance needs a <code>key</code> property that React uses to uniquely identify that instance.</li></ol><p>Now we understand how we create and render three checkboxes in our application. What happens when user selects/deselects our checkboxes? As you will see later - every time user changes checkbox's state - our <code>this.handleCheckboxChange</code> is called.</p><p>It's a good time to zoom out for a minute and talk about how our application works. There are a couple of questions we need to ask:</p><ol><li>Each checkbox has two states: selected and deselected. Which React component is responsible for managing that state?</li><li>How do we know which checkboxes are selected at any given moment in time?</li></ol><p>We want to keep our application as simple as possible, so our <code>App</code> component will be responsible for maintaining the state of each checkbox. Meaning: each <code>Checkbox</code> component will be a controlled component that is not responsible for managing it's own state. Instead <code>Checkbox</code> component will receive <code>isSelected</code> prop, render <code>input</code> element based on that prop and call <code>onCheckboxChange</code> callback prop when user interacts with it.</p><p>Have you noticed that we need to maintain the state of each checkbox for <em>two different</em> purposes? Let's take a closer look, this is important. In React, a form element that users can interact with has to have a state in order be rendered differently in response to user actions. That what makes a React component interactive: it's rendered one way, then user interacts with it and now it's rendered in another way. We know that changes in component's props or state will force React to re-render that component. Without that state, form elements will be useless, because they will always render the same way, regardless of what user does. They will feel unresponsive to a user. You can see that the purpose of that state is <em>mechanical</em> - it's purpose is to make an interactive UI component simply <em>work</em>. That's it.</p><p>Most often than not, you wouldn't render a UI component without a business reason. Why do we want to render a checkbox as part of our form? Well, we want to know user's preference for whatever choice options that checkbox represents and then submit it as part of the form. But where do we store that user preference before submitting the form? Notice that this user preference is our business state or our application state that lives in our React application. Does it mean that it should live in a component's state? No, as it's not React's responsibility to manage application's state. We can use Redux library, or plain JavaScript for that.</p><p>However, in this tutorial, we'll recognize that the two states: our <em>UI state</em> that we need for our checkboxes to work and our <em>application state</em> that we need for our application to make business sense - those two states with two different purposes can be represented with a single state. This state will live in the <code>App</code> component.</p><p>Why do we want to store state of the each checkbox in the parent <code>App</code> component instead of letting each checkbox to maintain it's own state? In <a href="/checkboxes-in-react/">the previous version of this tutorial</a> I've made a case that the parent <code>App</code> component doesn't need to know the state of each checkbox. It needs to know which checkboxes are selected in order to log them in a console when user clicks the <code>Save</code> button. However, in one of the comments <strong>Juan Leone</strong> asked how to select or deselect <em>all</em> checkboxes at once:</p><figure class="figure"><a href="/checkboxes-in-react/#comment-3545667834" target="_blank"><img src="./images/comment.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 3. Juan's comment.</figcaption></figure><p>The question is how the <code>App</code> component can control the state of it's child <code>Checkbox</code> components, without managing their state? The short answer is: it can't. When you make a React component stateful, the state becomes private to that component only. Parent components can't access it directly. Child components can only get access to it via props. That's one of the core ideas in React and your architectural challenge is to decide which components own what state.</p><p>In this tutorial I've added a new business requirement for our application: we need to have a button that selects all checkboxes and a button that deselects all checkboxes. This requirement will address Juan's comment and give you an example of how to manage application state in a parent component.</p><p>Let's declare our application state in the <code>App</code> component:</p><figure class="figure"><pre>
+<code class="language-js">
+state = {
+  checkboxes: OPTIONS.reduce(
+    (options, option) =&gt; ({
+      ...options,
+      [option]: false
+    }),
+    {}
+  )
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12. App.js</figcaption></figure><p>We use <a href="https://babeljs.io/docs/plugins/transform-class-properties/">class property</a> <code>state</code> to set the initial state of the <code>App</code> component.</p><p>Don't get scared by that <code>reduce</code> function:</p><figure class="figure"><pre>
+<code class="language-js">
+OPTIONS.reduce(
+  (options, option) =&gt; ({
+    ...options,
+    [option]: false
+  }),
+  {}
+)
+</code>
+</pre><figcaption class="figure-caption">Code snippet 11. App.js</figcaption></figure><p>All it does is transforms <code>["One", "Two", "Three"]</code> array to <code>{ "One": false, "Two": false, "Three": false }</code> object. This object is the shape of our state that represents two states: UI state for each <code>Checkbox</code> component and an application state for our entire application. In our state <code>false</code> means that user hasn't selected the checkbox and we want every checkbox to be initially rendered as unchecked. Option name represents the name of a checkbox, i.e. <code>"One"</code>, <code>"Two"</code>, <code>"Three"</code>.</p><ul><li>The UI state answers the question: <em>which checkbox should I render selected and which - deselected?</em></li><li>The application state answers the question: <em>which checkboxes user selected?</em></li></ul><p>As you can see those two states are tightly coupled and related - you can't render selected checkbox and at the same time assume that user's intention is to have it unselected. If you can think of a business case where your UI state will differ from your application state - you need to maintain them separately as two different states.</p><p>Now we know the shape of the <code>App</code> component's state:</p><figure class="figure"><pre>
+<code class="language-js">
+{
+  One: false,
+  Two: false,
+  Three: false,
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12. App.js</figcaption></figure><p>Let's look at the <code>this.handleCheckboxChange</code> function and understand how to change this state when user interacts with our checkboxes:</p><figure class="figure"><pre>
+<code class="language-js">
+handleCheckboxChange = changeEvent =&gt; {
+  const { name } = changeEvent.target;
+
+  this.setState(prevState =&gt; ({
+    checkboxes: {
+      ...prevState.checkboxes,
+      [name]: !prevState.checkboxes[name]
+    }
+  }));
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 13. App.js</figcaption></figure><p>It gets a <em>changeEvent</em> object and accesses <em>name</em> property that represents which checkbox is being toggled. Now what exactly <em>handleCheckboxChange</em> function does? It calls <code>this.setState</code> to request an update of the state and passes a function that gets a previous state and returns a new state that is created based on the previous state. The <code>name</code> property that comes with the <code>changeEvent</code> object becomes the key in our new state object and the value for that key becomes the opposite value of the value in the previous state:</p><figure class="figure"><pre>
+<code class="language-js">
+checkboxes: {
+  ...prevState.checkboxes,
+  [name]: !prevState.checkboxes[name]
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 14. App.js</figcaption></figure><p>This is how we toggle a checkbox in our application state. The <code>handleCheckboxChange</code> function toggles state of an individual checkbox. How do we change state for all checkboxes at once?</p><p>Let's look at our <code>this.selectAll</code> and <code>this.deselectAll</code> functions.</p><p>The <code>this.selectAll</code> function calls <code>this.selectAllCheckboxes</code> and passes <code>true</code> as an argument:</p><figure class="figure"><pre>
+<code class="language-js">
+selectAll = () =&gt; this.selectAllCheckboxes(true);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 15. App.js</figcaption></figure><p>While <code>this.deselectAll</code> function calls <code>this.selectAllCheckboxes</code> and passes <code>false</code> as an argument:</p><figure class="figure"><pre>
+<code class="language-js">
+selectAll = () =&gt; this.selectAllCheckboxes(false);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 16. App.js</figcaption></figure><p>Let's take a look at what <code>this.selectAllCheckboxes</code> does:</p><figure class="figure"><pre>
+<code class="language-js">
+selectAllCheckboxes = isSelected =&gt; {
+  Object.keys(this.state.checkboxes).forEach(checkbox =&gt; {
+    // BONUS: Can you explain why we pass updater function to setState instead of an object?
+    this.setState(prevState =&gt; ({
+      checkboxes: {
+        ...prevState.checkboxes,
+        [checkbox]: isSelected
+      }
+    }));
+  });
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 17. App.js</figcaption></figure><p>It iterates over the <code>checkboxes</code> that we have in our application state and for each checkbox it updates it's state to the value of the <code>isSelected</code> parameter. Can you explain why we must pass an updater function to <code>this.setState</code> here, instead of an object?</p><p>Now we have a React application that renders a form with three checkboxes and three buttons. What happens when a user clicks the <code>Save</code> button? Our form is submitted and our <code>handleFormSubmit</code> function is called by React:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;form onSubmit={this.handleFormSubmit}&gt;...&lt;/form&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 18. App.js</figcaption></figure><p>Let's take a look at <code>handleFormSubmit</code> function:</p><figure class="figure"><pre>
+<code class="language-jsx">
+handleFormSubmit = formSubmitEvent =&gt; {
+  formSubmitEvent.preventDefault();
+
+  Object.keys(this.state.checkboxes)
+    .filter(checkbox =&gt; this.state.checkboxes[checkbox])
+    .forEach(checkbox =&gt; {
+      console.log(checkbox, "is selected.");
+    });
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 19. App.js</figcaption></figure><p>First it prevents the default behavior of a form's submit event:</p><figure class="figure"><pre>
+<code class="language-js">
+formSubmitEvent.preventDefault();
+</code>
+</pre><figcaption class="figure-caption">Code snippet 20. App.js</figcaption></figure><p>And then it iterates over all checkboxes in our application state, filters the ones that are selected and logs their name in a console:</p><figure class="figure"><pre>
+<code class="language-js">
+Object.keys(this.state.checkboxes)
+  .filter(checkbox =&gt; this.state.checkboxes[checkbox])
+  .forEach(checkbox =&gt; {
+    console.log(checkbox, "is selected.");
+  });
+</code>
+</pre><figcaption class="figure-caption">Code snippet 21. App.js</figcaption></figure><p>Now you know what our <code>App</code> component does and how it works.</p><p>Next let's take a look at our <code>Checkbox</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+
+const Checkbox = ({ label, isSelected, onCheckboxChange }) =&gt; (
+  &lt;div className="form-check"&gt;
+    &lt;label&gt;
+      &lt;input
+        type="checkbox"
+        name={label}
+        checked={isSelected}
+        onChange={onCheckboxChange}
+        className="form-check-input"
+      /&gt;
+      {label}
+    &lt;/label&gt;
+  &lt;/div&gt;
+);
+
+export default Checkbox;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 22. Checkbox.js</figcaption></figure><p>Our <code>Checkbox</code> component is a stateless functional component that receives three props:</p><ol><li><code>label</code> is a text that represents the name of the checkbox and it also rendered next to that checkbox.</li><li><code>isSelected</code> is a boolean value that tells React whether that checkbox should be rendered selected or deselected.</li><li><code>onCheckboxChange</code> is a callback function that React will call when a user selects or deselects the checkbox.</li></ol><p>The <code>Checkbox</code> component renders <code>div</code> element with a Bootstrap class name that we use for styling. Inside of it we have <code>label</code> element with two children:</p><ol><li><code>input</code> element</li><li><code>label</code> text</li></ol><p>The <code>input</code> element renders the checkbox. It has 4 properties:</p><ol><li><code>type</code> - the type of the input: <code>checkbox</code> in our case.</li><li><code>name</code> - the name of the input: an option name passed as a prop from a parent <code>App</code> component. It will be either <code>One</code>, <code>Two</code> or <code>Three</code>.</li><li><code>checked</code> - whether the checkbox is selected or not. The value comes from the prop from a parent <code>App</code> component.</li><li><code>onChange</code> - the <code>change</code> event handler: <code>onCheckboxChange</code> function will be called when user selects or deselects the checkbox.</li></ol><p>If you read <a href="http://react.tips/radio-buttons-in-react-16/">this tutorial</a>, you will recognize that our <code>input</code> element is a <a href="https://facebook.github.io/react/docs/forms.html#controlled-components">controlled component</a> because we "control" the <code>checked</code> property by providing our own value that comes from <code>isSelected</code> prop. If you're not sure about the difference between controlled components and uncontrolled components, then I recommend you read <a href="http://react.tips/radio-buttons-in-react-16/">this tutorial</a>.</p><p>What happens when a user toggles our checkbox? React calls our <code>onCheckboxChange</code> callback function that references <code>handleCheckboxChange</code> function in a parent <code>App</code> component. <code>handleCheckboxChange</code> will update <code>App</code> component's state and the <code>App</code> component will re-render all <code>Checkbox</code> components.</p><p>That's how our <code>App</code> component will always know which checkboxes are selected at any given moment in time.</p><p>And now you know how to use checkboxes in React.js!</p><p>Notice that this solution works great for <em>our specific</em> requirements. If you have different requirements you might need to think of a different way of creating checkboxes.</p><p>Thank you for reading this React tutorial!</p><p>Please take a look at <a href="https://github.com/fedosejev/checkboxes-in-react-16">the complete source code on GitHub</a> and <a href="https://fedosejev.github.io/checkboxes-in-react-16/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */</style><div id="mc_embed_signup"><form action="//exchange.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><div id="mc_embed_signup_scroll"><input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div><div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div></div></form></div><!--End mc_embed_signup--></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/checkboxes-in-react-16/';
+    this.page.identifier = 'checkboxes-in-react-16';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>
