@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>How To Set Focus On Input After Render in React 16 - React Tips</title><meta name="description" content="Simple example of how to set focus on input after render in React 16."><link rel="canonical" href="http://react.tips/how-to-set-focus-on-input-after-render-in-react-16/"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li class="logo">React.Tips</li><li><a href="/">Tutorials</a></li><li><a href="/write-your-tutorial-for-react-tips">Write for React.Tips</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>How To Set Focus On Input After Render In React 16?</h1><p>When you create a form with React, you might want to set focus on an input element after it is rendered. How do you that?</p><p>Let's build a simple React application:</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-set-focus-on-input-after-render-in-react-16/" target="_blank"><img src="./images/app.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/how-to-set-focus-on-input-after-render-in-react-16">this GitHub repository</a>.</p><p>Our application is going to render a form with an input field for entering an email address. That's it, nothing else. Once this input element is rendered, we will set focus on it, so that our users could start typing their email address immediately.</p><p>Our application will be made of a single component called <code>App</code>, let's create it:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React, { Component } from "react";
+
+class App extends Component {
+  constructor() {
+    super();
+
+    this.emailInput = React.createRef();
+  }
+
+  componentDidMount() {
+    this.emailInput.current.focus();
+  }
+
+  render() {
+    return (
+      &lt;div className="container"&gt;
+        &lt;div className="row mt-5"&gt;
+          &lt;div className="col-sm-6 offset-sm-3"&gt;
+            &lt;form&gt;
+              &lt;div className="form-group"&gt;
+                &lt;label for="email"&gt;Email address&lt;/label&gt;
+                &lt;input
+                  type="email"
+                  className="form-control"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter email"
+                  ref={this.emailInput}
+                /&gt;
+              &lt;/div&gt;
+            &lt;/form&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default App;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1. App.js</figcaption></figure><p>First, let's focus on its <code>render</code> function:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render() {
+  return (
+    &lt;div className="container"&gt;
+      &lt;div className="row mt-5"&gt;
+        &lt;div className="col-sm-6 offset-sm-3"&gt;
+          &lt;form&gt;
+            &lt;div className="form-group"&gt;
+              &lt;label for="email"&gt;Email address&lt;/label&gt;
+              &lt;input
+                type="email"
+                className="form-control"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                ref={this.emailInput}
+              /&gt;
+            &lt;/div&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. App.js</figcaption></figure><p>We see three <code>div</code> elements with class names that you might recognize if you're familiar with <a href="http://getbootstrap.com">Bootstrap</a>. Bootstrap helps us create layout for our page.</p><p>Inside of the <code>div</code> elements we have a <code>form</code> element that has <code>label</code> and <code>input</code> child elements.</p><p>Let's focus on the <code>input</code> element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;input
+  type="email"
+  className="form-control"
+  aria-describedby="emailHelp"
+  placeholder="Enter email"
+  ref={this.emailInput}
+/&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3. App.js</figcaption></figure><p>Now let's think about how setting focus on an <code>input</code> element will work. The first thing to understand is that our <code>input</code> element doesn't exist in the DOM until our <code>App</code> component renders it. And we know that we can't focus on something that doesn't exist!</p><p>The first step is to render our <code>input</code> element. React will do this by calling the <code>render</code> method in our <code>App</code> component. Now our <code>input</code> element exists in the DOM, but to focus on it, we need to have a reference to it, don't we? That's where React offers us a prop called <code>ref</code>. We can use this prop on our <code>input</code> element to associate it with a <em>reference</em> that we'll name <code>emailInput</code>:</p><figure class="figure"><pre>
+<code class="language-jsx">
+ref={this.emailInput}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4. App.js</figcaption></figure><p>Now when React renders our <code>input</code> element in the DOM it creates a reference to that element and stores it in the <code>this.emailInput</code> reference object. Where does this object come from? We need to create it!</p><p>Let's create <code>this.emailInput</code> reference object in our <code>App</code> component's <code>constructor</code> method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+constructor() {
+  super();
+
+  this.emailInput = React.createRef();
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. App.js</figcaption></figure><p>We're calling <code>React.createRef()</code> function to create a new reference object and we're assigning it to our <code>this.emailInput</code> property.</p><p>Now you know that to create a reference to an element in the DOM, you need to 1) create a new reference object in component's <code>constructor</code> method using <code>React.createRef()</code> function call and then 2) add a <code>ref</code> prop to the element that we want to reference - passing our reference object to that prop, for example: <code>ref={this.emailInput}</code>.</p><p>That's all we need to do to create a reference to an element in the DOM that is rendered by our <code>render</code> method. The next question we should ask ourselves is: where do we access it, how do we access it and how do set focus on it?</p><p>Let's answer these questions!</p><p>What's the next component's lifecycle method that React calls right after the <code>render</code> method is called? It's <code>componentDidMount</code> method and it's a perfect place for us to access our reference and set a focus on the <code>input</code> element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+componentDidMount() {
+  this.emailInput.current.focus();
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6. App.js</figcaption></figure><p>Inside of our <code>componentDidMount</code> method we're calling <code>focus()</code> method on the <code>current</code> property of our <code>this.emailInput</code> reference object:</p><figure class="figure"><pre>
+<code class="language-jsx">
+this.emailInput.current.focus();
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7. App.js</figcaption></figure><p>The <code>current</code> property is a property that React creates on our <code>this.emailInput</code> reference object - this property stores a reference to our <code>input</code> element in the DOM. Calling <code>.focus()</code> method on the <code>current</code> property will set the focus on our <code>input</code> element.</p><p>And now you know how to set focus on input after render in React 16.</p><p>Thank you for reading this React tutorial!</p><p>Please take a look at <a href="https://github.com/fedosejev/how-to-set-focus-on-input-after-render-in-react-16">the complete source code on GitHub</a> and <a href="https://fedosejev.github.io/how-to-set-focus-on-input-after-render-in-react-16/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */</style><div id="mc_embed_signup"><form action="//exchange.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><div id="mc_embed_signup_scroll"><input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div><div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div></div></form></div><!--End mc_embed_signup--></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/how-to-set-focus-on-input-after-render-in-react-16/';
+    this.page.identifier = 'how-to-set-focus-on-input-after-render-in-react-16';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>
