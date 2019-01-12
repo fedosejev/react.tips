@@ -118,7 +118,7 @@ Let's focus on the `input` element:
 
 Now let's think about how setting focus on an `input` element will work. The first thing to understand is that our `input` element doesn't exist in the DOM until our `App` component renders it. And we know that we can't focus on something that doesn't exist!
 
-The first step is to render our `input` element. React will do this by calling the `render` method in our `App` component. Now our `input` element exists in the DOM, but to focus on it, we need to have a reference to it, don't we? That's where React offers us a prop called `ref`. We can use this prop on our `input` element to associate it with a _reference_ that we'll name `emailInput`:
+The first step is to render our `input` element. React will do this by calling the `render` method in our `App` component. Now our `input` element exists in the DOM, but to focus on it, we need to have a reference to it, don't we? That's where React offers us a <a href="https://reactjs.org/docs/refs-and-the-dom.html" target="_blank">prop called `ref`</a>. We can use this prop on our `input` element to associate it with a _reference_ that we'll name `emailInput`:
 
 <figure class="figure">
 <pre>
