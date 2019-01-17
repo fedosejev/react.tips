@@ -4,7 +4,7 @@ Your experience of building React applications and your unique way of explaining
 
 <h2>How many people will read your tutorial?</h2>
 
-Thousands.
+Thousands a month.
 
 Over <strong>11,000 people</strong> in December 2018. Take a look at this screenshot from our Google Analytics:
 
