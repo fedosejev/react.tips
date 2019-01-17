@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fragments in React 16 - React Tips</title><meta name="description" content="Simple example of how to use Fragments in React 16."><link rel="canonical" href="http://react.tips/fragments-in-react-16/"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li class="logo">React.Tips</li><li><a href="/">Tutorials</a></li><li><a href="/write-your-tutorial-for-react-tips">Write for React.Tips</a></li><li><a href="/best-react-books">Best React Books</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>Fragments in React 16</h1><p>Imagine your React app needs to render a list of items, for example:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;ul&gt;
+  &lt;li&gt;Private Item 1&lt;/li&gt;
+  &lt;li&gt;Private Item 2&lt;/li&gt;
+  &lt;li&gt;Private Item 3&lt;/li&gt;
+  &lt;li&gt;Public Item 1&lt;/li&gt;
+  &lt;li&gt;Public Item 2&lt;/li&gt;
+  &lt;li&gt;Public Item 3&lt;/li&gt;
+&lt;ul&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1.</figcaption></figure><p>In this list you have two types of items: private and public. They are grouped together and rendered by different React components. Private items are rendered by <code>PrivateListItems</code> React component and public items by <code>PublicListItems</code> React component.</p><p>The problem is that both <code>PrivateListItems</code> and <code>PublicListItems</code> components need to return multiple elements, for example:</p><figure class="figure"><pre>
+<code class="language-jsx">
+const PrivateListItems = () =&gt; (
+  &lt;li className="list-group-item"&gt;Private Item 1&lt;/li&gt;
+  &lt;li className="list-group-item"&gt;Private Item 2&lt;/li&gt;
+  &lt;li className="list-group-item"&gt;Private Item 3&lt;/li&gt;
+);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. Anti-pattern.</figcaption></figure><p>Unfortunately, this is not possible in React 16.</p><p>The rule is: a <code>render()</code> method in a React component must return only one element, not three <code>li</code> elements. We could wrap all three <code>li</code> elements in one parent element and return that element instead, but this will break our <code>ul</code> list.</p><p>So the question is: how can React component render three <code>li</code> elements without rendering a parent element?</p><p>This is what <a href="https://reactjs.org/docs/fragments.html" target="_blank">fragments</a> in React are for. Let's demonstrate how to use fragments with the help of a simple React application:</p><figure class="figure"><a href="https://fedosejev.github.io/fragments-in-react-16/" target="_blank"><img src="./images/app.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/fragments-in-react-16">this GitHub repository</a>.</p><p>Our application is going to render a list of items. This list will be made of private and public items. Private items will be rendered by <code>PrivateListItems</code> component and public items will be rendered by <code>PublicListItems</code> component.</p><p>Our application will be made of <a href="https://github.com/fedosejev/fragments-in-react-16/tree/master/src/components">three React components</a>:</p><ol><li><code>App</code></li><li><code>PrivateListItems</code></li><li><code>PublicListItems</code></li></ol><p><code>App</code> component is a container component - it encapsulates our entire React application, and renders <code>PrivateListItems</code> and <code>PublicListItems</code> as child components.</p><p>Let's create our <code>App</code> component first:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+import PrivateListItems from "./PrivateListItems";
+import PublicListItems from "./PublicListItems";
+
+const App = props =&gt; (
+  &lt;div class="container"&gt;
+    &lt;div class="row"&gt;
+      &lt;div class="col-sm mt-5"&gt;
+        &lt;ul class="list-group"&gt;
+          {props.userHasPermissions &amp;&amp; &lt;PrivateListItems /&gt;}
+          &lt;PublicListItems /&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+
+export default App;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3. App.js</figcaption></figure><p>Our <code>App</code> component renders three <code>div</code> elements with class names that you might recognize if you're familiar with <a href="http://getbootstrap.com">Bootstrap</a>. Bootstrap helps us create layout for our page.</p><p>Now let's focus on the <code>ul</code> element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;ul class="list-group"&gt;
+  {props.userHasPermissions &amp;&amp; &lt;PrivateListItems /&gt;}
+  &lt;PublicListItems /&gt;
+&lt;/ul&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4. App.js</figcaption></figure><p>The <code>ul</code> element has two child components: <code>&lt;PrivateListItems /&gt;</code> and <code>&lt;PublicListItems /&gt;</code>.</p><p>As we've discussed earlier, our <code>ul</code> list is made of public and private <code>li</code> elements. We have two separate React components responsible for rendering those items:</p><ul><li><code>&lt;PrivateListItems /&gt;</code> renders only private items.</li><li><code>&lt;PublicListItems /&gt;</code> renders only public items.</li></ul><p>Why do we want to separate those items into different React components? Imagine a scenario where all users can see public items, but only user with additional permissions can see private items. For example, only authenticated users can see items that are private to them.</p><p>Notice that use <code>props.userHasPermissions</code> prop and <a href="https://reactjs.org/docs/conditional-rendering.html" target="_blank">logical operator <code>&amp;&amp;</code></a> to decide if we want to render <code>&lt;PrivateListItems /&gt;</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{props.userHasPermissions &amp;&amp; &lt;PrivateListItems /&gt;}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. App.js</figcaption></figure><p>The <code>userHasPermissions</code> is a prop with a boolean value. When the value is <code>true</code> our <code>App</code> component will render <code>&lt;PrivateListItems /&gt;</code> component as a child. When the value is <code>false</code> our <code>App</code> component will not render <code>&lt;PrivateListItems /&gt;</code> component.</p><p>Now when we render our <code>App</code> component we can pass <code>userHasPermissions</code> prop to it only when the user is authenticated, for example:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/App";
+
+ReactDOM.render(&lt;App userHasPermissions /&gt;, document.getElementById("root"));
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. index.js</figcaption></figure><p>Change <code>userHasPermissions</code> to <code>userHasPermissions={false}</code> and our <code>App</code> component will only render <code>PublicListItems</code> component.</p><figure class="figure"><pre>
+<code class="language-jsx">
+ReactDOM.render(&lt;App userHasPermissions={false} /&gt;, document.getElementById("root"));
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6. index.js</figcaption></figure><p>Now let's take a look at our <code>PrivateListItems</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React, { Fragment } from "react";
+
+const PrivateListItems = () =&gt; (
+  &lt;Fragment&gt;
+    &lt;li className="list-group-item"&gt;Private Item 1&lt;/li&gt;
+    &lt;li className="list-group-item"&gt;Private Item 2&lt;/li&gt;
+    &lt;li className="list-group-item"&gt;Private Item 3&lt;/li&gt;
+  &lt;/Fragment&gt;
+);
+
+export default PrivateListItems;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7. PrivateListItems.js</figcaption></figure><p>It returns <code>Fragment</code> that wraps our three <code>li</code> items. What will <code>Fragment</code> type render into the DOM? Nothing! And that's exactly what we want our <code>PrivateListItems</code> component to do: render only three <code>li</code> items, without rendering a parent element.</p><p>You can think of a <code>Fragment</code> type as an element that is invisible to the DOM.</p><p>Now let's create our <code>PublicListItems</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+
+const PublicListItems = () =&gt; (
+  &lt;&gt;
+    &lt;li className="list-group-item"&gt;Public Item 1&lt;/li&gt;
+    &lt;li className="list-group-item"&gt;Public Item 2&lt;/li&gt;
+    &lt;li className="list-group-item"&gt;Public Item 3&lt;/li&gt;
+  &lt;/&gt;
+);
+
+export default PublicListItems;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8. PublicListItems.js</figcaption></figure><p>Wait, do we have a typo there? No, we don't! The empty tags <code>&lt;&gt;</code> and <code>&lt;/&gt;</code> is a short syntax for declaring <code>Fragment</code> in React 16.</p><p>In other words, this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;&gt;
+  &lt;li className="list-group-item"&gt;Public Item 1&lt;/li&gt;
+  &lt;li className="list-group-item"&gt;Public Item 2&lt;/li&gt;
+  &lt;li className="list-group-item"&gt;Public Item 3&lt;/li&gt;
+&lt;/&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9. PublicListItems.js</figcaption></figure><p>Is the shorter version of this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;Fragment&gt;
+  &lt;li className="list-group-item"&gt;Public Item 1&lt;/li&gt;
+  &lt;li className="list-group-item"&gt;Public Item 2&lt;/li&gt;
+  &lt;li className="list-group-item"&gt;Public Item 3&lt;/li&gt;
+&lt;/Fragment&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10. PublicListItems.js</figcaption></figure><p>What's the difference between those two syntaxes? There is one. <code>&lt;Fragment&gt;</code> syntax supports a <code>key</code> attribute, while <code>&lt;&gt;</code> syntax - doesn't.</p><p>Now you know how to use fragments in React 16!</p><p>Thank you for reading this React tutorial.</p><p>Please take a look at <a href="https://github.com/fedosejev/fragments-in-react-16">the complete source code on GitHub</a> and <a href="https://fedosejev.github.io/fragments-in-react-16/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */</style><div id="mc_embed_signup"><form action="//exchange.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><div id="mc_embed_signup_scroll"><input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div><div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div></div></form></div><!--End mc_embed_signup--></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/fragments-in-react-16/';
+    this.page.identifier = 'fragments-in-react-16';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>
