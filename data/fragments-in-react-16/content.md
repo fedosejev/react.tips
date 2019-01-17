@@ -231,7 +231,7 @@ Is the shorter version of this:
 <figcaption class="figure-caption">Code snippet 10. PublicListItems.js</figcaption>
 </figure>
 
-What's the difference between those two syntaxes? There is one. `<Fragment>` syntax supports a `key` attribute, while `<>` syntax - doesn't.
+What's the difference between those two syntaxes if the result is the same? There is a difference. `<Fragment>` syntax supports a `key` attribute, while `<>` syntax - doesn't.
 
 Now you know how to use fragments in React 16!
 
