@@ -47,97 +47,71 @@ First, let's create `App` component that is a root component for our entire Reac
 <pre>
 <code class="language-jsx">
 import React, { Component } from "react";
-import Checkbox from "./Checkbox";
-
-const OPTIONS = ["One", "Two", "Three"];
+import PaymentMethod from "./PaymentMethod";
+import PaymentMethodErrorBoundary from "./PaymentMethodErrorBoundary";
+import { PAYMENT_METHODS, NO_PAYMENT_METHOD } from "../index";
 
 class App extends Component {
   state = {
-    checkboxes: OPTIONS.reduce(
-      (options, option) => ({
-        ...options,
-        [option]: false
-      }),
-      {}
-    )
+    isProcessingPayment: false,
+    paymentMethod: NO_PAYMENT_METHOD
   };
 
-  selectAllCheckboxes = isSelected => {
-    Object.keys(this.state.checkboxes).forEach(checkbox => {
-      // BONUS: Can you explain why we pass updater function to setState instead of an object?
-      this.setState(prevState => ({
-        checkboxes: {
-          ...prevState.checkboxes,
-          [checkbox]: isSelected
-        }
-      }));
+  shouldRenderPaymentMethod = paymentMethod =>
+    this.state.paymentMethod === NO_PAYMENT_METHOD ||
+    this.state.paymentMethod === paymentMethod;
+
+  processPayment = paymentMethod => {
+    this.setState({
+      isProcessingPayment: true,
+      paymentMethod
     });
   };
 
-  selectAll = () => this.selectAllCheckboxes(true);
-
-  deselectAll = () => this.selectAllCheckboxes(false);
-
-  handleCheckboxChange = changeEvent => {
-    const { name } = changeEvent.target;
-
-    this.setState(prevState => ({
-      checkboxes: {
-        ...prevState.checkboxes,
-        [name]: !prevState.checkboxes[name]
-      }
-    }));
+  cancelPayment = () => {
+    this.setState({
+      isProcessingPayment: false,
+      paymentMethod: NO_PAYMENT_METHOD
+    });
   };
-
-  handleFormSubmit = formSubmitEvent => {
-    formSubmitEvent.preventDefault();
-
-    Object.keys(this.state.checkboxes)
-      .filter(checkbox => this.state.checkboxes[checkbox])
-      .forEach(checkbox => {
-        console.log(checkbox, "is selected.");
-      });
-  };
-
-  createCheckbox = option => (
-    <Checkbox
-      label={option}
-      isSelected={this.state.checkboxes[option]}
-      onCheckboxChange={this.handleCheckboxChange}
-      key={option}
-    />
-  );
-
-  createCheckboxes = () => OPTIONS.map(this.createCheckbox);
 
   render() {
     return (
       <div className="container">
         <div className="row mt-5">
-          <div className="col-sm-12">
-            <form onSubmit={this.handleFormSubmit}>
-              {this.createCheckboxes()}
+          <div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) && (
+              <PaymentMethod
+                name={PAYMENT_METHODS.CREDIT_CARD}
+                onProcessPayment={() =>
+                  this.processPayment(PAYMENT_METHODS.CREDIT_CARD)
+                }
+                onCancel={this.cancelPayment}
+                isProcessingPayment={this.state.isProcessingPayment}
+              />
+            )}
 
-              <div className="form-group mt-2">
-                <button
-                  type="button"
-                  className="btn btn-outline-primary mr-2"
-                  onClick={this.selectAll}
-                >
-                  Select All
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-outline-primary mr-2"
-                  onClick={this.deselectAll}
-                >
-                  Deselect All
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Save
-                </button>
-              </div>
-            </form>
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) && (
+              <PaymentMethod
+                name={PAYMENT_METHODS.DEBIT_CARD}
+                onProcessPayment={() =>
+                  this.processPayment(PAYMENT_METHODS.DEBIT_CARD)
+                }
+                isProcessingPayment={this.state.isProcessingPayment}
+              />
+            )}
+
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) && (
+              <PaymentMethodErrorBoundary onError={this.cancelPayment}>
+                <PaymentMethod
+                  name={PAYMENT_METHODS.BANK_TRANSFER}
+                  onProcessPayment={() =>
+                    this.processPayment(PAYMENT_METHODS.BANK_TRANSFER)
+                  }
+                  isProcessingPayment={this.state.isProcessingPayment}
+                />
+              </PaymentMethodErrorBoundary>
+            )}
           </div>
         </div>
       </div>
@@ -151,7 +125,7 @@ export default App;
 <figcaption class="figure-caption">Code snippet 1. App.js</figcaption>
 </figure>
 
-First, let's focus on its `render` function:
+Let's focus on `App` component's `render` function:
 
 <figure class="figure">
 <pre>
@@ -160,30 +134,39 @@ render() {
   return (
     <div className="container">
       <div className="row mt-5">
-        <div className="col-sm-12">
-          <form onSubmit={this.handleFormSubmit}>
-            {this.createCheckboxes()}
+        <div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) && (
+            <PaymentMethod
+              name={PAYMENT_METHODS.CREDIT_CARD}
+              onProcessPayment={() =>
+                this.processPayment(PAYMENT_METHODS.CREDIT_CARD)
+              }
+              onCancel={this.cancelPayment}
+              isProcessingPayment={this.state.isProcessingPayment}
+            />
+          )}
 
-            <div className="form-group mt-2">
-              <button
-                type="button"
-                className="btn btn-outline-primary mr-2"
-                onClick={this.selectAll}
-              >
-                Select All
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline-primary mr-2"
-                onClick={this.deselectAll}
-              >
-                Deselect All
-              </button>
-              <button type="submit" className="btn btn-primary">
-                Save
-              </button>
-            </div>
-          </form>
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) && (
+            <PaymentMethod
+              name={PAYMENT_METHODS.DEBIT_CARD}
+              onProcessPayment={() =>
+                this.processPayment(PAYMENT_METHODS.DEBIT_CARD)
+              }
+              isProcessingPayment={this.state.isProcessingPayment}
+            />
+          )}
+
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) && (
+            <PaymentMethodErrorBoundary onError={this.cancelPayment}>
+              <PaymentMethod
+                name={PAYMENT_METHODS.BANK_TRANSFER}
+                onProcessPayment={() =>
+                  this.processPayment(PAYMENT_METHODS.BANK_TRANSFER)
+                }
+                isProcessingPayment={this.state.isProcessingPayment}
+              />
+            </PaymentMethodErrorBoundary>
+          )}
         </div>
       </div>
     </div>

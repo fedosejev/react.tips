@@ -2,4 +2,4 @@ User-agent: *
 
 Disallow: 
 
-Sitemap: http://react.tips/sitemap.xml
+Sitemap: https://react.tips/sitemap.xml
