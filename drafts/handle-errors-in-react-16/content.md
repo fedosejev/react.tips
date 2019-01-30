@@ -1,5 +1,15 @@
 # Handle Errors In React 16
 
+
+
+
+
+
+
+
+
+
+
 How do you use checkboxes in React.js? We've learnt about radio buttons in [this tutorial](http://react.tips/radio-buttons-in-react-16/), but what about checkboxes - do you use them differently in React?
 
 The short answer is: yes.
@@ -41,7 +51,7 @@ Our application will be made of [five React components](https://github.com/fedos
 4. `PaymentMethodError`
 5. `PaymentMethodErrorBoundary`
 
-First, let's create `App` component that is a root component for our entire React application:
+First, let's create the `App` component that is a root component for our entire React application:
 
 <figure class="figure">
 <pre>
@@ -83,9 +93,7 @@ class App extends Component {
             {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) && (
               <PaymentMethod
                 name={PAYMENT_METHODS.CREDIT_CARD}
-                onProcessPayment={() =>
-                  this.processPayment(PAYMENT_METHODS.CREDIT_CARD)
-                }
+                onProcessPayment={this.processPayment}
                 onCancel={this.cancelPayment}
                 isProcessingPayment={this.state.isProcessingPayment}
               />
@@ -94,9 +102,7 @@ class App extends Component {
             {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) && (
               <PaymentMethod
                 name={PAYMENT_METHODS.DEBIT_CARD}
-                onProcessPayment={() =>
-                  this.processPayment(PAYMENT_METHODS.DEBIT_CARD)
-                }
+                onProcessPayment={this.processPayment}
                 isProcessingPayment={this.state.isProcessingPayment}
               />
             )}
@@ -105,9 +111,7 @@ class App extends Component {
               <PaymentMethodErrorBoundary onError={this.cancelPayment}>
                 <PaymentMethod
                   name={PAYMENT_METHODS.BANK_TRANSFER}
-                  onProcessPayment={() =>
-                    this.processPayment(PAYMENT_METHODS.BANK_TRANSFER)
-                  }
+                  onProcessPayment={this.processPayment}
                   isProcessingPayment={this.state.isProcessingPayment}
                 />
               </PaymentMethodErrorBoundary>
@@ -125,7 +129,7 @@ export default App;
 <figcaption class="figure-caption">Code snippet 1. App.js</figcaption>
 </figure>
 
-Let's focus on `App` component's `render` function:
+Let's focus on the `App` component's `render` method:
 
 <figure class="figure">
 <pre>
@@ -138,9 +142,7 @@ render() {
           {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) && (
             <PaymentMethod
               name={PAYMENT_METHODS.CREDIT_CARD}
-              onProcessPayment={() =>
-                this.processPayment(PAYMENT_METHODS.CREDIT_CARD)
-              }
+              onProcessPayment={this.processPayment}
               onCancel={this.cancelPayment}
               isProcessingPayment={this.state.isProcessingPayment}
             />
@@ -149,9 +151,7 @@ render() {
           {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) && (
             <PaymentMethod
               name={PAYMENT_METHODS.DEBIT_CARD}
-              onProcessPayment={() =>
-                this.processPayment(PAYMENT_METHODS.DEBIT_CARD)
-              }
+              onProcessPayment={this.processPayment}
               isProcessingPayment={this.state.isProcessingPayment}
             />
           )}
@@ -160,9 +160,7 @@ render() {
             <PaymentMethodErrorBoundary onError={this.cancelPayment}>
               <PaymentMethod
                 name={PAYMENT_METHODS.BANK_TRANSFER}
-                onProcessPayment={() =>
-                  this.processPayment(PAYMENT_METHODS.BANK_TRANSFER)
-                }
+                onProcessPayment={this.processPayment}
                 isProcessingPayment={this.state.isProcessingPayment}
               />
             </PaymentMethodErrorBoundary>
@@ -177,7 +175,100 @@ render() {
 <figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
 </figure>
 
+The `App` component renders three instances of the `PaymentMethod` method component. Each instance renders a payment method.
+
+We render a credit card payment method:
+
+<figure class="figure">
+<pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) && (
+  <PaymentMethod
+    name={PAYMENT_METHODS.CREDIT_CARD}
+    onProcessPayment={this.processPayment}
+    onCancel={this.cancelPayment}
+    isProcessingPayment={this.state.isProcessingPayment}
+  />
+)}
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
+</figure>
+
+Then we render a debit card payment method:
+
+<figure class="figure">
+<pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) && (
+  <PaymentMethod
+    name={PAYMENT_METHODS.DEBIT_CARD}
+    onProcessPayment={this.processPayment}
+    isProcessingPayment={this.state.isProcessingPayment}
+  />
+)}
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
+</figure>
+
+And finally we render a bank transfer payment method:
+
+<figure class="figure">
+<pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) && (
+  <PaymentMethodErrorBoundary onError={this.cancelPayment}>
+    <PaymentMethod
+      name={PAYMENT_METHODS.BANK_TRANSFER}
+      onProcessPayment={this.processPayment}
+      isProcessingPayment={this.state.isProcessingPayment}
+    />
+  </PaymentMethodErrorBoundary>
+)}
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
+</figure>
+
+Notice that all three payment methods create an instance of `PaymentMethod` component, but only bank transfer payment method wraps it inside of a `PaymentMethodErrorBoundary` component. In this example, we'll have scenario where:
+1. Credit card payment method works as expected.
+2. Debit card payment method throws an error that we don't handle.
+3. Bank transfer method throws an error that we catch with an error boundary component called `PaymentMethodErrorBoundary`.
+
+credit card and debit card payment methods are 
+
+
+We want users to select one payment method. When a user selects one payment method we don't render the other two. To achieve that we use <a href="https://reactjs.org/docs/conditional-rendering.html" target="_blank">conditional rendering</a>:
+
+<figure class="figure">
+<pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) && (
+  /* Render payment method */
+)}
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
+</figure>
+
+
+
+
+
+
+ with a credit card, with a debit card and via bank transfer.
+
 We see three `div` elements with class names that you might recognize if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us create layout for our page.
+
+
+
+
+
+
+We use conditional rendering t
+
+
 
 Now let's focus on the `form` element:
 
