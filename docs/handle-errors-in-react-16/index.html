@@ -1,0 +1,739 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Handle Errors In React 16 - React Tips</title><meta name="description" content="Intuitive example of how to handle errors in React 16."><link rel="canonical" href="http://react.tips/handle-errors-in-react-16/"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li class="logo">React.Tips</li><li><a href="/">Tutorials</a></li><li><a href="/write-your-tutorial-for-react-tips">Write for React.Tips</a></li><li><a href="/best-react-books">Best React Books</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>Handle Errors In React 16</h1><p>How do you handle errors in React 16? When your React component throws an error, it can make your React application unusable, and that can potentially cost your business money.</p><p>Let's learn by example why it's a good idea to handle errors in React and how you can do it in React 16.</p><p>In this tutorial, we'll build a React app that renders a payment page where users choose a payment method. Our React app will render three different payment methods, but only one of those payment methods will work as expected. The other two payment methods will throw errors. We'll handle one of those erros with Error Boudary feature introduced in React 16, while other error will be left unhandled. You'll see the difference that it makes for users and for a business.</p><p>First, let's take a look at the user interface that we want to build:</p><figure class="figure"><a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank"><img src="./images/app-screenshot-payment-methods.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application renders three payment methods.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/handle-errors-in-react-16">this GitHub repository</a>.</p><p>Our application will render three boxes where each box represents a payment method:</p><ol><li>Credit card payment</li><li>Debit card payment</li><li>Bank transfer payment</li></ol><p>When user clicks on <code>Choose ...</code> button for one of those payment methods we want our application to render a payment form. For example, when user clicks <code>Choose credit card</code> - a credit card payment form to be rendered while other payment methods will not be rendered:</p><figure class="figure"><a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank"><img src="./images/app-screenshot-payment-method-form.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 2. Our application renders credit card payment form.</figcaption></figure><p>In our example application the <code>Choose credit card</code> button will work as expected. However, clicking on <code>Choose debit card</code> button will throw an error. This error won't be handled by our application and as a result - our application will crash, our users won't be able to make a payment and our business will lose a sale. Clicking on <code>Choose bank transfer</code> button will throw an error as well, however, in this case, our application will handle the error gracefully - it will inform our users about an unexpected error and give them an option to choose another payment method and complete their purchase:</p><figure class="figure"><a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank"><img src="./images/app-screenshot-payment-method-error.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 3. Our application renders payment method error message.</figcaption></figure><p>This scenario will clerly demonstrate how a business can make more money by handling errors in React 16.</p><p>Let's take a look at how our application will be structured. The task of architecting a React application starts with three questions:</p><ol><li>What components we need to build?</li><li>What components hierarchy we need to build?</li><li>What state our application needs to store and which components will be responsible for storing and managing that state?</li></ol><p>Let's answer these questions one at a time.</p><h2>What components we need to build?</h2><p>A good starting point in deciding on what components to create is to look at the UI mockups and break them into reusable elements. In our case, we have payment method box that is rendered three times. We can create a React component for the payment method. We also have a credit card payment method form that we render when user clicks <code>Pay by credit card</code> button. We'll create a React component for that payment form as well. We also want to render an error message when we handle an error that is thrown when user clicks on <code>Pay by bank transfer</code>. We'll create a React component for the payment method error message. And finally, we'll need to create a "special" React component that will implement the mechanism for handling an error thrown by another React component. This "special" React component will be an Error Boundary component - we'll discuss what it does and how it works shortly in this tutorial.</p><p>Excellent, now we have a list of React components that we want to create:</p><ul><li><code>App.js</code> component will the root component for our entire React application.</li><li><code>PaymentMethod.js</code> component will render payment method box with a payment name and a button.</li><li><code>PaymentMethodForm.js</code> component will render credit card payment method form.</li><li><code>PaymentMethodErrorMessage.js</code> component will render payment method error message.</li><li><code>PaymentMethodErrorBoundary.js</code> component will handle error thrown by <code>PaymentMethod.js</code> component.</li></ul><p>Next step is to organise our components into a hierarchy.</p><h2>What components hierarchy we need to build?</h2><p>When we organise components into a hierarchy we decide which componets will be parents, which component will be child components and which components will be both.</p><p>We'll start with a parent component that will encapsulate our entire React application - the <code>App</code> component. It will have no parent React component, and it will render three child components: two <code>PaymentMethod</code> components and one <code>PaymentMethodErrorBoundary</code> component.</p><p>The <code>PaymentMethod</code> component will render <code>PaymentMethodForm</code> component or a payment method name with a button.</p><p>The <code>PaymentMethodErrorBoundary</code> component will render <code>PaymentMethod</code> or <code>PaymentMethodErrorMessage</code> component.</p><p>Here's the visual diagram of our components hierarchy:</p><figure class="figure"><a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank"><img src="./images/diagram-components-hierarchy.png" alt="Components hierarchy diagram" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 2. Our application.</figcaption></figure><p>Our application will need state. Let's decide on which components will be responsible for storing and maintaining that state.</p><h2>What state our application needs to store and which components will be responsible for storing and managing that state?</h2><p>The general rule that we want to follow is: the less state our applications has the better. Less state means less state management which means less complexity in our application. However keeping our application as simple as possible is not a trivial task.</p><p>The next general rule that we ant to follow is: the fewer stateful components we have the better. We want most of our React component to be stateless, functional components that do only one thing - render user interface.</p><p>From the user interface point of view we need state that decides whether to render payment method box with a payment method name and the <code>Choose ...</code> button or a payment method form. Your first idea might be to make <code>PaymentMethod.js</code> component stateful and let it decide what to render based on that state: a payment name and a payment button or a payment form.</p><p>However, the challenge here is that we want to render three instances of <code>PaymentMethod.js</code> component and we know that what renders one component instance will have an effect on another two. Earlier we've mentioned that we want to render a payment method form when user clicks on <code>Choose ...</code> button and - we don't want to render the other two payment methods when a payment form is rendered. This requirement introduces a mental logical connection between all three instances - they're not completely independent in our application.</p><p>Our <code>App.js</code> component will render all three instances of <code>PaymentMethod.js</code> component. We can't access <code>PaymentMethod.js</code> component's state from a parent <code>App.js</code> component, so our if we store state in <code>PaymentMethod.js</code> component - our <code>App</code> component has no way to know when to render all instances of a <code>PaymentMethod.js</code> component and when to render only the one that user has selected. That means we can't store state in <code>PaymentMethod.js</code> component and we need to store it in a component that is a parent component for all three <code>PaymentMethod.js</code> component instances - in our <code>App.js</code> component.</p><p>Now we know that <code>App.js</code> component will be stateful component. We have one other piece of state that our application will need to manage. When user clicks on <code>Pay by bank transfer</code> button we want to render the <code>PaymentMethodErrorMessage</code> component with an error message. This logic will be handled by <code>PaymentMethodErrorBoundary.js</code> component which will be stateful. We'll look at it in more details shortly.</p><p>Perfect, we have answered all three questions about architecting our React components and it's time for us to start implementing them.</p><h2>Creating <code>App</code> component</h2><p>We'll start with creating the <code>App.js</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React, { Component } from "react";
+import PaymentMethod from "./PaymentMethod";
+import PaymentMethodErrorBoundary from "./PaymentMethodErrorBoundary";
+import { PAYMENT_METHODS, NO_PAYMENT_METHOD } from "../config";
+
+class App extends Component {
+  state = {
+    selectedPaymentMethod: NO_PAYMENT_METHOD
+  };
+
+  shouldRenderPaymentMethod = paymentMethod =&gt;
+    this.state.selectedPaymentMethod === NO_PAYMENT_METHOD ||
+    this.state.selectedPaymentMethod === paymentMethod;
+
+  selectPaymentMethod = paymentMethod =&gt; {
+    this.setState({
+      selectedPaymentMethod: paymentMethod
+    });
+  };
+
+  cancelPaymentMethod = () =&gt; this.selectPaymentMethod(NO_PAYMENT_METHOD);
+
+  render() {
+    const showPaymentMethodForm =
+      this.state.selectedPaymentMethod !== NO_PAYMENT_METHOD;
+
+    return (
+      &lt;div className="container"&gt;
+        &lt;div className="row mt-5"&gt;
+          &lt;div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4"&gt;
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) &amp;&amp; (
+              &lt;PaymentMethod
+                name={PAYMENT_METHODS.CREDIT_CARD}
+                onSelectPaymentMethod={this.selectPaymentMethod}
+                onCancelPaymentMethod={this.cancelPaymentMethod}
+                showPaymentMethodForm={showPaymentMethodForm}
+              /&gt;
+            )}
+
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) &amp;&amp; (
+              &lt;PaymentMethod
+                name={PAYMENT_METHODS.DEBIT_CARD}
+                onSelectPaymentMethod={this.selectPaymentMethod}
+                onCancelPaymentMethod={this.cancelPaymentMethod}
+                showPaymentMethodForm={showPaymentMethodForm}
+              /&gt;
+            )}
+
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+              &lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+                &lt;PaymentMethod
+                  name={PAYMENT_METHODS.BANK_TRANSFER}
+                  onSelectPaymentMethod={this.selectPaymentMethod}
+                  onCancelPaymentMethod={this.cancelPaymentMethod}
+                  showPaymentMethodForm={showPaymentMethodForm}
+                /&gt;
+              &lt;/PaymentMethodErrorBoundary&gt;
+            )}
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default App;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1. App.js</figcaption></figure><p>Let's focus on the <code>App</code> component's <code>render</code> method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render() {
+  const showPaymentMethodForm =
+    this.state.selectedPaymentMethod !== NO_PAYMENT_METHOD;
+
+  return (
+    &lt;div className="container"&gt;
+      &lt;div className="row mt-5"&gt;
+        &lt;div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4"&gt;
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) &amp;&amp; (
+            &lt;PaymentMethod
+              name={PAYMENT_METHODS.CREDIT_CARD}
+              onSelectPaymentMethod={this.selectPaymentMethod}
+              onCancelPaymentMethod={this.cancelPaymentMethod}
+              showPaymentMethodForm={showPaymentMethodForm}
+            /&gt;
+          )}
+
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) &amp;&amp; (
+            &lt;PaymentMethod
+              name={PAYMENT_METHODS.DEBIT_CARD}
+              onSelectPaymentMethod={this.selectPaymentMethod}
+              onCancelPaymentMethod={this.cancelPaymentMethod}
+              showPaymentMethodForm={showPaymentMethodForm}
+            /&gt;
+          )}
+
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+            &lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+              &lt;PaymentMethod
+                name={PAYMENT_METHODS.BANK_TRANSFER}
+                onSelectPaymentMethod={this.selectPaymentMethod}
+                onCancelPaymentMethod={this.cancelPaymentMethod}
+                showPaymentMethodForm={showPaymentMethodForm}
+              /&gt;
+            &lt;/PaymentMethodErrorBoundary&gt;
+          )}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. App.js</figcaption></figure><p>The <code>App</code> component renders two instances of the <code>PaymentMethod</code> component and one instance of the <code>PaymentMethodErrorBoundary</code> component.</p><p>We render a credit card payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) &amp;&amp; (
+  &lt;PaymentMethod
+    name={PAYMENT_METHODS.CREDIT_CARD}
+    onSelectPaymentMethod={this.selectPaymentMethod}
+    onCancelPaymentMethod={this.cancelPaymentMethod}
+    showPaymentMethodForm={showPaymentMethodForm}
+  /&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3. App.js</figcaption></figure><p>We render a debit card payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) &amp;&amp; (
+  &lt;PaymentMethod
+    name={PAYMENT_METHODS.DEBIT_CARD}
+    onSelectPaymentMethod={this.selectPaymentMethod}
+    onCancelPaymentMethod={this.cancelPaymentMethod}
+    showPaymentMethodForm={showPaymentMethodForm}
+  /&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4. App.js</figcaption></figure><p>And we render a bank transfer payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+  &lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+    &lt;PaymentMethod
+      name={PAYMENT_METHODS.BANK_TRANSFER}
+      onSelectPaymentMethod={this.selectPaymentMethod}
+      onCancelPaymentMethod={this.cancelPaymentMethod}
+      showPaymentMethodForm={showPaymentMethodForm}
+    /&gt;
+  &lt;/PaymentMethodErrorBoundary&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. App.js</figcaption></figure><p>Out of all three instances of <code>PaymentMethod</code> component only the bank transfer one is wrapped into a <code>PaymentMethodErrorBoundary</code> component. In other words, we're passing <code>PaymentMethod</code> component instance as a child to <code>PaymentMethodErrorBoundary</code> component. This tells React that if that <code>PaymentMethod</code> method component will throw an error - the <code>PaymentMethodErrorBoundary</code> will catch it and handle it. Conversely, the other two instances of <code>PaymentMethod</code> component are not wrapped in the <code>PaymentMethodErrorBoundary</code> component, so if they throw an error and we know that the debit card payment method will throw an error - it will crash our entire React app.</p><p>Earlier we've discussed that we want to render all three payment methods initially and when user select one by clicking the <code>Choose ...</code> button - we want to display the payment form for that method and nothing else. This is why we render each payment method conditionally - using the <code>{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; ...</code> pattern. In this pattern we're calling <code>this.shouldRenderPaymentMethod</code> method on our component class and we're passing payment method name to that method. Let's take a look at what this method does:</p><figure class="figure"><pre>
+<code class="language-jsx">
+shouldRenderPaymentMethod = paymentMethod =&gt;
+  this.state.selectedPaymentMethod === NO_PAYMENT_METHOD ||
+  this.state.selectedPaymentMethod === paymentMethod;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6. App.js</figcaption></figure><p>The <code>shouldRenderPaymentMethod</code> method takes <code>paymentMethod</code> name as a parameter and checks if the <code>paymentMethod</code> in the <code>App</code> component's state matches the value of <code>NO_PAYMENT_METHOD</code> or the value of <code>paymentMethod</code> parameter. The idea here is for <code>shouldRenderPaymentMethod</code> method to tell us whether any given payment method should be rendered or not. And the logic here checks if the selected payment method equals to no payment method which is the case initially and in that case we want to render all payment methods. Or if the selected payment method equals to a specific payment method provided by the <code>paymentMethod</code> parameter then we want to render only that payment method. In other words, we want to render all three payment methods or only one of the three.</p><p>Notice that we import <code>NO_PAYMENT_METHOD</code> and <code>PAYMENT_METHODS</code> constants from the <code>config.js</code> file:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import { PAYMENT_METHODS, NO_PAYMENT_METHOD } from "../config";
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7. App.js</figcaption></figure><p>And this is our <code>config.js</code> file:</p><figure class="figure"><pre>
+<code class="language-jsx">
+export const PAYMENT_METHODS = {
+  CREDIT_CARD: "credit card",
+  DEBIT_CARD: "debit card",
+  BANK_TRANSFER: "bank transfer"
+};
+
+export const NO_PAYMENT_METHOD = "";
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8. config.js</figcaption></figure><p>It declares all three payment method names and an empty payment method name in <code>config.js</code> file.</p><p>We pass payment method names from the <code>config.js</code> file to <code>PaymentMethod</code> components, for example:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;PaymentMethod
+  name={PAYMENT_METHODS.CREDIT_CARD}
+  onSelectPaymentMethod={this.selectPaymentMethod}
+  onCancelPaymentMethod={this.cancelPaymentMethod}
+  showPaymentMethodForm={showPaymentMethodForm}
+/&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9. App.js</figcaption></figure><p>The <code>name</code> prop passes the payment method name. Let's take a look at other props that we pass to the <code>PaymentMethod</code> component:</p><ul><li><code>onSelectPaymentMethod</code> prop gets a callback function <code>this.selectPaymentMethod</code> which is called when user clicks on <code>Choose ...</code> button to select a payment method.</li><li><code>onCancelPaymentMethod</code> prop gets a callback function <code>this.cancelPaymentMethod</code> which is called when user clicks <code>Cancel</code> button on payment method form. You can see it in action when you click on <code>Choose credit card</code> button and then on the <code>Cancel</code> button.</li><li><code>showPaymentMethodForm</code> prop gets a boolean value <code>showPaymentMethodForm</code> which tells <code>PaymentMethod</code> component whether it should render a payment method form or a payment method name with a button.</li></ul><p>We declare <code>showPaymentMethodForm</code> variable in the component's <code>render</code> method before the <code>return</code> statement:</p><figure class="figure"><pre>
+<code class="language-jsx">
+const showPaymentMethodForm =
+  this.state.selectedPaymentMethod !== NO_PAYMENT_METHOD;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10. App.js</figcaption></figure><p>You can see that the value of <code>showPaymentMethodForm</code> depends on whether <code>this.state.selectedPaymentMethod</code> is anything other than <code>NO_PAYMENT_METHOD</code>. The idea here is to show payment method name with a <code>Choose ...</code> button initially when user hasn't selected any payment method yet. This fact is represented with <code>NO_PAYMENT_METHOD</code> value in the <code>App</code> component's state:</p><figure class="figure"><pre>
+<code class="language-jsx">
+state = {
+  selectedPaymentMethod: NO_PAYMENT_METHOD
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 11. App.js</figcaption></figure><p>When user chooses a payment method we update our component's state to another value that is not <code>NO_PAYMENT_METHOD</code>. When user selects a payment method - we want to render a payment method form. This is why <code>showPaymentMethodForm</code> variable will have <code>true</code> value when one of the payment methods is selected.</p><p>What exactly happens when user selects one of the payment methods? The <code>PaymentMethod</code> component will call the <code>App</code> component's <code>this.selectPaymentMethod</code> method and pass payment method name to it as a parameter:</p><figure class="figure"><pre>
+<code class="language-jsx">
+selectPaymentMethod = paymentMethod =&gt; {
+  this.setState({
+    selectedPaymentMethod: paymentMethod
+  });
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12. App.js</figcaption></figure><p>In turn, the <code>selectPaymentMethod</code> method will update <code>App</code> component's state - it will set <code>selectedPaymentMethod</code>'s value to the one that the <code>PaymentMethod</code> component passed as a <code>paymentMethod</code> parameter.</p><p>Now you understand the big picture of how the <code>App</code> component manages it's state. It has <code>selectedPaymentMethod</code> property that is initially set to <code>NO_PAYMENT_METHOD</code> value. Then it updates that property in <code>selectPaymentMethod</code> method. And who calls <code>selectPaymentMethod</code> method? It's child <code>PaymentMethod</code> component.</p><p>The <code>App</code> component has the <code>cancelPaymentMethod</code> method that is a helper method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+cancelPaymentMethod = () =&gt; this.selectPaymentMethod(NO_PAYMENT_METHOD);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 13. App.js</figcaption></figure><p>What <code>cancelPaymentMethod</code> does is it calls <code>selectPaymentMethod</code> method passing <code>NO_PAYMENT_METHOD</code> as a payment method name - effectively resetting selected payment method name to it's initial value. This will tell React to render all three payment methods once again when the user clicks <code>Cancel</code> button on one of the payment method forms.</p><p>Now you understand what our <code>App</code> component renders and how it works. Next let's take a look at one of it's child components that it renders - the <code>PaymentMethod</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+import PaymentMethodForm from "./PaymentMethodForm";
+import { PAYMENT_METHODS } from "../config";
+
+const PaymentMethod = props =&gt; {
+  if (
+    props.showPaymentMethodForm &amp;&amp;
+    props.name === PAYMENT_METHODS.CREDIT_CARD
+  ) {
+    return (
+      &lt;PaymentMethodForm
+        onSubmit={event =&gt; {
+          event.preventDefault();
+
+          console.log("Payment submitted.");
+        }}
+        onCancel={props.onCancelPaymentMethod}
+      /&gt;
+    );
+  }
+
+  if (
+    props.showPaymentMethodForm &amp;&amp;
+    (props.name === PAYMENT_METHODS.BANK_TRANSFER ||
+      props.name === PAYMENT_METHODS.DEBIT_CARD)
+  ) {
+    throw new Error("Failed to render payment form.");
+  }
+
+  return (
+    &lt;div className="card mb-3"&gt;
+      &lt;div className="card-body"&gt;
+        &lt;h5 className="card-title"&gt;Pay by {props.name}&lt;/h5&gt;
+
+        &lt;button
+          className="btn btn-primary"
+          onClick={() =&gt; props.onSelectPaymentMethod(props.name)}
+        &gt;
+          Choose {props.name}
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default PaymentMethod;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 14. PaymentMethod.js</figcaption></figure><p>As you can see, the <code>PaymentMethod</code> component is a functional React component. It has no state. All it does is renders a user interface. Let's take a closer look at what user interface it renders:</p><figure class="figure"><pre>
+<code class="language-jsx">
+return (
+  &lt;div className="card mb-3"&gt;
+    &lt;div className="card-body"&gt;
+      &lt;h5 className="card-title"&gt;Pay by {props.name}&lt;/h5&gt;
+
+      &lt;button
+        className="btn btn-primary"
+        onClick={() =&gt; props.onSelectPaymentMethod(props.name)}
+      &gt;
+        Choose {props.name}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 15. PaymentMethod.js</figcaption></figure><p>It renders a header and a button. The header has a payment method name that comes with the <code>name</code> prop. And the <code>Choose ...</code> button calls <code>onSelectPaymentMethod</code> function that is passed to <code>PaymentMethod</code> component as a prop as well. The <code>onSelectPaymentMethod</code> is a callback function that <code>PaymentMethod</code> component calls to communicate back to it's parent <code>App</code> component that user has selected payment method with a name <code>name</code>.</p><p>When you run our React app, you see three payment methods rendered by <code>PaymentMethod</code> component. That's what we want the <code>PaymentMethod</code> component to render by default. However, remember that we also want our <code>PaymentMethod</code> component to render a payment method form when user selects that payment method. This is why before returning a header and a button, we check if one of the payment methods is selected:</p><figure class="figure"><pre>
+<code class="language-jsx">
+if (
+  props.showPaymentMethodForm &amp;&amp;
+  props.name === PAYMENT_METHODS.CREDIT_CARD
+) {
+  return (
+    &lt;PaymentMethodForm
+      onSubmit={event =&gt; {
+        event.preventDefault();
+
+        console.log("Payment submitted.");
+      }}
+      onCancel={props.onCancelPaymentMethod}
+    /&gt;
+  );
+}
+
+if (
+  props.showPaymentMethodForm &amp;&amp;
+  (props.name === PAYMENT_METHODS.BANK_TRANSFER ||
+    props.name === PAYMENT_METHODS.DEBIT_CARD)
+) {
+  throw new Error("Failed to render payment form.");
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 16. PaymentMethod.js</figcaption></figure><p>In this tutorial we want to demonstrate three different scenarios:</p><ol><li>User clicks on a credit card payment method and it works as expected.</li><li>User clicks on a debit card payment method and it throws an error that our app doesn't handle.</li><li>User clicks on a bank transfer payment method and it throws an error that our app handles with an Error Boundary component.</li></ol><p>We use two <code>if</code> statements to describe all three scenarios. Both <code>if</code> statements check if the <code>PaymentMethod</code> component should render a payment method form. If not, it the <code>PaymentMethod</code> component will render payment method name and a <code>Choose ...</code> button. If <code>props.showPaymentMethodForm</code> is <code>true</code>, which means that the <code>App</code> component wants <code>PaymentMethod</code> component render to render a payment method form, then the next question is: what payment method this <code>PaymentMethod</code> component instance represents? We answer this question by checking if the payment method name equals to one of three options: <code>props.name === PAYMENT_METHODS.CREDIT_CARD</code>, <code>props.name === PAYMENT_METHODS.BANK_TRANSFER</code> and <code>props.name === PAYMENT_METHODS.DEBIT_CARD</code>.</p><p>In the first scenario we have a credit card payment method and in that scenario - we want to render a payment method form:</p><figure class="figure"><pre>
+<code class="language-jsx">
+if (
+  props.showPaymentMethodForm &amp;&amp;
+  props.name === PAYMENT_METHODS.CREDIT_CARD
+) {
+  return (
+    &lt;PaymentMethodForm
+      onSubmit={event =&gt; {
+        event.preventDefault();
+
+        console.log("Payment submitted.");
+      }}
+      onCancel={props.onCancelPaymentMethod}
+    /&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 17. PaymentMethod.js</figcaption></figure><p>This is what the first <code>if</code> statement checks for. If <code>props.showPaymentMethodForm &amp;&amp; props.name === PAYMENT_METHODS.CREDIT_CARD</code> is <code>true</code> then the <code>PaymentMethod</code> component renders <code>PaymentMethodForm</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;PaymentMethodForm
+  onSubmit={event =&gt; {
+    event.preventDefault();
+
+    console.log("Payment submitted.");
+  }}
+  onCancel={props.onCancelPaymentMethod}
+/&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 18. PaymentMethod.js</figcaption></figure><p>The <code>PaymentMethodForm</code> component gets <code>onSubmit</code> and <code>onCancel</code> props. We pass a function that logs <code>Payment submitted.</code> message in JavaScript console to <code>onSubmit</code> prop. And we pass <code>prop.onCancelPaymentMethod</code> value to <code>onCancel</code> prop. The <code>PaymentMethod</code> component gets that <code>onCancelPaymentMethod</code> as a prop from it's parent <code>App</code> component. This is an example of a prop that <code>PaymentMethod</code> component doesn't use itself, but it needs to pass it to it's child <code>PaymentMethodForm</code> component.</p><p>In the second and the third scenarios we have a debit card and a bank transfer payment methods and in those scenarios we want to throw an error, instead of returning a payment method form:</p><figure class="figure"><pre>
+<code class="language-jsx">
+if (
+  props.showPaymentMethodForm &amp;&amp;
+  (props.name === PAYMENT_METHODS.BANK_TRANSFER ||
+    props.name === PAYMENT_METHODS.DEBIT_CARD)
+) {
+  throw new Error("Failed to render payment form.");
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 19. PaymentMethod.js</figcaption></figure><p>Now that you understand what our <code>PaymentMethod</code> component does and how it works, let's take a look at the <code>PaymentMethodForm</code> component next:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+
+const PaymentMethodForm = props =&gt; (
+  &lt;div className="card mb-3"&gt;
+    &lt;div className="card-body"&gt;
+      &lt;h5 className="card-title"&gt;Pay by credit card&lt;/h5&gt;
+      &lt;form onSubmit={props.onSubmit}&gt;
+        &lt;div className="form-group"&gt;
+          &lt;input
+            type="text"
+            className="form-control"
+            aria-describedby="name"
+            placeholder="Enter name"
+          /&gt;
+        &lt;/div&gt;
+        &lt;div className="form-group"&gt;
+          &lt;input
+            type="text"
+            className="form-control"
+            aria-describedby="number"
+            placeholder="Enter number"
+          /&gt;
+        &lt;/div&gt;
+        &lt;div className="form-group"&gt;
+          &lt;input
+            type="text"
+            className="form-control"
+            aria-describedby="expirationDate"
+            placeholder="Enter expiration date"
+          /&gt;
+        &lt;/div&gt;
+        &lt;div className="form-group"&gt;
+          &lt;input
+            type="text"
+            className="form-control"
+            aria-describedby="CVV"
+            placeholder="Enter CVV"
+          /&gt;
+        &lt;/div&gt;
+        &lt;button type="submit" className="btn btn-primary"&gt;
+          Pay now
+        &lt;/button&gt;
+        &lt;button type="button" className="btn btn-link" onClick={props.onCancel}&gt;
+          Cancel
+        &lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+
+export default PaymentMethodForm;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 20. PaymentMethodForm.js</figcaption></figure><p>The <code>PaymentMethodForm</code> component is a functional component that renders a credit card payment form. It gets <code>onSubmit</code> and on <code>onCancel</code> props from a parent <code>PaymentMethod</code> component. When user clicks <code>Pay now</code> button, the <code>onSubmit</code> prop is called. When user clicks on <code>Cancel</code> button, the <code>onCancel</code> prop is called. As simple as that.</p><p>Now you understand how our <code>App</code>, <code>PaymentMethod</code> and <code>PaymentMethodForm</code> components work. Remember that in two different scenarios the <code>PaymentMethod</code> component throws an error. However, only in one scenario we handle that error in our <code>App</code> component with an Error Boundary. Let's take a closer look at how we do it:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+  &lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+    &lt;PaymentMethod
+      name={PAYMENT_METHODS.BANK_TRANSFER}
+      onSelectPaymentMethod={this.selectPaymentMethod}
+      onCancelPaymentMethod={this.cancelPaymentMethod}
+      showPaymentMethodForm={showPaymentMethodForm}
+    /&gt;
+  &lt;/PaymentMethodErrorBoundary&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 21. App.js</figcaption></figure><p>When user clicks on the bank transfer payment method the <code>PaymentMethod</code> component throws an error. We want to catch that error to prevent our entire React app from crashing. To do that we create the <code>PaymentMethodErrorBoundary</code> component and wrap the <code>PaymentMethod</code> component into it.</p><p>Let's take a look at our <code>PaymentMethodErrorBoundary</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React, { Component } from "react";
+import PaymentMethodErrorMessage from "./PaymentMethodErrorMessage";
+
+class PaymentMethodErrorBoundary extends Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch() {
+    this.props.onError();
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return &lt;PaymentMethodErrorMessage /&gt;;
+    }
+
+    return this.props.children;
+  }
+}
+
+export default PaymentMethodErrorBoundary;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 22. PaymentMethodErrorBoundary.js</figcaption></figure><p>Let's take a closer look at what our <code>PaymentMethodErrorBoundary</code> component renders:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render() {
+  if (this.state.hasError) {
+    return &lt;PaymentMethodErrorMessage /&gt;;
+  }
+
+  return this.props.children;
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 23. PaymentMethodErrorBoundary.js</figcaption></figure><p>It renders two different things depending on it's state. Our <code>PaymentMethodErrorBoundary</code> is a stateful component. It's initial state looks like this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+state = { hasError: false };
+</code>
+</pre><figcaption class="figure-caption">Code snippet 24. PaymentMethodErrorBoundary.js</figcaption></figure><p>The idea is to render two different things depending whether our <code>PaymentMethodErrorBoundary</code> component caught an error or not. We create <code>hasError</code> state property and set it initially to <code>false</code>. Later you'll see that we update <code>hasError</code>'s value to <code>true</code> when our <code>PaymentMethodErrorBoundary</code> component catches an error.</p><p>If we didn't catch an error, we want our <code>PaymentMethodErrorBoundary</code> component to render it's <code>children</code> prop: <code>return this.props.children;</code>. This allows us to nest <code>PaymentMethod</code> component inside of the <code>PaymentMethodErrorBoundary</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+  &lt;PaymentMethod
+    name={PAYMENT_METHODS.BANK_TRANSFER}
+    onSelectPaymentMethod={this.selectPaymentMethod}
+    onCancelPaymentMethod={this.cancelPaymentMethod}
+    showPaymentMethodForm={showPaymentMethodForm}
+  /&gt;
+&lt;/PaymentMethodErrorBoundary&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 25. App.js</figcaption></figure><p>If we did catch an error, then we want our <code>PaymentMethodErrorBoundary</code> component to render something other than the <code>PaymentMethod</code> component that throws an error. In our app we render <code>PaymentMethodErrorMessage</code> component instead:</p><figure class="figure"><pre>
+<code class="language-jsx">
+if (this.state.hasError) {
+  return &lt;PaymentMethodErrorMessage /&gt;;
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 26. PaymentMethodErrorBoundary.js</figcaption></figure><p>Let's take a quick look at what <code>PaymentMethodErrorMessage</code> renders:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+
+const PaymentMethodError = () =&gt; (
+  &lt;div className="card mb-3"&gt;
+    &lt;div className="card-body"&gt;
+      &lt;h5 className="card-title"&gt;We're sorry&lt;/h5&gt;
+      &lt;p className="card-text"&gt;
+        Unfortunately, this payment method is not available at the moment.
+      &lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+
+export default PaymentMethodError;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 27. PaymentMethodErrorBoundary.js</figcaption></figure><p>The <code>PaymentMethodErrorMessage</code> component is a functional component that renders an informative user-friendly error message.</p><p>Now we know what <code>PaymentMethodErrorBoundary</code> component renders. It's time to for us to understand how it works.</p><p>You already know that it's a stateful component and it's initial state is: <code>state = { hasError: false };</code>. What makes <code>PaymentMethodErrorBoundary</code> component an error boundary component rather than just another presentational component is the fact that it has one of those two component lifecycle methods: <code>getDerivedStateFromError</code> and <code>componentDidCatch</code>.</p><p>Let's take a closer look at <code>getDerivedStateFromError</code> method first:</p><figure class="figure"><pre>
+<code class="language-jsx">
+static getDerivedStateFromError() {
+  return { hasError: true };
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 28. PaymentMethodErrorBoundary.js</figcaption></figure><p><code>getDerivedStateFromError</code> is a lifecycle method that React calls after it's child <code>PaymentMethod</code> component throws an error. This is a lifecycle component method that we use to update <code>PaymentMethodErrorBoundary</code> component's state - we want to set <code>hasError</code> to <code>true</code>. Updating component's state will force React to re-render <code>PaymentMethodErrorBoundary</code> component and with a new state it will render <code>PaymentMethodErrorMessage</code> component instead of <code>this.props.children</code>. As you can see we use <code>getDerivedStateFromError</code> lifecycle method as part of our fallback mechanism: if no error, then render <code>this.props.children</code> prop, if error, then render <code>PaymentMethodErrorMessage</code> component.</p><p>After rendering an error message instead of a payment method form, we want our users to have a chance to choose a different payment method - the one that doesn't throw an error. This logic helps us to gracefully degrade our service and enables our users to still make a payment. Good for users, good for business.</p><p>How do we make sure that our <code>App</code> component will render three payment methods once again after user has select one of the payment methods that threw an error? That's what we use the <code>componentDidCatch</code> lifecycle method for:</p><figure class="figure"><pre>
+<code class="language-jsx">
+componentDidCatch() {
+  this.props.onError();
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 29. PaymentMethodErrorBoundary.js</figcaption></figure><p>React will call <code>componentDidCatch</code> method after catching an error and re-rendering our <code>PaymentMethodErrorBoundary</code> component with a fallback user interface - with <code>PaymentMethodErrorMessage</code> component in our case.</p><p>What we want to do in <code>componentDidCatch</code> is to call <code>onError</code> callback prop that <code>App</code> component passes to <code>PaymentMethodErrorBoundary</code> component. <code>onError</code> will call <code>App</code> component's <code>cancelPaymentMethod</code> method that will in turn reset <code>App</code> component's state to <code>{ selectedPaymentMethod: NO_PAYMENT_METHOD };</code>. Without having a payment method selected our <code>App</code> component will render all three payment methods and our users can choose another payment method. Winning.</p><p>Now you know how to handle errors in React 16 with Error Boundary components. <a href="https://reactjs.org/docs/error-boundaries.html" target="_blank">Here you can learn more about Error Boundaries in React</a>.</p><p>I hope you've enjoyed this tutorial. If you have any questions or suggestions for the next tutorial, then please leave a comment.</p><p>Thank you for your attention!</p><p>We render a credit card payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) &amp;&amp; (
+  &lt;PaymentMethod
+    name={PAYMENT_METHODS.CREDIT_CARD}
+    onProcessPayment={this.processPayment}
+    onCancel={this.cancelPayment}
+    isProcessingPayment={this.state.isProcessingPayment}
+  /&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. App.js</figcaption></figure><p>Then we render a debit card payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) &amp;&amp; (
+  &lt;PaymentMethod
+    name={PAYMENT_METHODS.DEBIT_CARD}
+    onProcessPayment={this.processPayment}
+    isProcessingPayment={this.state.isProcessingPayment}
+  /&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. App.js</figcaption></figure><p>And finally we render a bank transfer payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+  &lt;PaymentMethodErrorBoundary onError={this.cancelPayment}&gt;
+    &lt;PaymentMethod
+      name={PAYMENT_METHODS.BANK_TRANSFER}
+      onProcessPayment={this.processPayment}
+      isProcessingPayment={this.state.isProcessingPayment}
+    /&gt;
+  &lt;/PaymentMethodErrorBoundary&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. App.js</figcaption></figure><p>Notice that all three payment methods create an instance of <code>PaymentMethod</code> component, but only bank transfer payment method wraps it inside of a <code>PaymentMethodErrorBoundary</code> component. In this example, we'll have scenario where:</p><ol><li>Credit card payment method works as expected.</li><li>Debit card payment method throws an error that we don't handle.</li><li>Bank transfer method throws an error that we catch with an error boundary component called <code>PaymentMethodErrorBoundary</code>.</li></ol><p>credit card and debit card payment methods are</p><p>We want users to select one payment method. When a user selects one payment method we don't render the other two. To achieve that we use <a href="https://reactjs.org/docs/conditional-rendering.html" target="_blank">conditional rendering</a>:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+  /* Render payment method */
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. App.js</figcaption></figure><p>with a credit card, with a debit card and via bank transfer.</p><p>We see three <code>div</code> elements with class names that you might recognize if you're familiar with <a href="http://getbootstrap.com">Bootstrap</a>. Bootstrap helps us create layout for our page.</p><p>We use conditional rendering t</p><p>Now let's focus on the <code>form</code> element:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;form onSubmit={this.handleFormSubmit}&gt;
+  {this.createCheckboxes()}
+
+  &lt;div className="form-group mt-2"&gt;
+    &lt;button
+      type="button"
+      className="btn btn-outline-primary mr-2"
+      onClick={this.selectAll}
+    &gt;
+      Select All
+    &lt;/button&gt;
+    &lt;button
+      type="button"
+      className="btn btn-outline-primary mr-2"
+      onClick={this.deselectAll}
+    &gt;
+      Deselect All
+    &lt;/button&gt;
+    &lt;button type="submit" className="btn btn-primary"&gt;
+      Save
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3. App.js</figcaption></figure><p>Inside of our <code>form</code> element we call <code>this.createCheckboxes</code> function that creates three instances of a <code>Checkbox</code> component. We'll see how this function works in a moment. It's important to recognise that here we're creating our instances of a <code>Checkbox</code> component <strong>dynamically</strong>. If you're not familiar with this approach, then please read <a href="http://react.tips/how-to-create-reactjs-components-dynamically/">this tutorial</a> first.</p><p>We then create three instances of <code>button</code> element.</p><p>The first <code>Select All</code> button will select all checkboxes:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button
+  type="button"
+  className="btn btn-outline-primary mr-2"
+  onClick={this.selectAll}
+&gt;
+  Select All
+&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4. App.js</figcaption></figure><p>When it's clicked it calls <code>this.selectAll</code> function. Later we'll see what that function does.</p><p>The second <code>Deselect All</code> button will deselect all checkboxes:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button
+  type="button"
+  className="btn btn-outline-primary mr-2"
+  onClick={this.deselectAll}
+&gt;
+  Deselect All
+&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. App.js</figcaption></figure><p>When it's clicked it calls <code>this.deselectAll</code> function. Later we'll see what that function does.</p><p>The third <code>Save</code> button is of type <code>submit</code> which will submit our form when user clicks on it:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;button type="submit" className="btn btn-primary"&gt;
+  Save
+&lt;/button&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6. App.js</figcaption></figure><p>In our <code>form</code> element we're telling React to call <code>this.handleFormSubmit</code> function when user submits the form:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;form onSubmit={this.handleFormSubmit}&gt;
+{/* ... */}
+&lt;/form&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7. App.js</figcaption></figure><p>Next let's take a look at how exactly we're creating our instances of <code>Checkbox</code> component dynamically. Here is our <code>createCheckboxes</code> function:</p><figure class="figure"><pre>
+<code class="language-jsx">
+createCheckboxes = () =&gt; OPTIONS.map(this.createCheckbox);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8. App.js</figcaption></figure><p>It iterates over <code>OPTIONS</code> array and calls <code>this.createCheckbox</code> function for each item in that array. Where is <code>OPTIONS</code> array coming from and what is it for?</p><p>In our <code>App.js</code> file before declaring our <code>App</code> component, we've create <code>OPTIONS</code> constant that references an array of three items:</p><figure class="figure"><pre>
+<code class="language-js">
+const OPTIONS = ["One", "Two", "Three"];
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9. App.js</figcaption></figure><p><code>['One', 'Two', 'Three']</code> - these are labels for our checkboxes. This array represents data that will dictate how many checkboxes we need to render and what their labels will be. For the purpose of this tutorial, we declare this data in our React component file, but in a real world web application this data can be received from a server or imported from another file.</p><p>Now we know that <code>createCheckboxes</code> function calls <code>this.createCheckbox</code> function for each label in <code>OPTIONS</code> array. <code>createCheckboxes</code> function also returns an array of three instances of <code>Checkbox</code> component. That's because we call <code>this.createCheckbox</code> three times and each time it creates and returns an individual <code>Checkbox</code> component instance:</p><figure class="figure"><pre>
+<code class="language-js">
+createCheckbox = option =&gt; (
+  &lt;Checkbox
+    label={option}
+    isSelected={this.state.checkboxes[option]}
+    onCheckboxChange={this.handleCheckboxChange}
+    key={option}
+  /&gt;
+);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10. App.js</figcaption></figure><p>Each <code>Checkbox</code> component instance gets four properties:</p><ol><li><code>label</code> - the text that you see rendered next to a checkbox. This value is coming from our <code>OPTIONS</code> array.</li><li><code>isSelected</code> - <code>true</code> or <code>false</code> value that tells <code>Checkbox</code> component whether it should render selected or deselected checkbox.</li><li><code>onCheckboxChange</code> - a reference to <code>this.handleCheckboxChange</code> function. Every time user selects/deselects a checkbox React calls <code>this.handleCheckboxChange</code> function passing <code>change</code> event to it. We'll see how it works in a moment.</li><li><code>key</code> - as you already know, each dynamically created React component instance needs a <code>key</code> property that React uses to uniquely identify that instance.</li></ol><p>Now we understand how we create and render three checkboxes in our application. What happens when user selects/deselects our checkboxes? As you will see later - every time user changes checkbox's state - our <code>this.handleCheckboxChange</code> is called.</p><p>It's a good time to zoom out for a minute and talk about how our application works. There are a couple of questions we need to ask:</p><ol><li>Each checkbox has two states: selected and deselected. Which React component is responsible for managing that state?</li><li>How do we know which checkboxes are selected at any given moment in time?</li></ol><p>We want to keep our application as simple as possible, so our <code>App</code> component will be responsible for maintaining the state of each checkbox. Meaning: each <code>Checkbox</code> component will be a controlled component that is not responsible for managing it's own state. Instead <code>Checkbox</code> component will receive <code>isSelected</code> prop, render <code>input</code> element based on that prop and call <code>onCheckboxChange</code> callback prop when user interacts with it.</p><p>Have you noticed that we need to maintain the state of each checkbox for <em>two different</em> purposes? Let's take a closer look, this is important. In React, a form element that users can interact with has to have a state in order be rendered differently in response to user actions. That what makes a React component interactive: it's rendered one way, then user interacts with it and now it's rendered in another way. We know that changes in component's props or state will force React to re-render that component. Without that state, form elements will be useless, because they will always render the same way, regardless of what user does. They will feel unresponsive to a user. You can see that the purpose of that state is <em>mechanical</em> - it's purpose is to make an interactive UI component simply <em>work</em>. That's it.</p><p>Most often than not, you wouldn't render a UI component without a business reason. Why do we want to render a checkbox as part of our form? Well, we want to know user's preference for whatever choice options that checkbox represents and then submit it as part of the form. But where do we store that user preference before submitting the form? Notice that this user preference is our business state or our application state that lives in our React application. Does it mean that it should live in a component's state? No, as it's not React's responsibility to manage application's state. We can use Redux library, or plain JavaScript for that.</p><p>However, in this tutorial, we'll recognize that the two states: our <em>UI state</em> that we need for our checkboxes to work and our <em>application state</em> that we need for our application to make business sense - those two states with two different purposes can be represented with a single state. This state will live in the <code>App</code> component.</p><p>Why do we want to store state of the each checkbox in the parent <code>App</code> component instead of letting each checkbox to maintain it's own state? In <a href="/checkboxes-in-react/">the previous version of this tutorial</a> I've made a case that the parent <code>App</code> component doesn't need to know the state of each checkbox. It needs to know which checkboxes are selected in order to log them in a console when user clicks the <code>Save</code> button. However, in one of the comments <strong>Juan Leone</strong> asked how to select or deselect <em>all</em> checkboxes at once:</p><figure class="figure"><a href="/checkboxes-in-react/#comment-3545667834" target="_blank"><img src="./images/comment.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 3. Juan's comment.</figcaption></figure><p>The question is how the <code>App</code> component can control the state of it's child <code>Checkbox</code> components, without managing their state? The short answer is: it can't. When you make a React component stateful, the state becomes private to that component only. Parent components can't access it directly. Child components can only get access to it via props. That's one of the core ideas in React and your architectural challenge is to decide which components own what state.</p><p>In this tutorial I've added a new business requirement for our application: we need to have a button that selects all checkboxes and a button that deselects all checkboxes. This requirement will address Juan's comment and give you an example of how to manage application state in a parent component.</p><p>Let's declare our application state in the <code>App</code> component:</p><figure class="figure"><pre>
+<code class="language-js">
+state = {
+  checkboxes: OPTIONS.reduce(
+    (options, option) =&gt; ({
+      ...options,
+      [option]: false
+    }),
+    {}
+  )
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12. App.js</figcaption></figure><p>We use <a href="https://babeljs.io/docs/plugins/transform-class-properties/">class property</a> <code>state</code> to set the initial state of the <code>App</code> component.</p><p>Don't get scared by that <code>reduce</code> function:</p><figure class="figure"><pre>
+<code class="language-js">
+OPTIONS.reduce(
+  (options, option) =&gt; ({
+    ...options,
+    [option]: false
+  }),
+  {}
+)
+</code>
+</pre><figcaption class="figure-caption">Code snippet 11. App.js</figcaption></figure><p>All it does is transforms <code>["One", "Two", "Three"]</code> array to <code>{ "One": false, "Two": false, "Three": false }</code> object. This object is the shape of our state that represents two states: UI state for each <code>Checkbox</code> component and an application state for our entire application. In our state <code>false</code> means that user hasn't selected the checkbox and we want every checkbox to be initially rendered as unchecked. Option name represents the name of a checkbox, i.e. <code>"One"</code>, <code>"Two"</code>, <code>"Three"</code>.</p><ul><li>The UI state answers the question: <em>which checkbox should I render selected and which - deselected?</em></li><li>The application state answers the question: <em>which checkboxes user selected?</em></li></ul><p>As you can see those two states are tightly coupled and related - you can't render selected checkbox and at the same time assume that user's intention is to have it unselected. If you can think of a business case where your UI state will differ from your application state - you need to maintain them separately as two different states.</p><p>Now we know the shape of the <code>App</code> component's state:</p><figure class="figure"><pre>
+<code class="language-js">
+{
+  One: false,
+  Two: false,
+  Three: false,
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12. App.js</figcaption></figure><p>Let's look at the <code>this.handleCheckboxChange</code> function and understand how to change this state when user interacts with our checkboxes:</p><figure class="figure"><pre>
+<code class="language-js">
+handleCheckboxChange = changeEvent =&gt; {
+  const { name } = changeEvent.target;
+
+  this.setState(prevState =&gt; ({
+    checkboxes: {
+      ...prevState.checkboxes,
+      [name]: !prevState.checkboxes[name]
+    }
+  }));
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 13. App.js</figcaption></figure><p>It gets a <em>changeEvent</em> object and accesses <em>name</em> property that represents which checkbox is being toggled. Now what exactly <em>handleCheckboxChange</em> function does? It calls <code>this.setState</code> to request an update of the state and passes a function that gets a previous state and returns a new state that is created based on the previous state. The <code>name</code> property that comes with the <code>changeEvent</code> object becomes the key in our new state object and the value for that key becomes the opposite value of the value in the previous state:</p><figure class="figure"><pre>
+<code class="language-js">
+checkboxes: {
+  ...prevState.checkboxes,
+  [name]: !prevState.checkboxes[name]
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 14. App.js</figcaption></figure><p>This is how we toggle a checkbox in our application state. The <code>handleCheckboxChange</code> function toggles state of an individual checkbox. How do we change state for all checkboxes at once?</p><p>Let's look at our <code>this.selectAll</code> and <code>this.deselectAll</code> functions.</p><p>The <code>this.selectAll</code> function calls <code>this.selectAllCheckboxes</code> and passes <code>true</code> as an argument:</p><figure class="figure"><pre>
+<code class="language-js">
+selectAll = () =&gt; this.selectAllCheckboxes(true);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 15. App.js</figcaption></figure><p>While <code>this.deselectAll</code> function calls <code>this.selectAllCheckboxes</code> and passes <code>false</code> as an argument:</p><figure class="figure"><pre>
+<code class="language-js">
+selectAll = () =&gt; this.selectAllCheckboxes(false);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 16. App.js</figcaption></figure><p>Let's take a look at what <code>this.selectAllCheckboxes</code> does:</p><figure class="figure"><pre>
+<code class="language-js">
+selectAllCheckboxes = isSelected =&gt; {
+  Object.keys(this.state.checkboxes).forEach(checkbox =&gt; {
+    // BONUS: Can you explain why we pass updater function to setState instead of an object?
+    this.setState(prevState =&gt; ({
+      checkboxes: {
+        ...prevState.checkboxes,
+        [checkbox]: isSelected
+      }
+    }));
+  });
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 17. App.js</figcaption></figure><p>It iterates over the <code>checkboxes</code> that we have in our application state and for each checkbox it updates it's state to the value of the <code>isSelected</code> parameter. Can you explain why we must pass an updater function to <code>this.setState</code> here, instead of an object?</p><p>Now we have a React application that renders a form with three checkboxes and three buttons. What happens when a user clicks the <code>Save</code> button? Our form is submitted and our <code>handleFormSubmit</code> function is called by React:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;form onSubmit={this.handleFormSubmit}&gt;...&lt;/form&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 18. App.js</figcaption></figure><p>Let's take a look at <code>handleFormSubmit</code> function:</p><figure class="figure"><pre>
+<code class="language-jsx">
+handleFormSubmit = formSubmitEvent =&gt; {
+  formSubmitEvent.preventDefault();
+
+  Object.keys(this.state.checkboxes)
+    .filter(checkbox =&gt; this.state.checkboxes[checkbox])
+    .forEach(checkbox =&gt; {
+      console.log(checkbox, "is selected.");
+    });
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 19. App.js</figcaption></figure><p>First it prevents the default behavior of a form's submit event:</p><figure class="figure"><pre>
+<code class="language-js">
+formSubmitEvent.preventDefault();
+</code>
+</pre><figcaption class="figure-caption">Code snippet 20. App.js</figcaption></figure><p>And then it iterates over all checkboxes in our application state, filters the ones that are selected and logs their name in a console:</p><figure class="figure"><pre>
+<code class="language-js">
+Object.keys(this.state.checkboxes)
+  .filter(checkbox =&gt; this.state.checkboxes[checkbox])
+  .forEach(checkbox =&gt; {
+    console.log(checkbox, "is selected.");
+  });
+</code>
+</pre><figcaption class="figure-caption">Code snippet 21. App.js</figcaption></figure><p>Now you know what our <code>App</code> component does and how it works.</p><p>Next let's take a look at our <code>Checkbox</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+
+const Checkbox = ({ label, isSelected, onCheckboxChange }) =&gt; (
+  &lt;div className="form-check"&gt;
+    &lt;label&gt;
+      &lt;input
+        type="checkbox"
+        name={label}
+        checked={isSelected}
+        onChange={onCheckboxChange}
+        className="form-check-input"
+      /&gt;
+      {label}
+    &lt;/label&gt;
+  &lt;/div&gt;
+);
+
+export default Checkbox;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 22. Checkbox.js</figcaption></figure><p>Our <code>Checkbox</code> component is a stateless functional component that receives three props:</p><ol><li><code>label</code> is a text that represents the name of the checkbox and it also rendered next to that checkbox.</li><li><code>isSelected</code> is a boolean value that tells React whether that checkbox should be rendered selected or deselected.</li><li><code>onCheckboxChange</code> is a callback function that React will call when a user selects or deselects the checkbox.</li></ol><p>The <code>Checkbox</code> component renders <code>div</code> element with a Bootstrap class name that we use for styling. Inside of it we have <code>label</code> element with two children:</p><ol><li><code>input</code> element</li><li><code>label</code> text</li></ol><p>The <code>input</code> element renders the checkbox. It has 4 properties:</p><ol><li><code>type</code> - the type of the input: <code>checkbox</code> in our case.</li><li><code>name</code> - the name of the input: an option name passed as a prop from a parent <code>App</code> component. It will be either <code>One</code>, <code>Two</code> or <code>Three</code>.</li><li><code>checked</code> - whether the checkbox is selected or not. The value comes from the prop from a parent <code>App</code> component.</li><li><code>onChange</code> - the <code>change</code> event handler: <code>onCheckboxChange</code> function will be called when user selects or deselects the checkbox.</li></ol><p>If you read <a href="http://react.tips/radio-buttons-in-react-16/">this tutorial</a>, you will recognize that our <code>input</code> element is a <a href="https://facebook.github.io/react/docs/forms.html#controlled-components">controlled component</a> because we "control" the <code>checked</code> property by providing our own value that comes from <code>isSelected</code> prop. If you're not sure about the difference between controlled components and uncontrolled components, then I recommend you read <a href="http://react.tips/radio-buttons-in-react-16/">this tutorial</a>.</p><p>What happens when a user toggles our checkbox? React calls our <code>onCheckboxChange</code> callback function that references <code>handleCheckboxChange</code> function in a parent <code>App</code> component. <code>handleCheckboxChange</code> will update <code>App</code> component's state and the <code>App</code> component will re-render all <code>Checkbox</code> components.</p><p>That's how our <code>App</code> component will always know which checkboxes are selected at any given moment in time.</p><p>And now you know how to use checkboxes in React.js!</p><p>Notice that this solution works great for <em>our specific</em> requirements. If you have different requirements you might need to think of a different way of creating checkboxes.</p><p>Thank you for reading this React tutorial!</p><p>Please take a look at <a href="https://github.com/fedosejev/checkboxes-in-react-16">the complete source code on GitHub</a> and <a href="https://fedosejev.github.io/checkboxes-in-react-16/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */</style><div id="mc_embed_signup"><form action="//exchange.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><div id="mc_embed_signup_scroll"><input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div><div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div></div></form></div><!--End mc_embed_signup--></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/handle-errors-in-react-16/';
+    this.page.identifier = 'handle-errors-in-react-16';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>
