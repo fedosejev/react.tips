@@ -1,6 +1,6 @@
-# Handle Errors In React 16
+# How To Handle Errors In React 16
 
-How do you handle errors in React 16? When your React component throws an error, it can make your React application unusable, and that can potentially cost your business money.
+When your React component throws an error, it can make your React application unusable, and that can potentially cost your business money.
 
 Let's learn by example why it's a good idea to handle errors in React and how you can do it in React 16.
 
