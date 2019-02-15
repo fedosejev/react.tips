@@ -753,7 +753,7 @@ state = { hasError: false };
 <figcaption class="figure-caption">Code snippet 24. PaymentMethodErrorBoundary.js</figcaption>
 </figure>
 
-The idea is to render two different things depending whether our `PaymentMethodErrorBoundary` component caught an error or not. We create `hasError` state property and set it initially to `false`. Later you'll see that we update `hasError`'s value to `true` when our `PaymentMethodErrorBoundary` component catches an error.
+The idea is to render two different things depending on whether our `PaymentMethodErrorBoundary` component caught an error or not. We create `hasError` state property and set it initially to `false`. Later you'll see that we update `hasError`'s value to `true` when our `PaymentMethodErrorBoundary` component catches an error.
 
 If we didn't catch an error, we want our `PaymentMethodErrorBoundary` component to render it's `children` prop: `return this.props.children;`. This allows us to nest `PaymentMethod` component inside of the `PaymentMethodErrorBoundary` component:
 
