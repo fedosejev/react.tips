@@ -76,7 +76,7 @@ Here's the visual diagram of our components hierarchy:
 
 <figure class="figure">
   <a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank">
-    <img src="./images/diagram-components-hierarchy.png" alt="Components hierarchy diagram" class="figure-img img-fluid img-rounded" />
+    <img src="./images/app-diagram-components-hierarchy.png" alt="Components hierarchy diagram" class="figure-img img-fluid img-rounded" />
   </a>
   <figcaption class="figure-caption">Figure 2. Our application.</figcaption>
 </figure>
