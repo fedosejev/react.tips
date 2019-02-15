@@ -9,7 +9,7 @@ In this tutorial, we'll build a React app that renders a payment page where user
 First, let's take a look at the user interface that we want to build:
 
 <figure class="figure">
-  <a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank">
+  <a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/" target="_blank">
     <img src="./images/app-screenshot-payment-methods.png" alt="Application screenshot" class="figure-img img-fluid img-rounded" />
   </a>
   <figcaption class="figure-caption">Figure 1. Our application renders three payment methods.</figcaption>
@@ -25,7 +25,7 @@ Our application will render three boxes where each box represents a payment meth
 When user clicks on `Choose ...` button for one of those payment methods we want our application to render a payment form. For example, when user clicks `Choose credit card` - a credit card payment form to be rendered while other payment methods will not be rendered:
 
 <figure class="figure">
-  <a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank">
+  <a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/" target="_blank">
     <img src="./images/app-screenshot-payment-method-form.png" alt="Application screenshot" class="figure-img img-fluid img-rounded" />
   </a>
   <figcaption class="figure-caption">Figure 2. Our application renders credit card payment form.</figcaption>
@@ -34,7 +34,7 @@ When user clicks on `Choose ...` button for one of those payment methods we want
 In our example application the `Choose credit card` button will work as expected. However, clicking on `Choose debit card` button will throw an error. This error won't be handled by our application and as a result - our application will crash, our users won't be able to make a payment and our business will lose a sale. Clicking on `Choose bank transfer` button will throw an error as well, however, in this case, our application will handle the error gracefully - it will inform our users about an unexpected error and give them an option to choose another payment method and complete their purchase:
 
 <figure class="figure">
-  <a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank">
+  <a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/" target="_blank">
     <img src="./images/app-screenshot-payment-method-error.png" alt="Application screenshot" class="figure-img img-fluid img-rounded" />
   </a>
   <figcaption class="figure-caption">Figure 3. Our application renders payment method error message.</figcaption>
@@ -75,7 +75,7 @@ The `PaymentMethodErrorBoundary` component will render `PaymentMethod` or `Payme
 Here's the visual diagram of our components hierarchy:
 
 <figure class="figure">
-  <a href="https://fedosejev.github.io/handle-errors-in-react-16/" target="_blank">
+  <a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/" target="_blank">
     <img src="./images/app-diagram-components-hierarchy.png" alt="Components hierarchy diagram" class="figure-img img-fluid img-rounded" />
   </a>
   <figcaption class="figure-caption">Figure 2. Our application.</figcaption>
@@ -858,7 +858,7 @@ I hope you've enjoyed this tutorial. If you have any questions or suggestions fo
 
 Thank you for your attention!
 
-Please take a look at [the complete source code on GitHub](https://github.com/fedosejev/handle-errors-in-react-16/) and [the live version](https://fedosejev.github.io/handle-errors-in-react-16/) of our app.
+Please take a look at [the complete source code on GitHub](https://github.com/fedosejev/handle-errors-in-react-16/) and [the live version](https://fedosejev.github.io/how-to-handle-errors-in-react-16/) of our app.
 
 I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via [Twitter](http://twitter.com/artemy) and [email](mailto:artemij@fedosejev.com).
 
