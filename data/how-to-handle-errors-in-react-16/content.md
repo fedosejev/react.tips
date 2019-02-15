@@ -858,7 +858,7 @@ I hope you've enjoyed this tutorial. If you have any questions or suggestions fo
 
 Thank you for your attention!
 
-Please take a look at [the complete source code on GitHub](https://github.com/fedosejev/handle-errors-in-react-16/) and [the live version](https://fedosejev.github.io/how-to-handle-errors-in-react-16/) of our app.
+Please take a look at [the complete source code on GitHub](https://github.com/fedosejev/how-to-handle-errors-in-react-16/) and [the live version](https://fedosejev.github.io/how-to-handle-errors-in-react-16/) of our app.
 
 I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via [Twitter](http://twitter.com/artemy) and [email](mailto:artemij@fedosejev.com).
 
