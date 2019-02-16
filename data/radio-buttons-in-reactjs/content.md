@@ -370,7 +370,7 @@ Thank you for your attention!
 
 Please take a look at [the complete source code on GitHub](https://github.com/fedosejev/radio-buttons-react) and [the live version](http://fedosejev.github.io/radio-buttons-react/) of our app.
 
-**You might be interested in [Checkboxes in React 16](/checkboxes-in-react-16/) and [Dropdowns In React 16](/dropdowns-in-react-16/) tutorials.**
+**You might also be interested in [Checkboxes in React 16](/checkboxes-in-react-16/) and [Dropdowns In React 16](/dropdowns-in-react-16/) tutorials.**
 
 I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via [Twitter](http://twitter.com/artemy) and [email](mailto:artemij@fedosejev.com).
 
