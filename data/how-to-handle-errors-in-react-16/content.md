@@ -4,7 +4,7 @@ When your React component throws an error, it can make your React application un
 
 Let's learn by example why it's a good idea to handle errors in React and how you can do it in React 16.
 
-In this tutorial, we'll build a React app that renders a payment page where users choose a payment method. Our React app will render three different payment methods, but only one of those payment methods will work as expected. The other two payment methods will throw errors. We'll handle one of those erros with Error Boudary feature introduced in React 16, while other error will be left unhandled. You'll see the difference that it makes for users and for a business.
+In this tutorial, we'll build a React app that renders a payment page where users choose a payment method. Our React app will render three different payment methods, but only one of those payment methods will work as expected. The other two payment methods will throw errors. We'll handle one of those errors with Error Boudary feature introduced in React 16, while other error will be left unhandled. You'll see the difference that it makes for users and for a business.
 
 First, let's take a look at the user interface that we want to build:
 
@@ -40,7 +40,7 @@ In our example application the `Choose credit card` button will work as expected
   <figcaption class="figure-caption">Figure 3. Our application renders payment method error message.</figcaption>
 </figure>
 
-This scenario will clerly demonstrate how a business can make more money by handling errors in React 16.
+This scenario will clearly demonstrate how a business can make more money by handling errors in React 16.
 
 Let's take a look at how our application will be structured. The task of architecting a React application starts with three questions:
 1. What components we need to build?
