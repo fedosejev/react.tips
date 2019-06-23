@@ -1,5 +1,15 @@
 # Handle Errors In React 16
 
+
+
+
+
+
+
+
+
+
+
 How do you use checkboxes in React.js? We've learnt about radio buttons in [this tutorial](http://react.tips/radio-buttons-in-react-16/), but what about checkboxes - do you use them differently in React?
 
 The short answer is: yes.
@@ -41,103 +51,71 @@ Our application will be made of [five React components](https://github.com/fedos
 4. `PaymentMethodError`
 5. `PaymentMethodErrorBoundary`
 
-First, let's create `App` component that is a root component for our entire React application:
+First, let's create the `App` component that is a root component for our entire React application:
 
 <figure class="figure">
 <pre>
 <code class="language-jsx">
 import React, { Component } from "react";
-import Checkbox from "./Checkbox";
-
-const OPTIONS = ["One", "Two", "Three"];
+import PaymentMethod from "./PaymentMethod";
+import PaymentMethodErrorBoundary from "./PaymentMethodErrorBoundary";
+import { PAYMENT_METHODS, NO_PAYMENT_METHOD } from "../index";
 
 class App extends Component {
   state = {
-    checkboxes: OPTIONS.reduce(
-      (options, option) => ({
-        ...options,
-        [option]: false
-      }),
-      {}
-    )
+    isProcessingPayment: false,
+    paymentMethod: NO_PAYMENT_METHOD
   };
 
-  selectAllCheckboxes = isSelected => {
-    Object.keys(this.state.checkboxes).forEach(checkbox => {
-      // BONUS: Can you explain why we pass updater function to setState instead of an object?
-      this.setState(prevState => ({
-        checkboxes: {
-          ...prevState.checkboxes,
-          [checkbox]: isSelected
-        }
-      }));
+  shouldRenderPaymentMethod = paymentMethod =>
+    this.state.paymentMethod === NO_PAYMENT_METHOD ||
+    this.state.paymentMethod === paymentMethod;
+
+  processPayment = paymentMethod => {
+    this.setState({
+      isProcessingPayment: true,
+      paymentMethod
     });
   };
 
-  selectAll = () => this.selectAllCheckboxes(true);
-
-  deselectAll = () => this.selectAllCheckboxes(false);
-
-  handleCheckboxChange = changeEvent => {
-    const { name } = changeEvent.target;
-
-    this.setState(prevState => ({
-      checkboxes: {
-        ...prevState.checkboxes,
-        [name]: !prevState.checkboxes[name]
-      }
-    }));
+  cancelPayment = () => {
+    this.setState({
+      isProcessingPayment: false,
+      paymentMethod: NO_PAYMENT_METHOD
+    });
   };
-
-  handleFormSubmit = formSubmitEvent => {
-    formSubmitEvent.preventDefault();
-
-    Object.keys(this.state.checkboxes)
-      .filter(checkbox => this.state.checkboxes[checkbox])
-      .forEach(checkbox => {
-        console.log(checkbox, "is selected.");
-      });
-  };
-
-  createCheckbox = option => (
-    <Checkbox
-      label={option}
-      isSelected={this.state.checkboxes[option]}
-      onCheckboxChange={this.handleCheckboxChange}
-      key={option}
-    />
-  );
-
-  createCheckboxes = () => OPTIONS.map(this.createCheckbox);
 
   render() {
     return (
       <div className="container">
         <div className="row mt-5">
-          <div className="col-sm-12">
-            <form onSubmit={this.handleFormSubmit}>
-              {this.createCheckboxes()}
+          <div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) && (
+              <PaymentMethod
+                name={PAYMENT_METHODS.CREDIT_CARD}
+                onProcessPayment={this.processPayment}
+                onCancel={this.cancelPayment}
+                isProcessingPayment={this.state.isProcessingPayment}
+              />
+            )}
 
-              <div className="form-group mt-2">
-                <button
-                  type="button"
-                  className="btn btn-outline-primary mr-2"
-                  onClick={this.selectAll}
-                >
-                  Select All
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-outline-primary mr-2"
-                  onClick={this.deselectAll}
-                >
-                  Deselect All
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Save
-                </button>
-              </div>
-            </form>
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) && (
+              <PaymentMethod
+                name={PAYMENT_METHODS.DEBIT_CARD}
+                onProcessPayment={this.processPayment}
+                isProcessingPayment={this.state.isProcessingPayment}
+              />
+            )}
+
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) && (
+              <PaymentMethodErrorBoundary onError={this.cancelPayment}>
+                <PaymentMethod
+                  name={PAYMENT_METHODS.BANK_TRANSFER}
+                  onProcessPayment={this.processPayment}
+                  isProcessingPayment={this.state.isProcessingPayment}
+                />
+              </PaymentMethodErrorBoundary>
+            )}
           </div>
         </div>
       </div>
@@ -151,7 +129,7 @@ export default App;
 <figcaption class="figure-caption">Code snippet 1. App.js</figcaption>
 </figure>
 
-First, let's focus on its `render` function:
+Let's focus on the `App` component's `render` method:
 
 <figure class="figure">
 <pre>
@@ -160,30 +138,33 @@ render() {
   return (
     <div className="container">
       <div className="row mt-5">
-        <div className="col-sm-12">
-          <form onSubmit={this.handleFormSubmit}>
-            {this.createCheckboxes()}
+        <div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) && (
+            <PaymentMethod
+              name={PAYMENT_METHODS.CREDIT_CARD}
+              onProcessPayment={this.processPayment}
+              onCancel={this.cancelPayment}
+              isProcessingPayment={this.state.isProcessingPayment}
+            />
+          )}
 
-            <div className="form-group mt-2">
-              <button
-                type="button"
-                className="btn btn-outline-primary mr-2"
-                onClick={this.selectAll}
-              >
-                Select All
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline-primary mr-2"
-                onClick={this.deselectAll}
-              >
-                Deselect All
-              </button>
-              <button type="submit" className="btn btn-primary">
-                Save
-              </button>
-            </div>
-          </form>
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) && (
+            <PaymentMethod
+              name={PAYMENT_METHODS.DEBIT_CARD}
+              onProcessPayment={this.processPayment}
+              isProcessingPayment={this.state.isProcessingPayment}
+            />
+          )}
+
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) && (
+            <PaymentMethodErrorBoundary onError={this.cancelPayment}>
+              <PaymentMethod
+                name={PAYMENT_METHODS.BANK_TRANSFER}
+                onProcessPayment={this.processPayment}
+                isProcessingPayment={this.state.isProcessingPayment}
+              />
+            </PaymentMethodErrorBoundary>
+          )}
         </div>
       </div>
     </div>
@@ -194,7 +175,100 @@ render() {
 <figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
 </figure>
 
+The `App` component renders three instances of the `PaymentMethod` method component. Each instance renders a payment method.
+
+We render a credit card payment method:
+
+<figure class="figure">
+<pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) && (
+  <PaymentMethod
+    name={PAYMENT_METHODS.CREDIT_CARD}
+    onProcessPayment={this.processPayment}
+    onCancel={this.cancelPayment}
+    isProcessingPayment={this.state.isProcessingPayment}
+  />
+)}
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
+</figure>
+
+Then we render a debit card payment method:
+
+<figure class="figure">
+<pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) && (
+  <PaymentMethod
+    name={PAYMENT_METHODS.DEBIT_CARD}
+    onProcessPayment={this.processPayment}
+    isProcessingPayment={this.state.isProcessingPayment}
+  />
+)}
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
+</figure>
+
+And finally we render a bank transfer payment method:
+
+<figure class="figure">
+<pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) && (
+  <PaymentMethodErrorBoundary onError={this.cancelPayment}>
+    <PaymentMethod
+      name={PAYMENT_METHODS.BANK_TRANSFER}
+      onProcessPayment={this.processPayment}
+      isProcessingPayment={this.state.isProcessingPayment}
+    />
+  </PaymentMethodErrorBoundary>
+)}
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
+</figure>
+
+Notice that all three payment methods create an instance of `PaymentMethod` component, but only bank transfer payment method wraps it inside of a `PaymentMethodErrorBoundary` component. In this example, we'll have scenario where:
+1. Credit card payment method works as expected.
+2. Debit card payment method throws an error that we don't handle.
+3. Bank transfer method throws an error that we catch with an error boundary component called `PaymentMethodErrorBoundary`.
+
+credit card and debit card payment methods are 
+
+
+We want users to select one payment method. When a user selects one payment method we don't render the other two. To achieve that we use <a href="https://reactjs.org/docs/conditional-rendering.html" target="_blank">conditional rendering</a>:
+
+<figure class="figure">
+<pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) && (
+  /* Render payment method */
+)}
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 2. App.js</figcaption>
+</figure>
+
+
+
+
+
+
+ with a credit card, with a debit card and via bank transfer.
+
 We see three `div` elements with class names that you might recognize if you're familiar with [Bootstrap](http://getbootstrap.com). Bootstrap helps us create layout for our page.
+
+
+
+
+
+
+We use conditional rendering t
+
+
 
 Now let's focus on the `form` element:
 

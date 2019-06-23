@@ -1,0 +1,502 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>How To Handle Errors In React 16 - React Tips</title><meta name="description" content="Intuitive example of how to handle errors in React 16."><link rel="canonical" href="http://react.tips/how-to-handle-errors-in-react-16/"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"></head><body class="post-page"><div class="book-ad"><div class="container"><div class="row"><div class="col-sm-12"><a href="https://gumroad.com/l/DSiiZ"><strong class="mr-3">NEW BOOK</strong> React Interview: Developers Guide - <em>this book helps you to prepare for your React interview.</em></a></div></div></div></div><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li class="logo">React.Tips</li><li><a href="/">Tutorials</a></li><li><a href="/write-your-tutorial-for-react-tips">Write for React.Tips</a></li><li><a href="/best-react-books">Best React Books</a></li></ul></div></div></div><div class="row"><div class="col-sm-12"><h1>How To Handle Errors In React 16</h1><p>When your React component throws an error, it can make your React application unusable, and that can potentially cost your business money.</p><p>Let's learn by example why it's a good idea to handle errors in React and how you can do it in React 16.</p><p>In this tutorial, we'll build a React app that renders a payment page where users choose a payment method. Our React app will render three different payment methods, but only one of those payment methods will work as expected. The other two payment methods will throw errors. We'll handle one of those errors with Error Boudary feature introduced in React 16, while other error will be left unhandled. You'll see the difference that it makes for users and for a business.</p><p>First, let's take a look at the user interface that we want to build:</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/" target="_blank"><img src="./images/app-screenshot-payment-methods.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 1. Our application renders three payment methods.</figcaption></figure><p>You can find the full source code in <a href="https://github.com/fedosejev/handle-errors-in-react-16">this GitHub repository</a>.</p><p>Our application will render three boxes where each box represents a payment method:</p><ol><li>Credit card payment</li><li>Debit card payment</li><li>Bank transfer payment</li></ol><p>When user clicks on <code>Choose ...</code> button for one of those payment methods we want our application to render a payment form. For example, when user clicks <code>Choose credit card</code> - a credit card payment form to be rendered while other payment methods will not be rendered:</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/" target="_blank"><img src="./images/app-screenshot-payment-method-form.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 2. Our application renders credit card payment form.</figcaption></figure><p>In our example application the <code>Choose credit card</code> button will work as expected. However, clicking on <code>Choose debit card</code> button will throw an error. This error won't be handled by our application and as a result - our application will crash, our users won't be able to make a payment and our business will lose a sale. Clicking on <code>Choose bank transfer</code> button will throw an error as well, however, in this case, our application will handle the error gracefully - it will inform our users about an unexpected error and give them an option to choose another payment method and complete their purchase:</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/" target="_blank"><img src="./images/app-screenshot-payment-method-error.png" alt="Application screenshot" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 3. Our application renders payment method error message.</figcaption></figure><p>This scenario will clearly demonstrate how a business can make more money by handling errors in React 16.</p><p>Let's take a look at how our application will be structured. The task of architecting a React application starts with three questions:</p><ol><li>What components we need to build?</li><li>What components hierarchy we need to build?</li><li>What state our application needs to store and which components will be responsible for storing and managing that state?</li></ol><p>Let's answer these questions one at a time.</p><h2>What components we need to build?</h2><p>A good starting point in deciding on what components to create is to look at the UI mockups and break them into reusable elements. In our case, we have payment method box that is rendered three times. We can create a React component for the payment method. We also have a credit card payment method form that we render when user clicks <code>Pay by credit card</code> button. We'll create a React component for that payment form as well. We also want to render an error message when we handle an error that is thrown when user clicks on <code>Pay by bank transfer</code>. We'll create a React component for the payment method error message. And finally, we'll need to create a "special" React component that will implement the mechanism for handling an error thrown by another React component. This "special" React component will be an Error Boundary component - we'll discuss what it does and how it works shortly in this tutorial.</p><p>Excellent, now we have a list of React components that we want to create:</p><ul><li><code>App.js</code> component will the root component for our entire React application.</li><li><code>PaymentMethod.js</code> component will render payment method box with a payment name and a button.</li><li><code>PaymentMethodForm.js</code> component will render credit card payment method form.</li><li><code>PaymentMethodErrorMessage.js</code> component will render payment method error message.</li><li><code>PaymentMethodErrorBoundary.js</code> component will handle error thrown by <code>PaymentMethod.js</code> component.</li></ul><p>Next step is to organise our components into a hierarchy.</p><h2>What components hierarchy we need to build?</h2><p>When we organise components into a hierarchy we decide which componets will be parents, which component will be child components and which components will be both.</p><p>We'll start with a parent component that will encapsulate our entire React application - the <code>App</code> component. It will have no parent React component, and it will render three child components: two <code>PaymentMethod</code> components and one <code>PaymentMethodErrorBoundary</code> component.</p><p>The <code>PaymentMethod</code> component will render <code>PaymentMethodForm</code> component or a payment method name with a button.</p><p>The <code>PaymentMethodErrorBoundary</code> component will render <code>PaymentMethod</code> or <code>PaymentMethodErrorMessage</code> component.</p><p>Here's the visual diagram of our components hierarchy:</p><figure class="figure"><a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/" target="_blank"><img src="./images/app-diagram-components-hierarchy.png" alt="Components hierarchy diagram" class="figure-img img-fluid img-rounded"></a><figcaption class="figure-caption">Figure 2. Our application.</figcaption></figure><p>Our application will need state. Let's decide on which components will be responsible for storing and maintaining that state.</p><h2>What state our application needs to store and which components will be responsible for storing and managing that state?</h2><p>The general rule that we want to follow is: the less state our applications has the better. Less state means less state management which means less complexity in our application. However keeping our application as simple as possible is not a trivial task.</p><p>The next general rule that we ant to follow is: the fewer stateful components we have the better. We want most of our React component to be stateless, functional components that do only one thing - render user interface.</p><p>From the user interface point of view we need state that decides whether to render payment method box with a payment method name and the <code>Choose ...</code> button or a payment method form. Your first idea might be to make <code>PaymentMethod.js</code> component stateful and let it decide what to render based on that state: a payment name and a payment button or a payment form.</p><p>However, the challenge here is that we want to render three instances of <code>PaymentMethod.js</code> component and we know that what renders one component instance will have an effect on another two. Earlier we've mentioned that we want to render a payment method form when user clicks on <code>Choose ...</code> button and - we don't want to render the other two payment methods when a payment form is rendered. This requirement introduces a mental logical connection between all three instances - they're not completely independent in our application.</p><p>Our <code>App.js</code> component will render all three instances of <code>PaymentMethod.js</code> component. We can't access <code>PaymentMethod.js</code> component's state from a parent <code>App.js</code> component, so our if we store state in <code>PaymentMethod.js</code> component - our <code>App</code> component has no way to know when to render all instances of a <code>PaymentMethod.js</code> component and when to render only the one that user has selected. That means we can't store state in <code>PaymentMethod.js</code> component and we need to store it in a component that is a parent component for all three <code>PaymentMethod.js</code> component instances - in our <code>App.js</code> component.</p><p>Now we know that <code>App.js</code> component will be stateful component. We have one other piece of state that our application will need to manage. When user clicks on <code>Pay by bank transfer</code> button we want to render the <code>PaymentMethodErrorMessage</code> component with an error message. This logic will be handled by <code>PaymentMethodErrorBoundary.js</code> component which will be stateful. We'll look at it in more details shortly.</p><p>Perfect, we have answered all three questions about architecting our React components and it's time for us to start implementing them.</p><h2>Creating <code>App</code> component</h2><p>We'll start with creating the <code>App.js</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React, { Component } from "react";
+import PaymentMethod from "./PaymentMethod";
+import PaymentMethodErrorBoundary from "./PaymentMethodErrorBoundary";
+import { PAYMENT_METHODS, NO_PAYMENT_METHOD } from "../config";
+
+class App extends Component {
+  state = {
+    selectedPaymentMethod: NO_PAYMENT_METHOD
+  };
+
+  shouldRenderPaymentMethod = paymentMethod =&gt;
+    this.state.selectedPaymentMethod === NO_PAYMENT_METHOD ||
+    this.state.selectedPaymentMethod === paymentMethod;
+
+  selectPaymentMethod = paymentMethod =&gt; {
+    this.setState({
+      selectedPaymentMethod: paymentMethod
+    });
+  };
+
+  cancelPaymentMethod = () =&gt; this.selectPaymentMethod(NO_PAYMENT_METHOD);
+
+  render() {
+    const showPaymentMethodForm =
+      this.state.selectedPaymentMethod !== NO_PAYMENT_METHOD;
+
+    return (
+      &lt;div className="container"&gt;
+        &lt;div className="row mt-5"&gt;
+          &lt;div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4"&gt;
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) &amp;&amp; (
+              &lt;PaymentMethod
+                name={PAYMENT_METHODS.CREDIT_CARD}
+                onSelectPaymentMethod={this.selectPaymentMethod}
+                onCancelPaymentMethod={this.cancelPaymentMethod}
+                showPaymentMethodForm={showPaymentMethodForm}
+              /&gt;
+            )}
+
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) &amp;&amp; (
+              &lt;PaymentMethod
+                name={PAYMENT_METHODS.DEBIT_CARD}
+                onSelectPaymentMethod={this.selectPaymentMethod}
+                onCancelPaymentMethod={this.cancelPaymentMethod}
+                showPaymentMethodForm={showPaymentMethodForm}
+              /&gt;
+            )}
+
+            {this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+              &lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+                &lt;PaymentMethod
+                  name={PAYMENT_METHODS.BANK_TRANSFER}
+                  onSelectPaymentMethod={this.selectPaymentMethod}
+                  onCancelPaymentMethod={this.cancelPaymentMethod}
+                  showPaymentMethodForm={showPaymentMethodForm}
+                /&gt;
+              &lt;/PaymentMethodErrorBoundary&gt;
+            )}
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default App;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1. App.js</figcaption></figure><p>Let's focus on the <code>App</code> component's <code>render</code> method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render() {
+  const showPaymentMethodForm =
+    this.state.selectedPaymentMethod !== NO_PAYMENT_METHOD;
+
+  return (
+    &lt;div className="container"&gt;
+      &lt;div className="row mt-5"&gt;
+        &lt;div className="col-md-6 offset-md-3 col-lg-4 offset-lg-4"&gt;
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) &amp;&amp; (
+            &lt;PaymentMethod
+              name={PAYMENT_METHODS.CREDIT_CARD}
+              onSelectPaymentMethod={this.selectPaymentMethod}
+              onCancelPaymentMethod={this.cancelPaymentMethod}
+              showPaymentMethodForm={showPaymentMethodForm}
+            /&gt;
+          )}
+
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) &amp;&amp; (
+            &lt;PaymentMethod
+              name={PAYMENT_METHODS.DEBIT_CARD}
+              onSelectPaymentMethod={this.selectPaymentMethod}
+              onCancelPaymentMethod={this.cancelPaymentMethod}
+              showPaymentMethodForm={showPaymentMethodForm}
+            /&gt;
+          )}
+
+          {this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+            &lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+              &lt;PaymentMethod
+                name={PAYMENT_METHODS.BANK_TRANSFER}
+                onSelectPaymentMethod={this.selectPaymentMethod}
+                onCancelPaymentMethod={this.cancelPaymentMethod}
+                showPaymentMethodForm={showPaymentMethodForm}
+              /&gt;
+            &lt;/PaymentMethodErrorBoundary&gt;
+          )}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2. App.js</figcaption></figure><p>The <code>App</code> component renders two instances of the <code>PaymentMethod</code> component and one instance of the <code>PaymentMethodErrorBoundary</code> component.</p><p>We render a credit card payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.CREDIT_CARD) &amp;&amp; (
+  &lt;PaymentMethod
+    name={PAYMENT_METHODS.CREDIT_CARD}
+    onSelectPaymentMethod={this.selectPaymentMethod}
+    onCancelPaymentMethod={this.cancelPaymentMethod}
+    showPaymentMethodForm={showPaymentMethodForm}
+  /&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3. App.js</figcaption></figure><p>We render a debit card payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.DEBIT_CARD) &amp;&amp; (
+  &lt;PaymentMethod
+    name={PAYMENT_METHODS.DEBIT_CARD}
+    onSelectPaymentMethod={this.selectPaymentMethod}
+    onCancelPaymentMethod={this.cancelPaymentMethod}
+    showPaymentMethodForm={showPaymentMethodForm}
+  /&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4. App.js</figcaption></figure><p>And we render a bank transfer payment method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+  &lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+    &lt;PaymentMethod
+      name={PAYMENT_METHODS.BANK_TRANSFER}
+      onSelectPaymentMethod={this.selectPaymentMethod}
+      onCancelPaymentMethod={this.cancelPaymentMethod}
+      showPaymentMethodForm={showPaymentMethodForm}
+    /&gt;
+  &lt;/PaymentMethodErrorBoundary&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5. App.js</figcaption></figure><p>Out of all three instances of <code>PaymentMethod</code> component only the bank transfer one is wrapped into a <code>PaymentMethodErrorBoundary</code> component. In other words, we're passing <code>PaymentMethod</code> component instance as a child to <code>PaymentMethodErrorBoundary</code> component. This tells React that if that <code>PaymentMethod</code> method component will throw an error - the <code>PaymentMethodErrorBoundary</code> will catch it and handle it. Conversely, the other two instances of <code>PaymentMethod</code> component are not wrapped in the <code>PaymentMethodErrorBoundary</code> component, so if they throw an error and we know that the debit card payment method will throw an error - it will crash our entire React app.</p><p>Earlier we've discussed that we want to render all three payment methods initially and when user select one by clicking the <code>Choose ...</code> button - we want to display the payment form for that method and nothing else. This is why we render each payment method conditionally - using the <code>{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; ...</code> pattern. In this pattern we're calling <code>this.shouldRenderPaymentMethod</code> method on our component class and we're passing payment method name to that method. Let's take a look at what this method does:</p><figure class="figure"><pre>
+<code class="language-jsx">
+shouldRenderPaymentMethod = paymentMethod =&gt;
+  this.state.selectedPaymentMethod === NO_PAYMENT_METHOD ||
+  this.state.selectedPaymentMethod === paymentMethod;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6. App.js</figcaption></figure><p>The <code>shouldRenderPaymentMethod</code> method takes <code>paymentMethod</code> name as a parameter and checks if the <code>paymentMethod</code> in the <code>App</code> component's state matches the value of <code>NO_PAYMENT_METHOD</code> or the value of <code>paymentMethod</code> parameter. The idea here is for <code>shouldRenderPaymentMethod</code> method to tell us whether any given payment method should be rendered or not. And the logic here checks if the selected payment method equals to no payment method which is the case initially and in that case we want to render all payment methods. Or if the selected payment method equals to a specific payment method provided by the <code>paymentMethod</code> parameter then we want to render only that payment method. In other words, we want to render all three payment methods or only one of the three.</p><p>Notice that we import <code>NO_PAYMENT_METHOD</code> and <code>PAYMENT_METHODS</code> constants from the <code>config.js</code> file:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import { PAYMENT_METHODS, NO_PAYMENT_METHOD } from "../config";
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7. App.js</figcaption></figure><p>And this is our <code>config.js</code> file:</p><figure class="figure"><pre>
+<code class="language-jsx">
+export const PAYMENT_METHODS = {
+  CREDIT_CARD: "credit card",
+  DEBIT_CARD: "debit card",
+  BANK_TRANSFER: "bank transfer"
+};
+
+export const NO_PAYMENT_METHOD = "";
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8. config.js</figcaption></figure><p>It declares all three payment method names and an empty payment method name in <code>config.js</code> file.</p><p>We pass payment method names from the <code>config.js</code> file to <code>PaymentMethod</code> components, for example:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;PaymentMethod
+  name={PAYMENT_METHODS.CREDIT_CARD}
+  onSelectPaymentMethod={this.selectPaymentMethod}
+  onCancelPaymentMethod={this.cancelPaymentMethod}
+  showPaymentMethodForm={showPaymentMethodForm}
+/&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9. App.js</figcaption></figure><p>The <code>name</code> prop passes the payment method name. Let's take a look at other props that we pass to the <code>PaymentMethod</code> component:</p><ul><li><code>onSelectPaymentMethod</code> prop gets a callback function <code>this.selectPaymentMethod</code> which is called when user clicks on <code>Choose ...</code> button to select a payment method.</li><li><code>onCancelPaymentMethod</code> prop gets a callback function <code>this.cancelPaymentMethod</code> which is called when user clicks <code>Cancel</code> button on payment method form. You can see it in action when you click on <code>Choose credit card</code> button and then on the <code>Cancel</code> button.</li><li><code>showPaymentMethodForm</code> prop gets a boolean value <code>showPaymentMethodForm</code> which tells <code>PaymentMethod</code> component whether it should render a payment method form or a payment method name with a button.</li></ul><p>We declare <code>showPaymentMethodForm</code> variable in the component's <code>render</code> method before the <code>return</code> statement:</p><figure class="figure"><pre>
+<code class="language-jsx">
+const showPaymentMethodForm =
+  this.state.selectedPaymentMethod !== NO_PAYMENT_METHOD;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 10. App.js</figcaption></figure><p>You can see that the value of <code>showPaymentMethodForm</code> depends on whether <code>this.state.selectedPaymentMethod</code> is anything other than <code>NO_PAYMENT_METHOD</code>. The idea here is to show payment method name with a <code>Choose ...</code> button initially when user hasn't selected any payment method yet. This fact is represented with <code>NO_PAYMENT_METHOD</code> value in the <code>App</code> component's state:</p><figure class="figure"><pre>
+<code class="language-jsx">
+state = {
+  selectedPaymentMethod: NO_PAYMENT_METHOD
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 11. App.js</figcaption></figure><p>When user chooses a payment method we update our component's state to another value that is not <code>NO_PAYMENT_METHOD</code>. When user selects a payment method - we want to render a payment method form. This is why <code>showPaymentMethodForm</code> variable will have <code>true</code> value when one of the payment methods is selected.</p><p>What exactly happens when user selects one of the payment methods? The <code>PaymentMethod</code> component will call the <code>App</code> component's <code>this.selectPaymentMethod</code> method and pass payment method name to it as a parameter:</p><figure class="figure"><pre>
+<code class="language-jsx">
+selectPaymentMethod = paymentMethod =&gt; {
+  this.setState({
+    selectedPaymentMethod: paymentMethod
+  });
+};
+</code>
+</pre><figcaption class="figure-caption">Code snippet 12. App.js</figcaption></figure><p>In turn, the <code>selectPaymentMethod</code> method will update <code>App</code> component's state - it will set <code>selectedPaymentMethod</code>'s value to the one that the <code>PaymentMethod</code> component passed as a <code>paymentMethod</code> parameter.</p><p>Now you understand the big picture of how the <code>App</code> component manages it's state. It has <code>selectedPaymentMethod</code> property that is initially set to <code>NO_PAYMENT_METHOD</code> value. Then it updates that property in <code>selectPaymentMethod</code> method. And who calls <code>selectPaymentMethod</code> method? It's child <code>PaymentMethod</code> component.</p><p>The <code>App</code> component has the <code>cancelPaymentMethod</code> method that is a helper method:</p><figure class="figure"><pre>
+<code class="language-jsx">
+cancelPaymentMethod = () =&gt; this.selectPaymentMethod(NO_PAYMENT_METHOD);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 13. App.js</figcaption></figure><p>What <code>cancelPaymentMethod</code> does is it calls <code>selectPaymentMethod</code> method passing <code>NO_PAYMENT_METHOD</code> as a payment method name - effectively resetting selected payment method name to it's initial value. This will tell React to render all three payment methods once again when the user clicks <code>Cancel</code> button on one of the payment method forms.</p><p>Now you understand what our <code>App</code> component renders and how it works.</p><h2>Creating <code>PaymentMethod</code> component</h2><p>Next let's take a look at one of it's child components that it renders - the <code>PaymentMethod</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+import PaymentMethodForm from "./PaymentMethodForm";
+import { PAYMENT_METHODS } from "../config";
+
+const PaymentMethod = props =&gt; {
+  if (
+    props.showPaymentMethodForm &amp;&amp;
+    props.name === PAYMENT_METHODS.CREDIT_CARD
+  ) {
+    return (
+      &lt;PaymentMethodForm
+        onSubmit={event =&gt; {
+          event.preventDefault();
+
+          console.log("Payment submitted.");
+        }}
+        onCancel={props.onCancelPaymentMethod}
+      /&gt;
+    );
+  }
+
+  if (
+    props.showPaymentMethodForm &amp;&amp;
+    (props.name === PAYMENT_METHODS.BANK_TRANSFER ||
+      props.name === PAYMENT_METHODS.DEBIT_CARD)
+  ) {
+    throw new Error("Failed to render payment form.");
+  }
+
+  return (
+    &lt;div className="card mb-3"&gt;
+      &lt;div className="card-body"&gt;
+        &lt;h5 className="card-title"&gt;Pay by {props.name}&lt;/h5&gt;
+
+        &lt;button
+          className="btn btn-primary"
+          onClick={() =&gt; props.onSelectPaymentMethod(props.name)}
+        &gt;
+          Choose {props.name}
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default PaymentMethod;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 14. PaymentMethod.js</figcaption></figure><p>As you can see, the <code>PaymentMethod</code> component is a functional React component. It has no state. All it does is renders a user interface. Let's take a closer look at what user interface it renders:</p><figure class="figure"><pre>
+<code class="language-jsx">
+return (
+  &lt;div className="card mb-3"&gt;
+    &lt;div className="card-body"&gt;
+      &lt;h5 className="card-title"&gt;Pay by {props.name}&lt;/h5&gt;
+
+      &lt;button
+        className="btn btn-primary"
+        onClick={() =&gt; props.onSelectPaymentMethod(props.name)}
+      &gt;
+        Choose {props.name}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 15. PaymentMethod.js</figcaption></figure><p>It renders a header and a button. The header has a payment method name that comes with the <code>name</code> prop. And the <code>Choose ...</code> button calls <code>onSelectPaymentMethod</code> function that is passed to <code>PaymentMethod</code> component as a prop as well. The <code>onSelectPaymentMethod</code> is a callback function that <code>PaymentMethod</code> component calls to communicate back to it's parent <code>App</code> component that user has selected payment method with a name <code>name</code>.</p><p>When you run our React app, you see three payment methods rendered by <code>PaymentMethod</code> component. That's what we want the <code>PaymentMethod</code> component to render by default. However, remember that we also want our <code>PaymentMethod</code> component to render a payment method form when user selects that payment method. This is why before returning a header and a button, we check if one of the payment methods is selected:</p><figure class="figure"><pre>
+<code class="language-jsx">
+if (
+  props.showPaymentMethodForm &amp;&amp;
+  props.name === PAYMENT_METHODS.CREDIT_CARD
+) {
+  return (
+    &lt;PaymentMethodForm
+      onSubmit={event =&gt; {
+        event.preventDefault();
+
+        console.log("Payment submitted.");
+      }}
+      onCancel={props.onCancelPaymentMethod}
+    /&gt;
+  );
+}
+
+if (
+  props.showPaymentMethodForm &amp;&amp;
+  (props.name === PAYMENT_METHODS.BANK_TRANSFER ||
+    props.name === PAYMENT_METHODS.DEBIT_CARD)
+) {
+  throw new Error("Failed to render payment form.");
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 16. PaymentMethod.js</figcaption></figure><p>In this tutorial we want to demonstrate three different scenarios:</p><ol><li>User clicks on a credit card payment method and it works as expected.</li><li>User clicks on a debit card payment method and it throws an error that our app doesn't handle.</li><li>User clicks on a bank transfer payment method and it throws an error that our app handles with an Error Boundary component.</li></ol><p>We use two <code>if</code> statements to describe all three scenarios. Both <code>if</code> statements check if the <code>PaymentMethod</code> component should render a payment method form. If not, it the <code>PaymentMethod</code> component will render payment method name and a <code>Choose ...</code> button. If <code>props.showPaymentMethodForm</code> is <code>true</code>, which means that the <code>App</code> component wants <code>PaymentMethod</code> component render to render a payment method form, then the next question is: what payment method this <code>PaymentMethod</code> component instance represents? We answer this question by checking if the payment method name equals to one of three options: <code>props.name === PAYMENT_METHODS.CREDIT_CARD</code>, <code>props.name === PAYMENT_METHODS.BANK_TRANSFER</code> and <code>props.name === PAYMENT_METHODS.DEBIT_CARD</code>.</p><p>In the first scenario we have a credit card payment method and in that scenario - we want to render a payment method form:</p><figure class="figure"><pre>
+<code class="language-jsx">
+if (
+  props.showPaymentMethodForm &amp;&amp;
+  props.name === PAYMENT_METHODS.CREDIT_CARD
+) {
+  return (
+    &lt;PaymentMethodForm
+      onSubmit={event =&gt; {
+        event.preventDefault();
+
+        console.log("Payment submitted.");
+      }}
+      onCancel={props.onCancelPaymentMethod}
+    /&gt;
+  );
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 17. PaymentMethod.js</figcaption></figure><p>This is what the first <code>if</code> statement checks for. If <code>props.showPaymentMethodForm &amp;&amp; props.name === PAYMENT_METHODS.CREDIT_CARD</code> is <code>true</code> then the <code>PaymentMethod</code> component renders <code>PaymentMethodForm</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;PaymentMethodForm
+  onSubmit={event =&gt; {
+    event.preventDefault();
+
+    console.log("Payment submitted.");
+  }}
+  onCancel={props.onCancelPaymentMethod}
+/&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 18. PaymentMethod.js</figcaption></figure><p>The <code>PaymentMethodForm</code> component gets <code>onSubmit</code> and <code>onCancel</code> props. We pass a function that logs <code>Payment submitted.</code> message in JavaScript console to <code>onSubmit</code> prop. And we pass <code>prop.onCancelPaymentMethod</code> value to <code>onCancel</code> prop. The <code>PaymentMethod</code> component gets that <code>onCancelPaymentMethod</code> as a prop from it's parent <code>App</code> component. This is an example of a prop that <code>PaymentMethod</code> component doesn't use itself, but it needs to pass it to it's child <code>PaymentMethodForm</code> component.</p><p>In the second and the third scenarios we have a debit card and a bank transfer payment methods and in those scenarios we want to throw an error, instead of returning a payment method form:</p><figure class="figure"><pre>
+<code class="language-jsx">
+if (
+  props.showPaymentMethodForm &amp;&amp;
+  (props.name === PAYMENT_METHODS.BANK_TRANSFER ||
+    props.name === PAYMENT_METHODS.DEBIT_CARD)
+) {
+  throw new Error("Failed to render payment form.");
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 19. PaymentMethod.js</figcaption></figure><h2>Creating <code>PaymentMethodForm</code> component</h2><p>Now that you understand what our <code>PaymentMethod</code> component does and how it works, let's take a look at the <code>PaymentMethodForm</code> component next.</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+
+const PaymentMethodForm = props =&gt; (
+  &lt;div className="card mb-3"&gt;
+    &lt;div className="card-body"&gt;
+      &lt;h5 className="card-title"&gt;Pay by credit card&lt;/h5&gt;
+      &lt;form onSubmit={props.onSubmit}&gt;
+        &lt;div className="form-group"&gt;
+          &lt;input
+            type="text"
+            className="form-control"
+            aria-describedby="name"
+            placeholder="Enter name"
+          /&gt;
+        &lt;/div&gt;
+        &lt;div className="form-group"&gt;
+          &lt;input
+            type="text"
+            className="form-control"
+            aria-describedby="number"
+            placeholder="Enter number"
+          /&gt;
+        &lt;/div&gt;
+        &lt;div className="form-group"&gt;
+          &lt;input
+            type="text"
+            className="form-control"
+            aria-describedby="expirationDate"
+            placeholder="Enter expiration date"
+          /&gt;
+        &lt;/div&gt;
+        &lt;div className="form-group"&gt;
+          &lt;input
+            type="text"
+            className="form-control"
+            aria-describedby="CVV"
+            placeholder="Enter CVV"
+          /&gt;
+        &lt;/div&gt;
+        &lt;button type="submit" className="btn btn-primary"&gt;
+          Pay now
+        &lt;/button&gt;
+        &lt;button type="button" className="btn btn-link" onClick={props.onCancel}&gt;
+          Cancel
+        &lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+
+export default PaymentMethodForm;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 20. PaymentMethodForm.js</figcaption></figure><p>The <code>PaymentMethodForm</code> component is a functional component that renders a credit card payment form. It gets <code>onSubmit</code> and on <code>onCancel</code> props from a parent <code>PaymentMethod</code> component. When user clicks <code>Pay now</code> button, the <code>onSubmit</code> prop is called. When user clicks on <code>Cancel</code> button, the <code>onCancel</code> prop is called. As simple as that.</p><p>Now you understand how our <code>App</code>, <code>PaymentMethod</code> and <code>PaymentMethodForm</code> components work. Remember that in two different scenarios the <code>PaymentMethod</code> component throws an error. However, only in one scenario we handle that error in our <code>App</code> component with an Error Boundary. Let's take a closer look at how we do it:</p><figure class="figure"><pre>
+<code class="language-jsx">
+{this.shouldRenderPaymentMethod(PAYMENT_METHODS.BANK_TRANSFER) &amp;&amp; (
+  &lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+    &lt;PaymentMethod
+      name={PAYMENT_METHODS.BANK_TRANSFER}
+      onSelectPaymentMethod={this.selectPaymentMethod}
+      onCancelPaymentMethod={this.cancelPaymentMethod}
+      showPaymentMethodForm={showPaymentMethodForm}
+    /&gt;
+  &lt;/PaymentMethodErrorBoundary&gt;
+)}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 21. App.js</figcaption></figure><p>When user clicks on the bank transfer payment method the <code>PaymentMethod</code> component throws an error. We want to catch that error to prevent our entire React app from crashing. To do that we create the <code>PaymentMethodErrorBoundary</code> component and wrap the <code>PaymentMethod</code> component into it.</p><h2>Creating <code>PaymentMethodErrorBoundary</code> component</h2><p>Let's take a look at our <code>PaymentMethodErrorBoundary</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React, { Component } from "react";
+import PaymentMethodErrorMessage from "./PaymentMethodErrorMessage";
+
+class PaymentMethodErrorBoundary extends Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch() {
+    this.props.onError();
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return &lt;PaymentMethodErrorMessage /&gt;;
+    }
+
+    return this.props.children;
+  }
+}
+
+export default PaymentMethodErrorBoundary;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 22. PaymentMethodErrorBoundary.js</figcaption></figure><p>Let's take a closer look at what our <code>PaymentMethodErrorBoundary</code> component renders:</p><figure class="figure"><pre>
+<code class="language-jsx">
+render() {
+  if (this.state.hasError) {
+    return &lt;PaymentMethodErrorMessage /&gt;;
+  }
+
+  return this.props.children;
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 23. PaymentMethodErrorBoundary.js</figcaption></figure><p>It renders two different things depending on it's state. Our <code>PaymentMethodErrorBoundary</code> is a stateful component. It's initial state looks like this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+state = { hasError: false };
+</code>
+</pre><figcaption class="figure-caption">Code snippet 24. PaymentMethodErrorBoundary.js</figcaption></figure><p>The idea is to render two different things depending on whether our <code>PaymentMethodErrorBoundary</code> component caught an error or not. We create <code>hasError</code> state property and set it initially to <code>false</code>. Later you'll see that we update <code>hasError</code>'s value to <code>true</code> when our <code>PaymentMethodErrorBoundary</code> component catches an error.</p><p>If we didn't catch an error, we want our <code>PaymentMethodErrorBoundary</code> component to render it's <code>children</code> prop: <code>return this.props.children;</code>. This allows us to nest <code>PaymentMethod</code> component inside of the <code>PaymentMethodErrorBoundary</code> component:</p><figure class="figure"><pre>
+<code class="language-jsx">
+&lt;PaymentMethodErrorBoundary onError={this.cancelPaymentMethod}&gt;
+  &lt;PaymentMethod
+    name={PAYMENT_METHODS.BANK_TRANSFER}
+    onSelectPaymentMethod={this.selectPaymentMethod}
+    onCancelPaymentMethod={this.cancelPaymentMethod}
+    showPaymentMethodForm={showPaymentMethodForm}
+  /&gt;
+&lt;/PaymentMethodErrorBoundary&gt;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 25. App.js</figcaption></figure><p>If we did catch an error, then we want our <code>PaymentMethodErrorBoundary</code> component to render something other than the <code>PaymentMethod</code> component that throws an error. In our app we render <code>PaymentMethodErrorMessage</code> component instead:</p><figure class="figure"><pre>
+<code class="language-jsx">
+if (this.state.hasError) {
+  return &lt;PaymentMethodErrorMessage /&gt;;
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 26. PaymentMethodErrorBoundary.js</figcaption></figure><h2>Creating <code>PaymentMethodErrorMessage</code> component</h2><p>Let's take a quick look at what <code>PaymentMethodErrorMessage</code> renders:</p><figure class="figure"><pre>
+<code class="language-jsx">
+import React from "react";
+
+const PaymentMethodError = () =&gt; (
+  &lt;div className="card mb-3"&gt;
+    &lt;div className="card-body"&gt;
+      &lt;h5 className="card-title"&gt;We're sorry&lt;/h5&gt;
+      &lt;p className="card-text"&gt;
+        Unfortunately, this payment method is not available at the moment.
+      &lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+);
+
+export default PaymentMethodError;
+</code>
+</pre><figcaption class="figure-caption">Code snippet 27. PaymentMethodErrorBoundary.js</figcaption></figure><p>The <code>PaymentMethodErrorMessage</code> component is a functional component that renders an informative user-friendly error message.</p><p>Now we know what <code>PaymentMethodErrorBoundary</code> component renders. It's time to for us to understand how it works.</p><p>You already know that it's a stateful component and it's initial state is: <code>state = { hasError: false };</code>. What makes <code>PaymentMethodErrorBoundary</code> component an error boundary component rather than just another presentational component is the fact that it has one of those two component lifecycle methods: <code>getDerivedStateFromError</code> and <code>componentDidCatch</code>.</p><p>Let's take a closer look at <code>getDerivedStateFromError</code> method first:</p><figure class="figure"><pre>
+<code class="language-jsx">
+static getDerivedStateFromError() {
+  return { hasError: true };
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 28. PaymentMethodErrorBoundary.js</figcaption></figure><p><code>getDerivedStateFromError</code> is a lifecycle method that React calls after it's child <code>PaymentMethod</code> component throws an error. This is a lifecycle component method that we use to update <code>PaymentMethodErrorBoundary</code> component's state - we want to set <code>hasError</code> to <code>true</code>. Updating component's state will force React to re-render <code>PaymentMethodErrorBoundary</code> component and with a new state it will render <code>PaymentMethodErrorMessage</code> component instead of <code>this.props.children</code>. As you can see we use <code>getDerivedStateFromError</code> lifecycle method as part of our fallback mechanism: if no error, then render <code>this.props.children</code> prop, if error, then render <code>PaymentMethodErrorMessage</code> component.</p><p>After rendering an error message instead of a payment method form, we want our users to have a chance to choose a different payment method - the one that doesn't throw an error. This logic helps us to gracefully degrade our service and enables our users to still make a payment. Good for users, good for business.</p><p>How do we make sure that our <code>App</code> component will render three payment methods once again after user has select one of the payment methods that threw an error? That's what we use the <code>componentDidCatch</code> lifecycle method for:</p><figure class="figure"><pre>
+<code class="language-jsx">
+componentDidCatch() {
+  this.props.onError();
+}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 29. PaymentMethodErrorBoundary.js</figcaption></figure><p>React will call <code>componentDidCatch</code> method after catching an error and re-rendering our <code>PaymentMethodErrorBoundary</code> component with a fallback user interface - with <code>PaymentMethodErrorMessage</code> component in our case.</p><p>What we want to do in <code>componentDidCatch</code> is to call <code>onError</code> callback prop that <code>App</code> component passes to <code>PaymentMethodErrorBoundary</code> component. <code>onError</code> will call <code>App</code> component's <code>cancelPaymentMethod</code> method that will in turn reset <code>App</code> component's state to <code>{ selectedPaymentMethod: NO_PAYMENT_METHOD };</code>. Without having a payment method selected our <code>App</code> component will render all three payment methods and our users can choose another payment method. Winning.</p><p>Now you know how to handle errors in React 16 with Error Boundary components. <a href="https://reactjs.org/docs/error-boundaries.html" target="_blank">Here you can learn more about Error Boundaries in React</a>.</p><p>I hope you've enjoyed this tutorial. If you have any questions or suggestions for the next tutorial, then please leave a comment.</p><p>Thank you for your attention!</p><p>Please take a look at <a href="https://github.com/fedosejev/how-to-handle-errors-in-react-16/">the complete source code on GitHub</a> and <a href="https://fedosejev.github.io/how-to-handle-errors-in-react-16/">the live version</a> of our app.</p><p>I hope you've enjoyed this tutorial and I would love to hear your feedback in the comments. You can get in touch with me via <a href="http://twitter.com/artemy">Twitter</a> and <a href="mailto:artemij@fedosejev.com">email</a>.</p><p><img src="../__static/images/artemij-fedosejev.jpg" alt="Artemij Fedosejev" class="author-photo clip-shape"></p><p><a href="http://artemij.com">Artemij Fedosejev</a></p></div></div><div class="mailchimp"><h3>Other React.js developers get the best React.js tips and tricks delivered directly into their inbox. Your turn?</h3><!-- Begin MailChimp Signup Form --><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"><style type="text/css">#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+    /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+       We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */</style><div id="mc_embed_signup"><form action="//exchange.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate><div id="mc_embed_signup_scroll"><input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div><div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div></div></form></div><!--End mc_embed_signup--></div><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/how-to-handle-errors-in-react-16/';
+    this.page.identifier = 'how-to-handle-errors-in-react-16';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57556dcf510be202"></script></body></html>
