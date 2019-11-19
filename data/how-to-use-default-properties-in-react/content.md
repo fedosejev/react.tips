@@ -1,10 +1,10 @@
 # How To Use Default Properties In React.js
 
-You already know how to pass properties from a parent React component to a child React component. If you need to refresh your memory - please check [this tutorial](http://localhost:8080/how-reactjs-components-communicate/).
+You already know how to pass properties from a parent React component to a child React component. If you need to refresh your memory - please check [this tutorial](/how-reactjs-components-communicate/).
 
 But did you know that in React you can define the default properties?
 
-The default properties can be very helpful if we absolutely need to make sure that our child component gets all the nessesary properties and we can't rely on the fact that it's parent component will pass those properties at all times.
+The default properties can be very helpful if we absolutely need to make sure that our child component gets all the necessary properties and we can't rely on the fact that it's parent component will pass those properties at all times.
 
 Think of this situation: I've created useful React.js component and you've decided to reuse it in your React.js application. You'll be using my component as a child component for one of your components. My component depends on the fact that you pass all the properties, but you simply might not have them - what do you do?
 
@@ -92,7 +92,7 @@ return (
 <figcaption class="figure-caption">Code snippet 2. Panel.jsx</figcaption>
 </figure>
 
-`didYouKnowThat` and `whatIsUniqueAboutThisPanel` are both propeties that we expect to get from a parent component. However, here we're making a design decision to not rely on the fact that `didYouKnowThat` will always be provided by a parent component. So we need to provide a default value for `didYouKnowThat` property in case a parent component forgets to do so. To do this React has [a special function](https://facebook.github.io/react/docs/component-specs.html#getdefaultprops): - `getDefaultProps`:
+`didYouKnowThat` and `whatIsUniqueAboutThisPanel` are both properties that we expect to get from a parent component. However, here we're making a design decision to not rely on the fact that `didYouKnowThat` will always be provided by a parent component. So we need to provide a default value for `didYouKnowThat` property in case a parent component forgets to do so. To do this React has [a special function](https://facebook.github.io/react/docs/component-specs.html#getdefaultprops): - `getDefaultProps`:
 
 <figure class="figure">
 <pre>
@@ -146,7 +146,7 @@ export default Application;
 
 Our `Application` component renders 3 instances of `Panel` component. The first two instaces get only one property each - `whatIsUniqueAboutThisPanel`. Because we didn't provide `didYouKnowThat` property for them - the default value defined in `Panel` component class is used.
 
-This is convinient, because imagine a scenario in which our `Application` component simply has no values for `didYouKnowThat` property - what would we render without a default property?
+This is convenient, because imagine a scenario in which our `Application` component simply has no values for `didYouKnowThat` property - what would we render without a default property?
 
 On the other hand our third instance of the `Panel` component has two properties: `whatIsUniqueAboutThisPanel` and `didYouKnowThat`. Because `Application` component provides it's own value for `didYouKnowThat` property: `You can overwrite the default properties` - that value overwrites the default value provided by `Panel` component class - `This default property will be shared across all Panel component instances`.
 
