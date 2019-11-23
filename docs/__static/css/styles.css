@@ -115,7 +115,8 @@ strong {
     text-align: left; }
     .mailchimp-form #mc_embed_signup form input[type="email"] {
       width: 300px;
-      margin-right: 10px; }
+      margin-right: 10px;
+      font-size: 20px; }
     .mailchimp-form #mc_embed_signup form input[type="submit"] {
       margin-top: 10px;
       margin-bottom: 10px;
