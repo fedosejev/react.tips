@@ -1,0 +1,25 @@
+.mailchimp-form {
+  font-family: "Zilla Slab", serif;
+  font-size: 26px;
+  line-height: 36px;
+  width: 100%;
+
+  #mc_embed_signup form {
+    text-align: left;
+
+    input[type="email"] {
+      width: 300px;
+      margin-right: 10px;
+    }
+
+    input[type="submit"] {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    label {
+      margin-right: 10px;
+    }
+  }
+}
