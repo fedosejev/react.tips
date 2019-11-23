@@ -2,12 +2,17 @@
   <%- include('../../__partials/book-ad') %>
 
   <div class="container">
-    <%- include('../../__partials/header') %>
+    <%- include('../../__partials/header') %> <%-
+    include('../../__partials/mailchimp') %>
+    <hr />
 
     <div class="row"><div class="col-sm-12"><%- postHtml %></div></div>
 
-    <%- include('../../__partials/mailchimp') %> <%-
-    include('../../__partials/add-this-sharing-buttons') %> <%-
+    <hr />
+    <%- include('../../__partials/mailchimp') %>
+    <hr />
+
+    <%- include('../../__partials/add-this-sharing-buttons') %> <%-
     include('../../__partials/disqus') %> <%- include('../../__partials/footer')
     %>
   </div>

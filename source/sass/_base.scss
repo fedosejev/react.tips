@@ -31,3 +31,9 @@ a:focus {
 strong {
   font-weight: 600;
 }
+
+.separator-line {
+  width: 100%;
+  height: 1px;
+  border-bottom: 1px dotted #ccc;
+}
