@@ -7,6 +7,10 @@
   #mc_embed_signup form {
     text-align: left;
 
+    label {
+      margin-right: 10px;
+    }
+
     input[type="email"] {
       width: 300px;
       margin-right: 10px;
@@ -17,10 +21,6 @@
       margin-top: 10px;
       margin-bottom: 10px;
       font-size: 18px;
-    }
-
-    label {
-      margin-right: 10px;
     }
   }
 }

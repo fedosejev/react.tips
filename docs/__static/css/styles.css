@@ -113,6 +113,8 @@ strong {
   width: 100%; }
   .mailchimp-form #mc_embed_signup form {
     text-align: left; }
+    .mailchimp-form #mc_embed_signup form label {
+      margin-right: 10px; }
     .mailchimp-form #mc_embed_signup form input[type="email"] {
       width: 300px;
       margin-right: 10px;
@@ -121,8 +123,6 @@ strong {
       margin-top: 10px;
       margin-bottom: 10px;
       font-size: 18px; }
-    .mailchimp-form #mc_embed_signup form label {
-      margin-right: 10px; }
 
 .header {
   margin: 20px 0;
