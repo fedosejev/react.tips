@@ -3,7 +3,7 @@ const sass = require("gulp-sass");
 const rename = require("gulp-rename");
 const uglify = require("gulp-uglify");
 
-const BUILD_DIR = require("./config").BUILD_DIR;
+const BUILD_DIR = require("./build-config").BUILD_DIR;
 
 gulp.task("build-js-for-development", () =>
   gulp.src("./source/js/app.js").pipe(gulp.dest(`./${BUILD_DIR}/__static/js/`))
