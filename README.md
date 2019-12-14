@@ -6,8 +6,8 @@ Website source code.
 
 1. `npm install -g yarn`
 2. `yarn install`
-3. Configure `config.js`, `generate.sh`, `serve.sh`, `publish.sh` as needed.
-4. Configure `data/config.json` as needed.
+3. Configure `build-config.js`, `publish.sh` as needed.
+4. Configure `website-config.json` as needed.
 5. `npm install --global gulp http-server`
 6. `./generate.sh`
 7. `./serve.sh`
