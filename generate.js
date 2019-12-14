@@ -6,7 +6,7 @@ const minify = require("html-minifier").minify;
 const showdown = require("showdown");
 const fsExtra = require("fs-extra");
 
-const BUILD_DIR = require("./config").BUILD_DIR;
+const BUILD_DIR = require("./build-config").BUILD_DIR;
 
 const readPostConfigFromFile = (postDirectoryName, rootDirectoryName) => {
   const configFilePath = path.join(
@@ -22,7 +22,7 @@ const getCanonicalPostUrl = (websiteConfig, postConfig) =>
   `${websiteConfig.url}${path.join(postConfig.slug, "/")}`;
 
 const readWebsiteConfigFromFile = () => {
-  const configFilePath = path.join(__dirname, "data/config.json");
+  const configFilePath = path.join(__dirname, "./website-config.json");
   return JSON.parse(fs.readFileSync(configFilePath, "utf8"));
 };
 
