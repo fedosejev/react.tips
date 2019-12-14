@@ -1,0 +1,5 @@
+User-agent: * 
+
+Disallow: 
+
+Sitemap: https://react.tips/sitemap.xml
