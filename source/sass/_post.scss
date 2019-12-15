@@ -18,7 +18,7 @@
   }
 
   p {
-    margin: 20px 0;
+    margin: 20px 0 0 0;
     line-height: 32px;
     font-family: sans-serif;
     font-weight: 100;
@@ -40,7 +40,7 @@
 
   figure {
     width: 100%;
-    margin: 0 0 40px 0;
+    margin: 20px 0;
 
     figcaption {
       text-align: center;
@@ -79,6 +79,10 @@
   a:hover {
     color: #666;
     text-decoration: none;
+  }
+
+  .add-this-sharing-buttons {
+    margin: 40px 0;
   }
 
   #disqus_thread {
