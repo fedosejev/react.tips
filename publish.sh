@@ -7,8 +7,8 @@
 cp ./deploy/CNAME ./docs/CNAME
 cp ./deploy/.nojekyll ./docs/.nojekyll
 
-# Copy Google AdSense file
-cp ./deploy/ads.txt ./docs/ads.txt
+# Copy all static files and subdirectories
+cp -R ./static/* ./docs/
 
 # Set user
 git config user.name "Artemij Fedosejev"
