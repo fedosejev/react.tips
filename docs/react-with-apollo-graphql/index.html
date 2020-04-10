@@ -3,13 +3,15 @@ pagead/js/adsbygoogle.js"></script></head><body class="post-page"><div class="su
 <code class="language-jsx">
 import React from "react";
 
-function getCities(cities) {
-  return cities.map(city =&gt; city.name).join(", ");
+function getCitiesLabel(cities) {
+  return cities.length &gt; 1 ? "Cities" : "City";
+}
+
+function getCitiesList(cities) {
+  return cities.map((city) =&gt; city.name).join(", ");
 }
 
 function Job(props) {
-  const cities = getCities(props.job.cities);
-
   return (
     &lt;a
       href={props.job.applyUrl}
@@ -19,14 +21,12 @@ function Job(props) {
       &lt;div&gt;
         &lt;strong&gt;Company:&lt;/strong&gt; {props.job.company.name}
       &lt;/div&gt;
-      &lt;div&gt;
-        {cities &amp;&amp; (
-          &lt;&gt;
-            &lt;strong&gt;Cities: &lt;/strong&gt;
-            {cities}
-          &lt;/&gt;
-        )}
-      &lt;/div&gt;
+      {props.job.cities.length &gt; 0 &amp;&amp; (
+        &lt;div&gt;
+          &lt;strong&gt;{getCitiesLabel(props.job.cities)}: &lt;/strong&gt;
+          {getCitiesList(props.job.cities)}
+        &lt;/div&gt;
+      )}
     &lt;/a&gt;
   );
 }

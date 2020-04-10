@@ -49,13 +49,15 @@ Let's create our `Job` component first:
 <code class="language-jsx">
 import React from "react";
 
-function getCities(cities) {
-  return cities.map(city => city.name).join(", ");
+function getCitiesLabel(cities) {
+  return cities.length > 1 ? "Cities" : "City";
+}
+
+function getCitiesList(cities) {
+  return cities.map((city) => city.name).join(", ");
 }
 
 function Job(props) {
-  const cities = getCities(props.job.cities);
-
   return (
     <a
       href={props.job.applyUrl}
@@ -65,14 +67,12 @@ function Job(props) {
       <div>
         <strong>Company:</strong> {props.job.company.name}
       </div>
-      <div>
-        {cities && (
-          <>
-            <strong>Cities: </strong>
-            {cities}
-          </>
-        )}
-      </div>
+      {props.job.cities.length > 0 && (
+        <div>
+          <strong>{getCitiesLabel(props.job.cities)}: </strong>
+          {getCitiesList(props.job.cities)}
+        </div>
+      )}
     </a>
   );
 }
