@@ -27,7 +27,7 @@ Personally, I prefer three stage interview process:
 2. A coding test
 3. A face-to-face conversation about my solution for the coding test
 
-## Step 1: Let's talk about your experience
+## Stage 1: Let's talk about your experience
 
 First, I want to learn about your previous experience of solving problems as a front-end developer. I am interested in hearing what problems have you solved and how you solved them.
 
@@ -41,7 +41,7 @@ Then talk about what are you looking for in your next role: what products are in
 
 The goal of this conversation is to establish the baseline for expectations - what should I expect your skills level to be and what you should expect from a new role.
 
-## Step 2: Let's solve a problem
+## Stage 2: Let's solve a problem
 
 Now it's time to test your skills. I will ask you to solve a specific problem. 
 
@@ -55,7 +55,7 @@ If you're asked to solve it at the face-to-face interview, then it could be from
 
 The goal of this test is to see your current skills in action, get a sense of what you know about different aspects of software development and create a context for our next interview stage where we'll discuss your solution and I'll ask you any follow up questions that I might have.
 
-## Step 3: Let's discuss how you solved a problem
+## Stage 3: Let's discuss how you solved a problem
 
 I'll review your solution for the coding test and prepare follow-up questions. We might talk about why have you chosen one solution over the other, how do you think about system design and architecture, how different data-structures affect performance and how do you choose the right one.
 
