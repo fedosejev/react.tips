@@ -1,6 +1,8 @@
 # React Interview Questions
 
-In this tutorial, I am going to describe an interview process for a front-end React developer. This is the process that I would follow if I would be an interviewer. And this is the process that I would like to be part of as an interviewee.
+In this tutorial, I am going to describe an interview process for a front-end React developer.
+
+This is the process that I would follow if I would be an interviewer. And this is the process that I would like to be part of as an interviewee.
 
 Let's start with discussing what you must know as a front-end developer.
 
