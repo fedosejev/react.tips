@@ -65,13 +65,13 @@ At this stage I'll learn more about your broader understanding of how to build a
 
 In this coding test you'll need to build a shopping cart using React.
 
-Here's a list of all requirements: https://github.com/fedosejev/react-shopping-cart/blob/master/requirements/
+[Here's a list of all requirements](https://github.com/fedosejev/react-shopping-cart/blob/master/requirements/).
 
-Here's a live example of the React app that you need to build: https://fedosejev.github.io/react-shopping-cart/
+[Here's a live example of the React app that you need to build](https://fedosejev.github.io/react-shopping-cart/). 
 
 Before you continue reading this tutorial - try to do the coding test and build the app yourself first. Take a maximum of one day of time. Choose a code editor that works for you best. I recommend using [Visual Studio Code](https://code.visualstudio.com/).
 
-If you would like to see my solution, then here it is: https://github.com/fedosejev/react-shopping-cart
+If you would like to see my solution, then [here it is](https://github.com/fedosejev/react-shopping-cart).
 
 This coding test will drive the follow-up questions that I'll ask you in the Stage 3 of the interview process.
 
