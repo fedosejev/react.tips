@@ -8,7 +8,7 @@ Let's start with discussing what you must know as a front-end developer.
 
 When I interview front-end developers I evaluate two critical skills:
 1. How do you solve problems
-2. How do you solve front-end problems with front-end tools, such as JavaScript, React, Redux, etc.
+2. How do you solve front-end problems with front-end tools, such as JavaScript, React, Redux, etc
 
 Software developers solve problems. That's the core value that they bring to the table. Front-end developers solve front-end problems with front-end tools. 
 
@@ -26,8 +26,6 @@ Personally, I prefer three stage interview process:
 1. A phone call conversation about my previous experience
 2. A coding test
 3. A face-to-face conversation about my solution for the coding test
-
-Over the years of interviewing for 
 
 ## Step 1: Let's talk about your experience
 
