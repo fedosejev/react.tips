@@ -45,15 +45,11 @@ The goal of this conversation is to establish the baseline for expectations - wh
 
 ## Stage 2: Let's solve a problem
 
-Now it's time to test your skills. I will ask you to solve a specific problem. 
-
-This problem is an example of a task that you would get if you would join the company.
+Now it's time to test your skills. I will ask you to solve a specific problem. This problem would be an example of a task that you would get if you would join the company that's hiring.
 
 You can solve it at home or at your face-to-face interview as a pair programming exercise.
 
-If you're asked to solve it at home, then the expectation is for you to spend less then a day on it.
-
-If you're asked to solve it at the face-to-face interview, then it could be from an hour to two hours pair programming exercise.
+If you're asked to solve it at home, then the expectation is for you to spend less then a day on it. If you're asked to solve it at the face-to-face interview, then it could be from an hour to two hours pair programming exercise.
 
 The goal of this test is to see your current skills in action, get a sense of what you know about different aspects of software development and create a context for our next interview stage where we'll discuss your solution and I'll ask you any follow up questions that I might have.
 
@@ -63,7 +59,7 @@ I'll review your solution for the coding test and prepare follow-up questions. W
 
 At this stage I'll learn more about your broader understanding of how to build a better software.
 
-## Example of a coding test
+## The coding test
 
 In this coding test you'll need to build a shopping cart using React.
 
@@ -71,39 +67,46 @@ Shopping cart requirements:
 1. Display the total number of items in the shopping cart.
 2. Display the total price for all the items in the shopping cart.
 3. Display `Clear shopping cart` button that removes all items from the shopping cart.
-   1. If the shopping cart is empty, then `Clear shopping cart` button is disabled.
+      1. If the shopping cart is empty, then the `Clear shopping cart` button is disabled.
 4. Display a list of all items in the shopping cart and for each item:
-   1. Display item name.
-   2. Display item quantity.
-   3. Display price for one unit of this item.
-   4. Display total price for all units of this item.
-   5. Display `Change quantity` button that displays quantity editing view.
-   6. Display `Remove` button.
-   7. When user clicks on `Change quantity` button, then display quantity editing view:
-      1. Display total price for all units of this item.
-      2. Display editable input field with quantity value for this item.
-      3. Display `Add one` button that adds one more item to the total quantity for this item.
-      4. Display `Remove one` button that removes one item from the total quantity for this item.
-         1. If quantity is `0`, then `Remove one` button is disabled.
-      5. Display `Save` button that:
-         1. Updates:
-            1. Total quantity for this item.
-            2. Total number of items for the entire shopping cart.
-            3. Total price for the entire shopping cart.
-         2. Hides quantity editing view.
-      6. If no changes were made, then `Save` button is disabled.
-      7. Display `Cancel` button that discards any changes and hides quantity editing view.
-   8. When user clicks on `Remove` button, then remove item from the shopping list and update:
-      1. Total number of items for the entire shopping cart.
-      2. Total price for the entire shopping cart.
+      1. Display item name.
+      2. Display item quantity.
+      3. Display price for one unit of the item.
+      4. Display total price for all units of the item.
+      5. Display `Change quantity` button that displays quantity editing view.
+      6. Display `Remove` button.
+      7. When user clicks on `Change quantity` button, display quantity editing view:
+         1. Display total price for all units of this item.
+         2. Display editable input field with quantity value for the item.
+         3. Display `Add one` button that adds one more item to the total quantity for the item.
+         4. Display `Remove one` button that removes one item from the total quantity for the item.
+            1. If quantity is `0`, then `Remove one` button is disabled.
+         5. Display `Save` button that:
+            1. Updates:
+               1. Total quantity for the item.
+               2. Total number of items for the entire shopping cart.
+               3. Total price for the entire shopping cart.
+            2. Hides quantity editing view.
+         6. If no changes were made, then `Save` button is disabled.
+         7. Display `Cancel` button that discards any changes and hides quantity editing view.
+      8.  When user clicks on `Remove` button, then remove item from the shopping list and update:
+         8. Total number of items for the entire shopping cart.
+         9. Total price for the entire shopping cart.
+
 
 [Here's a live example of the React app that you need to build](https://fedosejev.github.io/react-shopping-cart/). 
 
-Before you continue reading this tutorial - try to do the coding test and build the app yourself first. Take a maximum of one day of time. Choose a code editor that works for you best. I recommend using [Visual Studio Code](https://code.visualstudio.com/).
+Before you continue reading this tutorial - try to do the coding test and build the app yourself first.
 
-If you would like to see my solution, then [here it is](https://github.com/fedosejev/react-shopping-cart).
+Take maximum time of one day.
+
+Choose the code editor that works for you best. I recommend using [Visual Studio Code](https://code.visualstudio.com/).
 
 This coding test will drive the follow-up questions that I'll ask you in the Stage 3 of the interview process.
+
+## The solution for the coding test
+
+If you would like to see my solution, then [here it is](https://github.com/fedosejev/react-shopping-cart).
 
 ## The follow-up questions
 
