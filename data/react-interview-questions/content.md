@@ -67,7 +67,7 @@ At this stage I'll learn more about your broader understanding of how to build a
 
 In this coding test you'll need to build a shopping cart using React.
 
-### Shopping cart requirements
+Shopping cart requirements:
 1. Display the total number of items in the shopping cart.
 2. Display the total price for all the items in the shopping cart.
 3. Display `Clear shopping cart` button that removes all items from the shopping cart.
