@@ -114,6 +114,8 @@ _Coming soon._
 
 ## General React questions
 
+Often I'll ask questions that we didn't cover during the coding test part of the interview.
+
 #### Question
 
 How to improve React application performance?
