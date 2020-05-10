@@ -126,5 +126,5 @@ The key approach is to reduce the number of component re-renders in your React a
 
 Practically, this can be achieved in a couple of different ways:
 1. Using [React.PureComponent](https://reactjs.org/docs/react-api.html#reactpurecomponent) instead of [React.Component](https://reactjs.org/docs/react-api.html#reactcomponent) base class.
-2. Using [React.memo](https://reactjs.org/docs/react-api.html#reactmemo) [higher-order component](https://reactjs.org/docs/higher-order-components.html) (HOC).
+2. Using [React.memo](https://reactjs.org/docs/react-api.html#reactmemo) higher-order component ([HOC](https://reactjs.org/docs/higher-order-components.html)).
 3. Decouple UI layer from data layer in your React application. Understand _why_ your React application is slow - find where in your application do you have code that takes significant time to run. Find out what part of your application is slow. It can be rendering React components, or transforming and calculating data. If you separate the UI layer - your React components from the data layer - your data transformation and calculation functions, then you can optimize their performance easier. For React components, consider using methods mentioned previously. For data transformation functions, consider using [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
