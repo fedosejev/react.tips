@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url> <loc>https://react.tips/</loc> <lastmod>2020-05-15T19:14:03Z</lastmod> <changefreq>weekly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/checkboxes-in-react</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/checkboxes-in-react-16</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/dropdowns-in-react-16</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/fragments-in-react-16</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/from-react-to-flux-to-redux</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/how-reactjs-components-communicate</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/how-to-create-components-dynamically-in-react-16</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/how-to-create-reactjs-components-dynamically</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/how-to-handle-errors-in-react-16</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/how-to-loop-inside-jsx-in-react-16</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/how-to-set-focus-on-input-after-render-in-react-16</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/how-to-use-default-properties-in-react</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/how-to-use-react-component-lifecycle-methods</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/radio-buttons-in-react-16</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/radio-buttons-in-reactjs</loc> <lastmod>2020-05-15T19:14:02Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/react-component-libraries</loc> <lastmod>2020-05-15T19:14:03Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/react-interview-questions</loc> <lastmod>2020-05-15T19:14:03Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/react-with-apollo-graphql</loc> <lastmod>2020-05-15T19:14:03Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
-<url> <loc>https://react.tips/reactjs-and-geocoding</loc> <lastmod>2020-05-15T19:14:03Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>weekly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/checkboxes-in-react</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/checkboxes-in-react-16</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/dropdowns-in-react-16</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/fragments-in-react-16</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/from-react-to-flux-to-redux</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/function-parameters-in-javascript</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/how-reactjs-components-communicate</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/how-to-create-components-dynamically-in-react-16</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/how-to-create-reactjs-components-dynamically</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/how-to-handle-errors-in-react-16</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/how-to-loop-inside-jsx-in-react-16</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/how-to-set-focus-on-input-after-render-in-react-16</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/how-to-use-default-properties-in-react</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/how-to-use-react-component-lifecycle-methods</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/javascript-tips</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/radio-buttons-in-react-16</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/radio-buttons-in-reactjs</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/react-component-libraries</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/react-interview-questions</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/react-with-apollo-graphql</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://react.tips/reactjs-and-geocoding</loc> <lastmod>2020-05-15T21:14:06Z</lastmod> <changefreq>monthly</changefreq> <priority>0.8</priority> </url>
 </urlset>

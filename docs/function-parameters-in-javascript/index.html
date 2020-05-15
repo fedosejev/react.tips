@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Function Parameters In JavaScript - React Tips</title><meta name="description" content="A JavaScript tip on how to declare function parameters."><link rel="canonical" href="http://react.tips/function-parameters-in-javascript/"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css"><link href="../__static/css/styles.css" rel="stylesheet" type="text/css"><script data-ad-client="pub-8237887753791570" async src="https://pagead2.googlesyndication.com/
+pagead/js/adsbygoogle.js"></script></head><body class="post-page"><div class="subscribe-ad"><div class="container"><div class="row"><div class="col-sm-12"><div class="mailchimp-form"><!-- Begin Mailchimp Signup Form --><div id="mc_embed_signup"><form action="https://tips.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate form-inline" target="_blank" novalidate><div id="mc_embed_signup_scroll"><div class="mc-field-group form-group"><label for="mce-EMAIL">Subscribe for new tutorials:</label><input type="email" value="" placeholder="Your email address" name="EMAIL" class="required email form-control" id="mce-EMAIL"> <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button btn btn-dark"></div><div id="mce-responses" class="clear"><div class="response" id="mce-error-response" style="display: none"></div><div class="response" id="mce-success-response" style="display: none"></div></div><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div></div></form></div><!--End mc_embed_signup--></div></div></div></div></div><div class="container"><div class="row"><div class="col-sm-12"><div class="header"><ul class="navigation"><li class="logo">React.Tips</li><li><a href="/">Tutorials</a></li><li><a href="/write-your-tutorial-for-react-tips">Write for React.Tips</a></li><li><a href="/best-react-books">Best React Books</a></li></ul></div></div></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Tutorial --> <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8237887753791570" data-ad-slot="4208808096" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script><div class="row"><div class="col-sm-12"><h1>Function Parameters In JavaScript</h1><p>When you write a function that accepts a single parameters, you can write it like this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+function transformData(data) {}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 1</figcaption></figure><p>As you can see <code>transformData</code> accepts a single <code>data</code> parameter. This code is easy to write, read and use.</p><p>When you want to use <code>transformData</code> function later in your code, all you do is:</p><figure class="figure"><pre>
+<code class="language-jsx">
+const data = [];
+
+transformData(data);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 2</figcaption></figure><p>But what if <code>transformData</code> need to accept two or more parameters?</p><p>How could you write such function?</p><figure class="figure"><pre>
+<code class="language-jsx">
+function transformData(data, filter, sort) {}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 3</figcaption></figure><p>Now your function accepts three parameters: <code>data</code>, <code>filter</code> and <code>sort</code>. Such function is still easy to write and read, but what about using it?</p><figure class="figure"><pre>
+<code class="language-jsx">
+const data = [];
+
+transformData(data, true, false);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 4</figcaption></figure><p>And here you'll discover a problem. When you write <code>transformData(data, true, false)</code>, you need to remember or look up the order of parameters, because if you write them on a different order, for example: <code>transformData(data, false, true)</code> - you will get an unexpected result from <code>transformData</code> function.</p><p>The problem is that the way the function accepts those three parameters creates an opportunity to introduce a bug by those who will use this function.</p><p>Right now <code>transformData</code> function expects three parameters in a certain order and if you make a mistake in your order, you will create a bug.</p><p>And what if one of the parameters are optional? The users of your function might start writing code like this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+const data = [];
+
+transformData(data, _, false);
+</code>
+</pre><figcaption class="figure-caption">Code snippet 5</figcaption></figure><p>The <code>_</code> here communicates the fact that you don't want to provide the second parameter, but you have to mention it in order to provide the third parameters, all because the order of parameters is important.</p><p>When you write a function you want to make sure that it will be very easy to use your function and hard to introduce a bug by using your function.</p><p>Let's rewrite <code>transformData</code> function. It will still accept three parameters, but it will not require them to be provided in a certain order.</p><figure class="figure"><pre>
+<code class="language-jsx">
+function transformData({ data, filter, sort }) {}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 6</figcaption></figure><p>You might not notice the difference between <code>function transformData(data, filter, sort) {}</code> and <code>function transformData({ data, filter, sort }) {}</code> straight away, but there's a significant difference between the two ways to define that function.</p><p>Instead of listing three parameters, in which case their order is important, we'll make our <code>transformData</code> function to accept only one parameter - an object, and then we'll destruct that object as function parameters.</p><p>Now the order of <code>data</code>, <code>filter</code>, <code>sort</code> doesn't matter. This:</p><figure class="figure"><pre>
+<code class="language-jsx">
+function transformData({ data, filter, sort }) {}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 7</figcaption></figure><p>Works just as well as this:</p><figure class="figure"><pre>
+<code class="language-jsx">
+function transformData({ sort, filter, data }) {}
+</code>
+</pre><figcaption class="figure-caption">Code snippet 8</figcaption></figure><p>And how would you use this function?</p><p>Easy. Remember that now <code>transformData</code> accepts only one parameter that is an object that has three properties: <code>data</code>, <code>filter</code> and <code>sort</code>. In any order, because object properties in JavaScript have no order.</p><figure class="figure"><pre>
+<code class="language-jsx">
+const data = [];
+
+transformData({ data: data, filter: false, sort: true });
+</code>
+</pre><figcaption class="figure-caption">Code snippet 9</figcaption></figure><p>Later if you decide to expand the functionality of <code>transformData</code> function, you will simply add another property to the single parameters object.</p><p>What do you think?</p></div></div><hr><div class="mailchimp-form"><!-- Begin Mailchimp Signup Form --><div id="mc_embed_signup"><form action="https://tips.us12.list-manage.com/subscribe/post?u=e6ae402f40ee7f015cfdfc790&amp;id=8e05bece96" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate form-inline" target="_blank" novalidate><div id="mc_embed_signup_scroll"><div class="mc-field-group form-group"><label for="mce-EMAIL">Subscribe for new tutorials:</label><input type="email" value="" placeholder="Your email address" name="EMAIL" class="required email form-control" id="mce-EMAIL"> <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button btn btn-dark"></div><div id="mce-responses" class="clear"><div class="response" id="mce-error-response" style="display: none"></div><div class="response" id="mce-success-response" style="display: none"></div></div><!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><div style="position: absolute; left: -5000px" aria-hidden="true"><input type="text" name="b_e6ae402f40ee7f015cfdfc790_8e05bece96" tabindex="-1" value=""></div></div></form></div><!--End mc_embed_signup--></div><hr><div class="add-this-sharing-buttons"><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_sharing_toolbox"></div></div><div id="disqus_thread"></div><script>var disqus_config = function () { 
+    this.page.url = 'http://react.tips/function-parameters-in-javascript/';
+    this.page.identifier = 'function-parameters-in-javascript';
+  };
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//reacttips.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();</script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><div class="row"><div class="col-sm-12"><div class="footer"><p>Created by <a href="http://artemij.com" target="_blank">Artemij Fedosejev</a> author of <a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" target="_blank">React.js Essentials</a> book:</p><aside class="books"><a href="https://www.amazon.com/React-js-Essentials-Artemij-Fedosejev/dp/1783551623/" class="book-cover"><img src="/__static/images/react-essentials-book-cover.jpg" alt="React.js Essentials english book cover"> </a><a href="https://www.amazon.com/Sviluppare-applicazioni-web-React-js-Italian-ebook/dp/B01D8P17IM" class="book-cover"><img src="/__static/images/react-essentials-italian-book-cover.gif" alt="React.js Essentials italian book cover"></a></aside></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-jsx.min.js"></script><script src="/__static/js/app.js"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-1519369-23', 'auto');
+ga('send', 'pageview');</script><!-- Go to www.addthis.com/dashboard to customize your tools --><script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-521e8c8140cf8e4d"></script></body></html>
