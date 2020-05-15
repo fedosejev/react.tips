@@ -14,19 +14,19 @@ Let's take a look at the most useful libraries of React components that are easy
 
 A collection of UI components for all purposes. Unfortunately, their Table component has no editing feature. I've used [React Data Grid](https://adazzle.github.io/react-data-grid/) table with Material UI.
 
-Documentation: https://material-ui.com/
+Documentation: [https://material-ui.com](https://material-ui.com/)
 
 ## Blueprint JS
 
 A very strong alternative to Material UI. Includes Table component that can be edited.
 
-Documentation: https://blueprintjs.com/
+Documentation: [https://blueprintjs.com](https://blueprintjs.com/)
 
 ## React Data Grid
 
 A Table component with lots of flexibility and good performance.
 
-Documentation: https://adazzle.github.io/react-data-grid/
+Documentation: [https://adazzle.github.io/react-data-grid](https://adazzle.github.io/react-data-grid)
 
 ## What experience do you have?
 
