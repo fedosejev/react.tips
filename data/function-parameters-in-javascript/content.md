@@ -71,7 +71,7 @@ transformData(data, _, false);
 <figcaption class="figure-caption">Code snippet 5</figcaption>
 </figure>
 
-The `_` here communicates the fact that you don't want to provide the second parameter, but you have to mention it in order to provide the third parameters, all because the order of parameters is important.
+The `_` here communicates the fact that you don't want to provide the second parameter, but you have to mention it anyway in order to provide the third parameter, all because the order of parameters is important.
 
 When you write a function you want to make sure that it will be very easy to use your function and hard to introduce a bug by using your function.
 

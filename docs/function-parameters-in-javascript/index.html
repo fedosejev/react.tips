@@ -25,7 +25,7 @@ const data = [];
 
 transformData(data, _, false);
 </code>
-</pre><figcaption class="figure-caption">Code snippet 5</figcaption></figure><p>The <code>_</code> here communicates the fact that you don't want to provide the second parameter, but you have to mention it in order to provide the third parameters, all because the order of parameters is important.</p><p>When you write a function you want to make sure that it will be very easy to use your function and hard to introduce a bug by using your function.</p><p>Let's rewrite <code>transformData</code> function. It will still accept three parameters, but it will not require them to be provided in a certain order.</p><figure class="figure"><pre>
+</pre><figcaption class="figure-caption">Code snippet 5</figcaption></figure><p>The <code>_</code> here communicates the fact that you don't want to provide the second parameter, but you have to mention it anyway in order to provide the third parameter, all because the order of parameters is important.</p><p>When you write a function you want to make sure that it will be very easy to use your function and hard to introduce a bug by using your function.</p><p>Let's rewrite <code>transformData</code> function. It will still accept three parameters, but it will not require them to be provided in a certain order.</p><figure class="figure"><pre>
 <code class="language-jsx">
 function transformData({ data, filter, sort }) {}
 </code>
