@@ -58,7 +58,7 @@ The problem is that the way the function accepts those three parameters creates 
 
 Right now `transformData` function expects three parameters in a certain order and if you make a mistake in your order, you will create a bug.
 
-And what if one of the parameters are optional? The users of your function might start writing code like this:
+And what if one of the parameters is optional? The users of your function might start writing code like this:
 
 <figure class="figure">
 <pre>
