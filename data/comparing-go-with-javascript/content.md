@@ -29,3 +29,27 @@ func explain() {}
 </pre>
 <figcaption class="figure-caption">Code snippet 1.2</figcaption>
 </figure>
+
+## Printing to console
+
+In JavaScript:
+
+<figure class="figure">
+<pre>
+<code class="language-js">
+console.log('Explaining...');
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 1.1</figcaption>
+</figure>
+
+In Go:
+
+<figure class="figure">
+<pre>
+<code class="language-go">
+fmt.Println("Explaining...")
+</code>
+</pre>
+<figcaption class="figure-caption">Code snippet 1.2</figcaption>
+</figure>
