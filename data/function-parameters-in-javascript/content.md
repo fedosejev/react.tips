@@ -4,7 +4,7 @@ When you write a function that accepts a single parameters, you can write it lik
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 function transformData(data) {}
 </code>
 </pre>
@@ -17,7 +17,7 @@ When you want to use `transformData` function later in your code, all you do is:
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 const data = [];
 
 transformData(data);
@@ -32,7 +32,7 @@ How could you write such function?
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 function transformData(data, filter, sort) {}
 </code>
 </pre>
@@ -43,7 +43,7 @@ Now your function accepts three parameters: `data`, `filter` and `sort`. Such fu
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 const data = [];
 
 transformData(data, true, false);
@@ -62,7 +62,7 @@ And what if one of the parameters is optional? The users of your function might 
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 const data = [];
 
 transformData(data, _, false);
@@ -79,7 +79,7 @@ Let's rewrite `transformData` function. It will still accept three parameters, b
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 function transformData({ data, filter, sort }) {}
 </code>
 </pre>
@@ -94,7 +94,7 @@ Now the order of `data`, `filter`, `sort` doesn't matter. This:
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 function transformData({ data, filter, sort }) {}
 </code>
 </pre>
@@ -105,7 +105,7 @@ Works just as well as this:
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 function transformData({ sort, filter, data }) {}
 </code>
 </pre>
@@ -118,7 +118,7 @@ Easy. Remember that now `transformData` accepts only one parameter that is an ob
 
 <figure class="figure">
 <pre>
-<code class="language-jsx">
+<code class="language-js">
 const data = [];
 
 transformData({ data: data, filter: false, sort: true });
