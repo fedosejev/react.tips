@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-    "type": "git",
+    "category": "git",
     "url": "git+https://github.com/fedosejev/react.tips.git"
   },
   "author": "Artemij Fedosejev",

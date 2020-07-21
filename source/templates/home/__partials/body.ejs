@@ -9,13 +9,31 @@
         <h1>React Tutorials</h1>
 
         <ul class="posts">
-          <% for (var iterator = 0; iterator < posts.length; iterator++) { %>
+          <% for (var iterator = 0; iterator < posts.length; iterator++) { if
+          (posts[iterator].category === "react") { %>
           <li>
             <a href="/<%= posts[iterator].slug %>/">
               <%= posts[iterator].title %>
             </a>
           </li>
-          <% } %>
+          <% } } %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>JavaScript Tutorials</h1>
+
+        <ul class="posts">
+          <% for (var iterator = 0; iterator < posts.length; iterator++) { if
+          (posts[iterator].category === "javascript") { %>
+          <li>
+            <a href="/<%= posts[iterator].slug %>/">
+              <%= posts[iterator].title %>
+            </a>
+          </li>
+          <% } } %>
         </ul>
       </div>
     </div>

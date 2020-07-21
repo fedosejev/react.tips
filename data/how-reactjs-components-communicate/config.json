@@ -2,5 +2,6 @@
   "title": "How React.js Components Communicate",
   "description": "Example of how React.js components communicate with each other.",
   "slug": "how-reactjs-components-communicate",
+  "category": "react",
   "date": "2016-06-14"
 }
